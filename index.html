@@ -149,7 +149,7 @@
     <header class="site-header" id="topo">
       <div class="container header__inner">
         <a class="brand" href="#inicio" aria-label="ROTAV3 Systems — início">
-          <img src="img/logo-rotav3.png" alt="ROTAV3 Systems" width="154" height="43" />
+          <img src="img/logo-rotav3.png" alt="ROTAV3 Systems" width="177" height="43" />
         </a>
         <nav class="nav" id="menu-principal" aria-label="Menu principal">
           <a href="#inicio" data-nav="inicio">Início</a>
@@ -338,11 +338,10 @@
                 <div
                   class="map"
                   id="plan-map"
-                  tabindex="0"
-                  aria-label="Mapa ilustrativo. Arraste para mover e use os botões para aproximar."
+                  role="region"
+                  aria-label="Mapa de ruas com as paradas da rota na ordem de atendimento (dados demonstrativos)"
                 >
-                  <div class="map__layer" id="plan-map-layer"></div>
-                  <div class="map__tip" id="plan-map-tip" role="status" hidden></div>
+                  <p class="map__loading">Carregando mapa…</p>
                 </div>
                 <div class="map__zoom">
                   <button type="button" data-zoom="in" aria-label="Aproximar">
@@ -351,11 +350,13 @@
                   <button type="button" data-zoom="out" aria-label="Afastar">
                     <svg class="ico"><use href="#i-minus" /></svg>
                   </button>
-                  <button type="button" data-zoom="reset" aria-label="Centralizar">
+                  <button type="button" data-zoom="reset" aria-label="Mostrar a rota inteira">
                     <svg class="ico"><use href="#i-locate" /></svg>
                   </button>
                 </div>
-                <span class="map__credit">Mapa ilustrativo</span>
+                <span class="map__credit"
+                  ><i class="map__dots" aria-hidden="true"></i>Ordem das paradas</span
+                >
               </div>
               <div class="app__side">
                 <div class="panel">
@@ -787,7 +788,7 @@
             class="cta__logo"
             src="img/logo-rotav3.png"
             alt="ROTAV3 Systems"
-            width="154"
+            width="177"
             height="43"
             loading="lazy"
           />

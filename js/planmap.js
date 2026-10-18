@@ -1,233 +1,35 @@
-// Painel interativo da seção "Planejamento": abas Entregas/Coletas, lista de pedidos,
-// mapa com arrastar/zoom, marcadores clicáveis, resumo da rota e capacidade do veículo.
-import { generateMap, mapToSVG, routeSVG, streetPath } from "./mapgen.js";
-import {
-  ORDERS,
-  DEPOT,
-  MAP_W,
-  MAP_H,
-  MAP_SEED,
-  CONTEXT_ROUTES,
-  VEHICLE_CAPACITY_KG,
-  fmtKg,
-} from "./data.js";
+// Painel interativo da seção "Planejamento": abas Entregas/Coletas, lista de paradas na ordem
+// da rota, mapa de ruas com as paradas numeradas, resumo da rota e capacidade do veículo.
+// Todos os pedidos são DEMONSTRATIVOS (js/data.js).
+import { loadLeaflet, createMap, esc } from "./leafletmap.js";
+import { ORDERS, DEPOT_GEO, VEHICLE_CAPACITY_KG, fmtKg } from "./data.js";
 
-const PIN = (color) =>
-  `<svg viewBox="0 0 30 38" aria-hidden="true"><path d="M15 36.5S3 25.6 3 15.6A12 12 0 0 1 27 15.6c0 10-12 20.9-12 20.9z" fill="${color}" stroke="#fff" stroke-width="2"/><circle cx="15" cy="15.5" r="4.6" fill="#fff"/></svg>`;
+const KIND_TEXT = { entrega: "Entrega", coleta: "Coleta" };
+const volumes = (n) => `${n} volume${n > 1 ? "s" : ""}`;
 
-export function initPlanMap() {
+export function initPlanMap({ reduceMotion = false } = {}) {
   const root = document.getElementById("plan-map");
   if (!root) return;
-  const layer = document.getElementById("plan-map-layer");
-  const tip = document.getElementById("plan-map-tip");
   const list = document.getElementById("lista-pedidos");
   const tabs = [...document.querySelectorAll(".tabs .tab")];
   const zoomBtns = document.querySelectorAll(".map__zoom button");
 
-  const map = generateMap(MAP_SEED, MAP_W, MAP_H);
-  const routes = {};
-  for (const kind of Object.keys(ORDERS)) {
-    const pts = [
-      [DEPOT.x, DEPOT.y],
-      ...ORDERS[kind].items.map((i) => [i.x, i.y]),
-      [DEPOT.x, DEPOT.y],
-    ];
-    routes[kind] = streetPath(pts, kind === "entrega" ? 3 : 11);
-  }
-  let svg = mapToSVG(map);
-  for (const c of CONTEXT_ROUTES)
-    svg += routeSVG(streetPath(c.pts, 5), c.color, { width: 3.5, opacity: 0.5 });
-  for (const kind of Object.keys(ORDERS))
-    svg += routeSVG(routes[kind], ORDERS[kind].color, { width: 5, id: `route-${kind}` });
-  svg += "</svg>";
-  layer.innerHTML = svg;
-  layer.style.width = MAP_W + "px";
-  layer.style.height = MAP_H + "px";
-
-  const depot = document.createElement("span");
-  depot.className = "map__depot";
-  depot.innerHTML = '<svg class="ico"><use href="#i-warehouse"/></svg>';
-  root.appendChild(depot);
-
-  const pins = [];
-  for (const kind of Object.keys(ORDERS)) {
-    for (const item of ORDERS[kind].items) {
-      const b = document.createElement("button");
-      b.type = "button";
-      b.className = "map__pin";
-      b.dataset.kind = kind;
-      b.dataset.id = item.id;
-      b.setAttribute("aria-pressed", "false");
-      b.setAttribute(
-        "aria-label",
-        `${kind === "entrega" ? "Entrega" : "Coleta"} ${item.id}, ${item.city}`,
-      );
-      b.innerHTML = PIN(ORDERS[kind].color);
-      b.addEventListener("click", (e) => {
-        e.stopPropagation();
-        select(kind, item.id, false);
-      });
-      root.appendChild(b);
-      pins.push({ el: b, kind, item });
-    }
-  }
-
   let active = "entrega";
-  let selected = null;
-  let z = 1,
-    tx = 0,
-    ty = 0,
-    s0 = 1,
-    cw = 0,
-    ch = 0;
+  let selectedId = null;
+  let api = null; // preenchido quando o mapa carrega
 
-  function clampView() {
-    const w = MAP_W * s0 * z,
-      h = MAP_H * s0 * z;
-    tx = w <= cw ? (cw - w) / 2 : Math.min(0, Math.max(cw - w, tx));
-    ty = h <= ch ? (ch - h) / 2 : Math.min(0, Math.max(ch - h, ty));
-  }
-  function apply() {
-    const k = s0 * z;
-    layer.style.transform = `translate(${tx}px, ${ty}px) scale(${k})`;
-    for (const p of pins) {
-      p.el.style.left = tx + p.item.x * k + "px";
-      p.el.style.top = ty + p.item.y * k + "px";
-    }
-    depot.style.left = tx + DEPOT.x * k + "px";
-    depot.style.top = ty + DEPOT.y * k + "px";
-    if (selected) {
-      const it = ORDERS[selected.kind].items.find((i) => i.id === selected.id);
-      const X = tx + it.x * k,
-        Y = ty + it.y * k;
-      const tw = tip.offsetWidth || 180,
-        th = tip.offsetHeight || 60;
-      const cx = Math.min(cw - tw / 2 - 8, Math.max(tw / 2 + 8, X));
-      tip.style.left = cx + "px";
-      tip.style.top = Y + "px";
-      tip.style.setProperty("--ax", `calc(50% + ${Math.round(X - cx)}px)`);
-      tip.classList.toggle("is-below", Y - th - 46 < 6);
-    }
-  }
-  function layout() {
-    const fresh = cw === 0;
-    cw = root.clientWidth;
-    ch = root.clientHeight;
-    if (!cw || !ch) return;
-    s0 = Math.max(cw / MAP_W, ch / MAP_H);
-    if (fresh) {
-      tx = (cw - MAP_W * s0) / 2;
-      ty = (ch - MAP_H * s0) / 2;
-    }
-    clampView();
-    apply();
-  }
-  function zoomAt(factor, cx = cw / 2, cy = ch / 2) {
-    const nz = Math.min(3.2, Math.max(1, z * factor));
-    const mx = (cx - tx) / (s0 * z),
-      my = (cy - ty) / (s0 * z);
-    z = nz;
-    tx = cx - mx * s0 * z;
-    ty = cy - my * s0 * z;
-    clampView();
-    apply();
-  }
-  function centerOn(x, y) {
-    tx = cw / 2 - x * s0 * z;
-    ty = ch / 2 - y * s0 * z;
-    clampView();
-    apply();
-  }
-
-  new ResizeObserver(layout).observe(root);
-  layout();
-
-  // arrastar e pinça
-  const pointers = new Map();
-  let last = null,
-    pinchDist = 0,
-    moved = 0;
-  root.addEventListener("pointerdown", (e) => {
-    if (e.target.closest(".map__pin")) return;
-    root.setPointerCapture(e.pointerId);
-    moved = 0;
-    pointers.set(e.pointerId, [e.clientX, e.clientY]);
-    last = [e.clientX, e.clientY];
-    if (pointers.size === 2) {
-      const [a, b] = [...pointers.values()];
-      pinchDist = Math.hypot(a[0] - b[0], a[1] - b[1]);
-    }
-  });
-  root.addEventListener("pointermove", (e) => {
-    if (!pointers.has(e.pointerId)) return;
-    pointers.set(e.pointerId, [e.clientX, e.clientY]);
-    if (pointers.size === 2) {
-      const [a, b] = [...pointers.values()];
-      const d = Math.hypot(a[0] - b[0], a[1] - b[1]);
-      const rect = root.getBoundingClientRect();
-      if (pinchDist)
-        zoomAt(d / pinchDist, (a[0] + b[0]) / 2 - rect.left, (a[1] + b[1]) / 2 - rect.top);
-      pinchDist = d;
-      return;
-    }
-    tx += e.clientX - last[0];
-    ty += e.clientY - last[1];
-    moved += Math.abs(e.clientX - last[0]) + Math.abs(e.clientY - last[1]);
-    last = [e.clientX, e.clientY];
-    clampView();
-    apply();
-  });
-  const end = (e) => {
-    pointers.delete(e.pointerId);
-    pinchDist = 0;
-    if (pointers.size === 1) last = [...pointers.values()][0];
-  };
-  root.addEventListener("pointerup", end);
-  root.addEventListener("pointercancel", end);
-  root.addEventListener("click", (e) => {
-    if (!e.target.closest(".map__pin") && moved < 5) clearSelection();
-  });
-  root.addEventListener("keydown", (e) => {
-    const step = 50;
-    const keys = {
-      ArrowLeft: [step, 0],
-      ArrowRight: [-step, 0],
-      ArrowUp: [0, step],
-      ArrowDown: [0, -step],
-    };
-    if (keys[e.key]) {
-      e.preventDefault();
-      tx += keys[e.key][0];
-      ty += keys[e.key][1];
-      clampView();
-      apply();
-    } else if (e.key === "+" || e.key === "=") zoomAt(1.3);
-    else if (e.key === "-") zoomAt(1 / 1.3);
-    else if (e.key === "Escape") clearSelection();
-  });
-  zoomBtns.forEach((b) =>
-    b.addEventListener("click", () => {
-      if (b.dataset.zoom === "in") zoomAt(1.35);
-      else if (b.dataset.zoom === "out") zoomAt(1 / 1.35);
-      else {
-        z = 1;
-        cw = 0;
-        layout();
-      }
-    }),
-  );
-
+  /* ---------- lista e resumo (funcionam mesmo antes de o mapa carregar) ---------- */
   function renderList() {
     const o = ORDERS[active];
     list.innerHTML = "";
-    for (const it of o.items) {
+    o.items.forEach((it, i) => {
       const li = document.createElement("li");
-      li.innerHTML = `<button type="button" class="order" aria-pressed="false" data-id="${it.id}">
-        <span class="order__pin" style="background:${o.color}"><svg class="ico"><use href="#i-pin"/></svg></span>
-        <span><strong>${it.id} · ${it.city}</strong><small>${it.vol} volume${it.vol > 1 ? "s" : ""} · ${fmtKg(it.kg)}</small></span></button>`;
-      li.firstElementChild.addEventListener("click", () => select(active, it.id, true));
+      li.innerHTML = `<button type="button" class="order" aria-pressed="false" data-id="${esc(it.id)}">
+        <span class="order__seq" style="background:${o.color}" aria-label="Parada ${i + 1}">${i + 1}</span>
+        <span><strong>${esc(it.id)} · ${esc(it.city)}</strong><small>${esc(it.area)} · ${volumes(it.vol)} · ${fmtKg(it.kg)}</small></span></button>`;
+      li.firstElementChild.addEventListener("click", () => select(it.id, true));
       list.appendChild(li);
-    }
+    });
     const total = o.items.reduce((s, i) => s + i.kg, 0);
     document.getElementById("st-dist").textContent = o.distance;
     document.getElementById("st-time").textContent = o.time;
@@ -237,41 +39,14 @@ export function initPlanMap() {
     const pct = Math.round((total / VEHICLE_CAPACITY_KG) * 100);
     document.getElementById("cap-pct").textContent = pct + "%";
     document.getElementById("cap-bar").style.width = pct + "%";
-    for (const p of pins) {
-      const on = p.kind === active;
-      p.el.classList.toggle("is-dim", !on);
-      p.el.tabIndex = on ? 0 : -1;
-      p.el.setAttribute("aria-hidden", on ? "false" : "true");
-    }
-    for (const kind of Object.keys(ORDERS)) {
-      const g = layer.querySelector(`#route-${kind}`);
-      if (g) {
-        g.setAttribute("opacity", kind === active ? "1" : "0.22");
-        if (kind === active) g.parentNode.appendChild(g);
-      }
-    }
   }
 
-  function select(kind, id, pan) {
-    if (kind !== active) return;
-    selected = { kind, id };
-    const it = ORDERS[kind].items.find((i) => i.id === id);
-    for (const p of pins)
-      p.el.setAttribute("aria-pressed", String(p.kind === kind && p.item.id === id));
+  function select(id, fromList) {
+    selectedId = id;
     list
       .querySelectorAll(".order")
       .forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.id === id)));
-    const label = kind === "entrega" ? "Entrega" : "Coleta";
-    tip.innerHTML = `<strong>${it.id} · ${it.city}</strong><span><svg class="ico"><use href="#i-package"/></svg>${label} · ${it.vol} volume${it.vol > 1 ? "s" : ""} · ${fmtKg(it.kg)}</span>`;
-    tip.hidden = false;
-    if (pan) centerOn(it.x, it.y + 60 / (s0 * z));
-    else apply();
-  }
-  function clearSelection() {
-    selected = null;
-    tip.hidden = true;
-    pins.forEach((p) => p.el.setAttribute("aria-pressed", "false"));
-    list.querySelectorAll(".order").forEach((b) => b.setAttribute("aria-pressed", "false"));
+    if (api) api.focusStop(id, fromList);
   }
 
   function setTab(tab) {
@@ -282,8 +57,9 @@ export function initPlanMap() {
     });
     list.setAttribute("aria-labelledby", tab.id);
     active = tab.dataset.kind;
-    clearSelection();
+    selectedId = null;
     renderList();
+    if (api) api.showKind(active);
   }
   tabs.forEach((t, i) => {
     t.addEventListener("click", () => setTab(t));
@@ -296,8 +72,159 @@ export function initPlanMap() {
       }
     });
   });
-
   renderList();
-  // começa com um pedido selecionado, como na referência
-  requestAnimationFrame(() => select("entrega", "#1023", false));
+
+  /* ---------- mapa de ruas ---------- */
+  function buildMap(L) {
+    const map = createMap(L, root, { reduceMotion, zoomControl: false });
+    const depotLL = [DEPOT_GEO.lat, DEPOT_GEO.lng];
+    const groups = {};
+    const markers = {};
+
+    L.marker(depotLL, {
+      icon: L.divIcon({
+        className: "mk-wrap",
+        html: '<span class="mk mk--cd"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 5l9 5.5V20H3z"/><path d="M8 20v-6h8v6"/></svg></span>',
+        iconSize: [28, 28],
+        iconAnchor: [14, 14],
+        popupAnchor: [0, -12],
+      }),
+      title: `${DEPOT_GEO.name} (demonstrativo)`,
+      keyboard: false,
+      zIndexOffset: 500,
+    })
+      .bindPopup(
+        `<div class="mpop"><strong>${DEPOT_GEO.name}</strong><span>Saída e volta da rota</span></div>`,
+      )
+      .addTo(map);
+
+    for (const [kind, g] of Object.entries(ORDERS)) {
+      const pts = g.items.map((o) => [o.lat, o.lng]);
+      // linha pontilhada = ordem das paradas (não é o trajeto pelas ruas)
+      const seqLine = L.polyline([depotLL, ...pts, depotLL], {
+        color: g.color,
+        weight: 3.5,
+        opacity: 0.9,
+        dashArray: "1 9",
+        lineCap: "round",
+        interactive: false,
+      });
+      const seqHalo = L.polyline([depotLL, ...pts, depotLL], {
+        color: "#ffffff",
+        weight: 7,
+        opacity: 0.7,
+        lineCap: "round",
+        interactive: false,
+      });
+      // pontos pequenos da outra aba, só para dar contexto
+      const ghosts = g.items.map((o) =>
+        L.circleMarker([o.lat, o.lng], {
+          radius: 4.5,
+          color: "#ffffff",
+          weight: 1.5,
+          fillColor: g.color,
+          fillOpacity: 0.55,
+          interactive: false,
+        }),
+      );
+      markers[kind] = {};
+      const stops = g.items.map((o, i) => {
+        const text = `Parada ${i + 1}: ${KIND_TEXT[kind].toLowerCase()} do pedido ${o.id}, ${o.city}`;
+        const m = L.marker([o.lat, o.lng], {
+          icon: L.divIcon({
+            className: "mk-wrap",
+            html: `<span class="mk mk--seq" style="--c:${g.color}">${i + 1}</span>`,
+            iconSize: [28, 28],
+            iconAnchor: [14, 14],
+            popupAnchor: [0, -13],
+          }),
+          title: text,
+          riseOnHover: true,
+        }).bindPopup(
+          `<div class="mpop"><span class="mpop__kind mpop__kind--${kind}">${KIND_TEXT[kind]} · parada ${i + 1}</span><strong>Pedido ${esc(o.id)}</strong><span>${esc(o.city)} — ${esc(o.area)}</span><span>${volumes(o.vol)} · ${fmtKg(o.kg)}</span></div>`,
+          { autoPanPadding: [24, 24] },
+        );
+        m.on("add", () => {
+          const el = m.getElement();
+          el.setAttribute("role", "button");
+          el.setAttribute("aria-label", text);
+        });
+        m.on("click", () => select(o.id, false));
+        m.on("popupopen", () => m.getElement()?.classList.add("is-active"));
+        m.on("popupclose", () => m.getElement()?.classList.remove("is-active"));
+        markers[kind][o.id] = m;
+        return m;
+      });
+      groups[kind] = {
+        route: L.layerGroup([seqHalo, seqLine, ...stops]),
+        ghosts: L.layerGroup(ghosts),
+        bounds: L.latLngBounds([depotLL, ...pts]),
+      };
+    }
+
+    const fitActive = (animate) =>
+      map.fitBounds(groups[active].bounds, {
+        padding: [34, 34],
+        maxZoom: 13,
+        animate: animate && !reduceMotion,
+      });
+
+    function showKind(kind) {
+      map.closePopup();
+      for (const [k, g] of Object.entries(groups)) {
+        if (k === kind) {
+          map.removeLayer(g.ghosts);
+          map.addLayer(g.route);
+        } else {
+          map.removeLayer(g.route);
+          map.addLayer(g.ghosts);
+        }
+      }
+      fitActive(true);
+    }
+    function focusStop(id, pan) {
+      const m = markers[active][id];
+      if (!m) return;
+      if (pan && !map.getBounds().pad(-0.12).contains(m.getLatLng()))
+        map.panTo(m.getLatLng(), { animate: !reduceMotion });
+      m.openPopup();
+    }
+
+    zoomBtns.forEach((b) =>
+      b.addEventListener("click", () => {
+        if (b.dataset.zoom === "in") map.zoomIn();
+        else if (b.dataset.zoom === "out") map.zoomOut();
+        else fitActive(true);
+      }),
+    );
+
+    showKind(active);
+    fitActive(false);
+    return { map, showKind, focusStop };
+  }
+
+  const start = () =>
+    loadLeaflet()
+      .then((L) => {
+        api = buildMap(L);
+        root.closest(".app__map").classList.add("is-ready");
+        if (selectedId) api.focusStop(selectedId, true);
+        window.__rotav3 = Object.assign(window.__rotav3 || {}, { plan: api });
+      })
+      .catch((err) => {
+        console.warn("Mapa do painel indisponível:", err);
+        root.classList.add("is-failed");
+        root.textContent = "Não foi possível carregar o mapa agora.";
+      });
+
+  if (!("IntersectionObserver" in window)) return start();
+  const io = new IntersectionObserver(
+    (entries) => {
+      if (!entries.some((e) => e.isIntersecting)) return;
+      io.disconnect();
+      start();
+    },
+    { rootMargin: "500px 0px" },
+  );
+  io.observe(root);
 }

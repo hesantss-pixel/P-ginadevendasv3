@@ -55,11 +55,12 @@ A imagem precisa de endereço completo; por isso ela não está ligada ainda.
 | Pedidos, pesos e rotas do painel interativo (demonstrativos) | `js/data.js`                                                               |
 | Imagem do painel no topo                                     | `img/painel-rotav3.webp`                                                   |
 | Modelos de empresas (seção "Personalização")                 | `index.html` + `img/modelo-*.webp`                                         |
+| Mapa do painel de planejamento (paradas numeradas)           | `js/planmap.js`                                                            |
 | Mapas de ruas (pedidos, coletas e entregas)                  | `js/ordersmap.js` (pontos em `js/data.js`, mapa de ruas em `js/config.js`) |
 | Mapa 3D da seção escura                                      | `js/city3d.js`                                                             |
 | Formulário, menu, animações                                  | `js/main.js`                                                               |
 | WhatsApp e destino do formulário                             | `js/config.js`                                                             |
-| Logo                                                         | `img/logo-rotav3.png` (troque pelo arquivo original, mesmo nome)           |
+| Logo                                                         | `img/logo-rotav3.png` (original, fundo transparente)                       |
 
 ## Imagens do topo e dos modelos
 
@@ -68,6 +69,13 @@ A imagem precisa de endereço completo; por isso ela não está ligada ainda.
   - `img/modelo-viaverde.webp`: a captura original era do painel "2SL LOG"; o nome no canto superior esquerdo foi substituído por "ViaVerde" na imagem. Não é uma captura de um sistema que a ViaVerde já usa.
   - `img/modelo-2sl-log.webp`: recorte da captura de celular enviada. A barra do navegador, a barra de status e o mapa foram cortados — o mapa aparecia com o aviso "API KEY REQUIRED" do Google Maps.
 - Se houver capturas novas, é só substituir os arquivos com os mesmos nomes. A proporção usada nos cartões é 2,2 : 1 (o corte é feito pelo CSS, `object-fit: cover`).
+
+## Painel de planejamento
+
+- O mapa do painel também é um mapa de ruas (Leaflet + OpenStreetMap), no lugar do mapa ilustrativo desenhado em código.
+- As paradas aparecem numeradas na ordem da rota, e a linha pontilhada liga as paradas nessa ordem (saindo e voltando ao centro de distribuição). Ela **não** é o trajeto pelas ruas — o site não tem serviço de rotas. Os pontos da outra aba aparecem pequenos e apagados, só para dar contexto.
+- Clicar em um pedido da lista abre o balão no mapa; clicar no número no mapa marca o pedido na lista.
+- Distância e tempo do resumo são demonstrativos: soma das distâncias em linha reta × 1,3 e 30 km/h de média + 8 min por parada.
 
 ## Mapas de ruas (seção "Pedidos no mapa")
 
@@ -87,7 +95,8 @@ A imagem precisa de endereço completo; por isso ela não está ligada ainda.
 
 ## O que foi testado (Chromium sem interface, WebGL por software)
 
-- Abas Entregas/Coletas, lista, marcadores, balão do pedido, zoom, arrastar o mapa e troca de aba pelo teclado.
+- Painel: abas Entregas/Coletas, paradas numeradas 1–8 e 1–6 na mesma ordem da lista, lista → balão e marcador → lista, zoom e botão de centralizar, troca de aba pelo teclado.
+- No celular, o cartão "Alertas do dia" fica abaixo do mapa 3D, sem cobrir a cena.
 - Resumo da rota e capacidade usada recalculados a partir dos pedidos (455 kg = 70% e 312 kg = 48% de 650 kg).
 - Formulário: 4 erros com campos vazios, máscara do WhatsApp, modo de demonstração e envio real para um destino **simulado** (conferido o conteúdo recebido).
 - WhatsApp escondido sem número e com link correto quando configurado.
@@ -122,7 +131,7 @@ Imagens:
 
 - No topo, a imagem do painel é a enviada pelo Henrique (dados demonstrativos). A estrada ao fundo é desenhada em CSS.
 - A foto do caminhão em "Para quem é" é ilustrativa (gerada para o projeto do Lovable) e recebeu um filtro de entardecer.
-- A logo é um recorte provisório da imagem de referência e tem resolução baixa. Troque pelo arquivo original.
+- A logo (`img/logo-rotav3.png`) e os ícones (`favicon.png`, `apple-touch-icon.png`) vêm da logo original enviada em 18/10/2026; o fundo azul foi retirado para a logo ficar transparente.
 
 A página ficou mais alta que a imagem porque os textos foram mantidos em tamanho legível.
 

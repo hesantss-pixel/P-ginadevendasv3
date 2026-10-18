@@ -210,7 +210,7 @@ form.addEventListener("submit", async (e) => {
 });
 
 /* ---------- Painel interativo ---------- */
-initPlanMap();
+initPlanMap({ reduceMotion });
 
 /* ---------- Mapas de ruas (pedidos / coletas e entregas) ---------- */
 initOrdersMaps({ reduceMotion });
