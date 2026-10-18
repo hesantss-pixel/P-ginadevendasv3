@@ -95,6 +95,15 @@ Os textos foram ajustados ao que o sistema já faz:
 - "Termos de uso" e "Política de privacidade" ficaram fora do rodapé até existirem os textos.
 - Foi acrescentada a seção de Perguntas (o menu "Perguntas" precisava de destino) e o formulário de demonstração.
 
+Tela do notebook (dashboard enviado em 18/10/2026): o desenho segue o layout enviado (barra lateral, indicadores, rotas, mapa, próximas paradas, pedidos por região, detalhes da rota e veículos). Ficou diferente da imagem onde ela diria algo que o sistema não comprova:
+
+- "Dados em tempo real (Firebase)", "em rota no momento" e "Em andamento" viraram textos neutros ("pedidos para roteirizar", "veículos usados no dia", "Planejada"). A tela não mostra rastreamento de veículos.
+- A seta de variação (↑ 12%) saiu; o selo "Dados demonstrativos" ocupa o lugar de "65 pendentes".
+- Clientes, endereços, horários e placas de exemplo foram trocados por pedidos e bairros genéricos, com volumes e kg. A data virou "Hoje".
+- O mapa é o mapa ilustrativo gerado em código, sem nomes de cidades ou rodovias reais.
+- Os números são só demonstrativos e não fecham entre si (por exemplo, 65 pedidos e 50 paradas nas cinco rotas). Edite em `js/screens.js`.
+- Cores: no dashboard novo, entrega é verde e coleta é azul. O painel interativo mais abaixo na página ainda usa entrega azul e coleta verde.
+
 Imagens:
 
 - No topo, a foto da estrada foi substituída pelos aparelhos em 3D sobre uma estrada desenhada em CSS.

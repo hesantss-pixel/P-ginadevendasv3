@@ -206,20 +206,191 @@ function icon(ctx, kind, x, y, s, color) {
       ctx.lineTo(12, 18);
       ctx.lineTo(21, 13);
       break;
+    case "bot":
+      ctx.rect(5, 8, 14, 11);
+      ctx.moveTo(12, 8);
+      ctx.lineTo(12, 5);
+      ctx.moveTo(13.2, 3.8);
+      ctx.arc(12, 3.8, 1.2, 0, 7);
+      ctx.moveTo(10.2, 12.6);
+      ctx.arc(9.4, 12.6, 0.8, 0, 7);
+      ctx.moveTo(15.4, 12.6);
+      ctx.arc(14.6, 12.6, 0.8, 0, 7);
+      ctx.moveTo(9.5, 16);
+      ctx.lineTo(14.5, 16);
+      ctx.moveTo(5, 11.5);
+      ctx.lineTo(3, 11.5);
+      ctx.lineTo(3, 15.5);
+      ctx.lineTo(5, 15.5);
+      ctx.moveTo(19, 11.5);
+      ctx.lineTo(21, 11.5);
+      ctx.lineTo(21, 15.5);
+      ctx.lineTo(19, 15.5);
+      break;
+    case "calendar":
+      ctx.rect(4, 5.5, 16, 14.5);
+      ctx.moveTo(4, 10);
+      ctx.lineTo(20, 10);
+      ctx.moveTo(8, 3.5);
+      ctx.lineTo(8, 7.5);
+      ctx.moveTo(16, 3.5);
+      ctx.lineTo(16, 7.5);
+      break;
+    case "clock":
+      ctx.arc(12, 12, 8.5, 0, 7);
+      ctx.moveTo(12, 7.5);
+      ctx.lineTo(12, 12);
+      ctx.lineTo(15.5, 14);
+      break;
+    case "chevR":
+      ctx.moveTo(9, 5);
+      ctx.lineTo(16, 12);
+      ctx.lineTo(9, 19);
+      break;
+    case "chevD":
+      ctx.moveTo(5, 9);
+      ctx.lineTo(12, 16);
+      ctx.lineTo(19, 9);
+      break;
+    case "arrowR":
+      ctx.moveTo(4, 12);
+      ctx.lineTo(20, 12);
+      ctx.moveTo(14, 6);
+      ctx.lineTo(20, 12);
+      ctx.lineTo(14, 18);
+      break;
+    case "plus":
+      ctx.moveTo(12, 5);
+      ctx.lineTo(12, 19);
+      ctx.moveTo(5, 12);
+      ctx.lineTo(19, 12);
+      break;
+    case "minus":
+      ctx.moveTo(5, 12);
+      ctx.lineTo(19, 12);
+      break;
+    case "bars":
+      ctx.rect(4, 12, 4, 8);
+      ctx.rect(10, 4, 4, 16);
+      ctx.rect(16, 9, 4, 11);
+      break;
   }
   ctx.stroke();
   ctx.restore();
 }
 
-// rotas do painel (coordenadas no espaço do mapa gerado)
+// ---------- Dados DEMONSTRATIVOS das telas (nada aqui é real) ----------
+const KIND = {
+  entrega: { color: C.green, label: "Entrega" },
+  coleta: { color: C.blue, label: "Coleta" },
+};
+const DEMO_ROUTES = [
+  ["Rota 1 - Guarulhos", "12 paradas · 48,2 km", C.blue],
+  ["Rota 2 - Zona Norte", "11 paradas · 42,7 km", C.green],
+  ["Rota 3 - Centro", "10 paradas · 36,4 km", C.amber],
+  ["Rota 4 - Zona Leste", "9 paradas · 38,9 km", C.purple],
+  ["Rota 5 - Zona Sul", "8 paradas · 31,6 km", C.red],
+];
+const DEMO_STOPS = [
+  { kind: "coleta", id: "#2031", area: "Centro", vol: 5, kg: 72.0 },
+  { kind: "entrega", id: "#1021", area: "Vila Galvão", vol: 4, kg: 58.4 },
+  { kind: "entrega", id: "#1022", area: "Macedo", vol: 2, kg: 22.0 },
+  { kind: "coleta", id: "#2032", area: "Cumbica", vol: 3, kg: 34.8 },
+  { kind: "entrega", id: "#1023", area: "Picanço", vol: 6, kg: 87.2 },
+];
+const DEMO_VEHICLES = [
+  ["Fiorino · Veículo 1", "Rota 1 - Guarulhos", 72],
+  ["VUC · Veículo 2", "Rota 2 - Zona Norte", 64],
+  ["Toco · Veículo 3", "Rota 3 - Centro", 58],
+  ["Fiorino · Veículo 4", "Rota 4 - Zona Leste", 46],
+  ["Sprinter · Veículo 5", "Rota 5 - Zona Sul", 32],
+];
+const DEMO_REGIONS = [
+  ["Guarulhos", 38],
+  ["Itaim", 16],
+  ["Outras Cidades", 4],
+  ["Santos", 2],
+  ["São Paulo", 2],
+  ["Guarujá", 1],
+  ["Praia Grande", 1],
+  ["Sorocaba", 1],
+];
+const kgBR = (n) =>
+  n.toLocaleString("pt-BR", { minimumFractionDigits: 1, maximumFractionDigits: 1 }) + " kg";
+
+function card(b, x, y, w, h, r = 12) {
+  b.fillStyle = C.white;
+  rr(b, x, y, w, h, r);
+  b.fill();
+  b.strokeStyle = "#e4e9f0";
+  b.lineWidth = 1.3;
+  b.stroke();
+}
+function chip(b, x, y, label, { active = false, dot = null } = {}) {
+  b.font = `600 13px ${FONT}`;
+  const w = b.measureText(label).width + (dot ? 42 : 30);
+  b.fillStyle = active ? "#12305a" : "#f1f4f8";
+  rr(b, x, y, w, 31, 15.5);
+  b.fill();
+  if (dot) {
+    b.fillStyle = dot;
+    b.beginPath();
+    b.arc(x + 16, y + 15.5, 4, 0, 7);
+    b.fill();
+  }
+  text(
+    b,
+    label,
+    dot ? x + 28 : x + w / 2,
+    y + 20.5,
+    13,
+    active ? 600 : 500,
+    active ? "#fff" : C.ink,
+    dot ? "left" : "center",
+  );
+  return w;
+}
+function linkText(b, label, xRight, y) {
+  icon(b, "arrowR", xRight - 13, y - 11, 13, C.muted);
+  text(b, label, xRight - 19, y, 12, 500, C.muted, "right");
+}
+function cardHeader(b, ic, title, x, y) {
+  icon(b, ic, x + 16, y + 14, 22, "#33455f");
+  text(b, title, x + 46, y + 31, 15, 600, C.ink);
+}
+
+// rotas do mapa (coordenadas no espaço do mapa gerado)
 function buildRoutes(W, H) {
   const P = (fx, fy) => [fx * W, fy * H];
-  const depot = P(0.5, 0.52);
+  const depot = P(0.5, 0.5);
+  const B = C.blue,
+    G = C.green;
   const defs = [
-    { color: C.blue, stops: [P(0.36, 0.34), P(0.27, 0.2), P(0.45, 0.12), P(0.6, 0.24)] },
-    { color: C.red, stops: [P(0.66, 0.4), P(0.8, 0.3), P(0.9, 0.46), P(0.78, 0.62)] },
-    { color: C.green, stops: [P(0.38, 0.62), P(0.22, 0.7), P(0.12, 0.55), P(0.2, 0.4)] },
-    { color: C.amber, stops: [P(0.58, 0.7), P(0.7, 0.84), P(0.52, 0.9), P(0.4, 0.8)] },
+    {
+      color: C.blue,
+      pinColors: [B, G, G, G],
+      stops: [P(0.36, 0.3), P(0.27, 0.15), P(0.45, 0.1), P(0.6, 0.2)],
+    },
+    {
+      color: C.red,
+      pinColors: [B, G, G, G],
+      stops: [P(0.66, 0.36), P(0.8, 0.26), P(0.9, 0.44), P(0.78, 0.6)],
+    },
+    {
+      color: C.green,
+      pinColors: [B, G, G, G],
+      stops: [P(0.38, 0.62), P(0.22, 0.72), P(0.1, 0.54), P(0.2, 0.38)],
+    },
+    {
+      color: C.amber,
+      pinColors: [B, G, G],
+      stops: [P(0.58, 0.72), P(0.72, 0.86), P(0.5, 0.9)],
+    },
+    {
+      color: C.purple,
+      pinColors: [G, G],
+      stops: [P(0.82, 0.78), P(0.94, 0.62)],
+    },
   ];
   return {
     depot,
@@ -227,7 +398,7 @@ function buildRoutes(W, H) {
   };
 }
 
-function drawRoutes(ctx, R, progress, scale = 1) {
+function drawRoutes(ctx, R, progress, scale = 1, pinScale = scale) {
   ctx.save();
   ctx.lineCap = "round";
   ctx.lineJoin = "round";
@@ -245,192 +416,333 @@ function drawRoutes(ctx, R, progress, scale = 1) {
   }
   for (const r of R.routes)
     r.stops.forEach((s, i) => {
-      if (progress > 0.25 + i * 0.18) pin(ctx, s[0], s[1], r.color, scale);
+      if (progress > 0.25 + i * 0.18)
+        pin(ctx, s[0], s[1], r.pinColors ? r.pinColors[i] : r.color, pinScale);
     });
   // depósito
   const [dx, dy] = R.depot;
   ctx.fillStyle = C.navy;
-  rr(ctx, dx - 15 * scale, dy - 15 * scale, 30 * scale, 30 * scale, 8 * scale);
+  rr(ctx, dx - 15 * pinScale, dy - 15 * pinScale, 30 * pinScale, 30 * pinScale, 8 * pinScale);
   ctx.fill();
   ctx.fillStyle = C.gold;
-  rr(ctx, dx - 6 * scale, dy - 6 * scale, 12 * scale, 12 * scale, 3 * scale);
+  rr(ctx, dx - 6 * pinScale, dy - 6 * pinScale, 12 * pinScale, 12 * pinScale, 3 * pinScale);
   ctx.fill();
   ctx.restore();
 }
 
-/* ---------- Notebook: 1600 x 1000 ---------- */
+/* ---------- Notebook: 1600 x 1000 ----------
+   O desenho segue o dashboard de referência (1536 x 1024) com escala uniforme; a largura que
+   sobra é dividida entre os painéis. Tudo abaixo é desenhado em "unidades da referência". */
 export function createLaptopPainter(assets) {
   const W = 1600,
     H = 1000;
+  const S = H / 1024;
+  const RW = W / S;
   const base = document.createElement("canvas");
   base.width = W;
   base.height = H;
   const b = base.getContext("2d");
-  b.fillStyle = C.bg;
-  b.fillRect(0, 0, W, H);
+  b.scale(S, S);
+  b.fillStyle = "#f4f6fa";
+  b.fillRect(0, 0, RW, 1024);
+
   // barra lateral
-  b.fillStyle = C.navy;
-  b.fillRect(0, 0, 250, H);
+  const sg = b.createLinearGradient(0, 0, 0, 1024);
+  sg.addColorStop(0, "#0d1b2c");
+  sg.addColorStop(1, "#112238");
+  b.fillStyle = sg;
+  b.fillRect(0, 0, 260, 1024);
   if (assets.logo) {
-    const lw = 160,
+    const lw = 190,
       lh = (lw * assets.logo.naturalHeight) / assets.logo.naturalWidth;
-    b.drawImage(assets.logo, 34, 30, lw, lh);
+    b.drawImage(assets.logo, 28, 48 - lh / 2, lw, lh);
   }
   const menu = [
-    ["grid", "Dashboard"],
-    ["box", "Pedidos"],
-    ["route", "Roteirização"],
-    ["layers", "Rotas"],
-    ["user", "Motoristas"],
-    ["map", "Mapa"],
-    ["spark", "IA Assistente"],
-    ["gear", "Configurações"],
+    ["grid", "Dashboard", 111],
+    ["box", "Pedidos", 167],
+    ["route", "Roteirização", 221],
+    ["pin", "Rotas", 275],
+    ["map", "Mapa", 329],
+    ["bot", "IA Assistente", 383],
   ];
-  menu.forEach(([ic, label], i) => {
-    const y = 132 + i * 58;
+  menu.forEach(([ic, label, y], i) => {
     if (i === 0) {
-      b.fillStyle = "rgba(252,192,62,.13)";
-      rr(b, 18, y - 26, 214, 50, 12);
+      b.fillStyle = "#102a4c";
+      rr(b, 14, y - 26, 233, 52, 9);
       b.fill();
-      b.fillStyle = C.gold;
-      rr(b, 18, y - 18, 5, 34, 3);
+      b.fillStyle = "#fdce4c";
+      rr(b, 13, y - 19, 4, 38, 2);
       b.fill();
     }
-    icon(b, ic, 40, y - 13, 24, i === 0 ? C.gold : "#9fb0c4");
-    text(b, label, 80, y + 6, 19, i === 0 ? 600 : 500, i === 0 ? "#ffffff" : "#c3cfdc");
+    icon(b, ic, 36, y - 12, 24, i === 0 ? "#ffffff" : "#d4dde9");
+    text(b, label, 77, y + 6, 17.5, i === 0 ? 600 : 500, i === 0 ? "#ffffff" : "#dfe7f1");
   });
-  b.fillStyle = C.navy2;
-  rr(b, 18, H - 104, 214, 76, 14);
-  b.fill();
-  b.fillStyle = C.gold;
-  b.beginPath();
-  b.arc(52, H - 66, 18, 0, 7);
-  b.fill();
-  text(b, "ME", 52, H - 59, 15, 700, C.navy, "center");
-  text(b, "Minha Empresa", 80, H - 70, 16, 600, "#fff");
-  text(b, "Operação demo", 80, H - 48, 14, 500, "#9fb0c4");
+
   // barra superior
   b.fillStyle = C.white;
-  rr(b, 280, 24, 560, 48, 24);
+  b.fillRect(260, 0, RW - 260, 66);
+  b.fillStyle = "#e8edf3";
+  b.fillRect(260, 66, RW - 260, 1.5);
+  b.fillStyle = "#eef2f7";
+  rr(b, 283, 15, 360, 36, 10);
   b.fill();
-  b.strokeStyle = C.line;
-  b.lineWidth = 2;
-  b.stroke();
-  icon(b, "search", 298, 36, 24, C.muted);
-  text(b, "Buscar pedido, cliente ou cidade", 336, 55, 18, 400, "#94a3b8");
+  icon(b, "search", 296, 24, 18, "#6b7a90");
+  text(b, "Buscar pedido, endereço, cliente...", 324, 38, 14, 400, "#8a97a8");
+  icon(b, "bell", RW - 440, 21, 24, "#33455f");
+  b.fillStyle = "#f5a922";
+  b.beginPath();
+  b.arc(RW - 421, 24, 4, 0, 7);
+  b.fill();
   b.fillStyle = "#fff4dc";
-  rr(b, 1160, 30, 236, 36, 18);
+  rr(b, RW - 400, 15, 168, 37, 18.5);
   b.fill();
-  b.strokeStyle = "#f2d38d";
-  b.lineWidth = 2;
-  b.stroke();
-  text(b, "Dados demonstrativos", 1278, 54, 16, 600, "#8a5a00", "center");
-  b.fillStyle = C.white;
+  b.fillStyle = "#f5a922";
   b.beginPath();
-  b.arc(1440, 48, 24, 0, 7);
+  b.arc(RW - 384, 33.5, 4.5, 0, 7);
   b.fill();
-  b.strokeStyle = C.line;
-  b.stroke();
-  icon(b, "bell", 1428, 36, 24, C.muted);
-  b.fillStyle = C.gold;
-  b.beginPath();
-  b.arc(1510, 48, 24, 0, 7);
-  b.fill();
-  text(b, "ME", 1510, 55, 16, 700, C.navy, "center");
-  // KPIs
-  const kpis = [
-    ["Pedidos", "128", "box", C.blue],
-    ["Entregas", "98", "truck", C.green],
-    ["Coletas", "30", "layers", C.amber],
-    ["Veículos", "12", "route", C.purple],
-  ];
-  const kw = (1600 - 280 - 32 - 3 * 20) / 4;
-  kpis.forEach(([label, val, ic, col], i) => {
-    const x = 280 + i * (kw + 20),
-      y = 96;
-    b.fillStyle = C.white;
-    rr(b, x, y, kw, 104, 16);
-    b.fill();
-    b.strokeStyle = C.line;
-    b.lineWidth = 2;
-    b.stroke();
-    b.fillStyle = col + "1f";
-    b.beginPath();
-    b.arc(x + 46, y + 52, 26, 0, 7);
-    b.fill();
-    icon(b, ic, x + 33, y + 39, 26, col);
-    text(b, label, x + 88, y + 42, 18, 500, C.muted);
-    text(b, val, x + 88, y + 82, 34, 700, C.ink);
-  });
-  // painel do mapa
-  const mx = 280,
-    my = 222,
-    mw = 890,
-    mh = 746;
-  b.save();
-  rr(b, mx, my, mw, mh, 18);
-  b.clip();
-  const map = generateMap(11, mw, mh);
-  drawMapCanvas(b, map, mx, my, mw, mh, 1.1);
-  b.restore();
-  b.strokeStyle = C.line;
-  b.lineWidth = 2;
-  rr(b, mx, my, mw, mh, 18);
-  b.stroke();
+  text(b, "Dados demonstrativos", RW - 374, 38.5, 13, 600, "#8a5a00");
+  card(b, RW - 218, 15, 188, 37, 10);
+  icon(b, "user", RW - 206, 21, 22, "#33455f");
+  text(b, "Minha Empresa", RW - 178, 39, 14, 500, C.ink);
+  icon(b, "chevD", RW - 52, 25, 14, "#6b7a90");
+
+  // título
+  const LX = 290,
+    RX = RW - 30,
+    CW = RX - LX,
+    G = 14;
+  text(b, "Dashboard", LX, 115, 34, 700, "#0b1b33");
+  text(b, "Visão geral da sua operação logística", LX, 139, 15, 400, C.muted);
+  card(b, RX - 150, 88, 150, 38, 10);
+  icon(b, "calendar", RX - 138, 97, 20, "#33455f");
+  text(b, "Hoje", RX - 108, 113, 14.5, 500, C.ink);
+  icon(b, "chevD", RX - 30, 100, 15, "#6b7a90");
+
+  // indicadores
+  const kw = (CW - 3 * G) / 4;
   [
-    ["Hoje", 0],
-    ["Todas as rotas", 112],
-  ].forEach(([s, off]) => {
-    const w = s.length * 10 + 46;
-    b.fillStyle = C.white;
-    rr(b, mx + 18 + off, my + 18, w, 40, 12);
+    ["PEDIDOS", "65", "pedidos para roteirizar", "box"],
+    ["ROTAS", "5", "rotas planejadas", "route"],
+    ["TEMPO ESTIMADO", "6h32", "tempo total das rotas", "clock"],
+    ["VEÍCULOS NAS ROTAS", "5 / 8", "veículos usados no dia", "truck"],
+  ].forEach(([label, val, sub, ic], i) => {
+    const x = LX + i * (kw + G);
+    card(b, x, 157, kw, 143, 12);
+    b.fillStyle = "#f1f4f8";
+    rr(b, x + 15, 172, 46, 46, 10);
     b.fill();
-    b.strokeStyle = C.line;
-    b.stroke();
-    text(b, s + "  ▾", mx + 34 + off, my + 44, 16, 600, C.ink);
+    icon(b, ic, x + 26, 183, 24, "#33455f");
+    text(b, label, x + 76, 200, 12.5, 700, "#2a3a52");
+    text(b, val, x + 20, 257, 34, 700, "#0b1b33");
+    text(b, sub, x + 20, 285, 13, 500, "#2a9d6f");
   });
-  // painel de rotas
-  const px = 1190,
-    pw = 378;
-  b.fillStyle = C.white;
-  rr(b, px, my, pw, mh, 18);
-  b.fill();
-  b.strokeStyle = C.line;
-  b.stroke();
-  text(b, "Rotas geradas", px + 26, my + 50, 22, 700, C.ink);
-  text(b, "Hoje", px + pw - 26, my + 50, 16, 500, C.muted, "right");
-  const rotas = [
-    ["Rota 1 · Centro", "12 paradas · Fiorino", 412, 650, C.blue],
-    ["Rota 2 · Zona Sul", "14 paradas · HR", 1180, 1500, C.red],
-    ["Rota 3 · Zona Oeste", "9 paradas · Fiorino", 298, 650, C.green],
-    ["Rota 4 · Guarulhos", "16 paradas · VUC", 2540, 3000, C.amber],
-  ];
-  rotas.forEach(([t, s, kg, cap, col], i) => {
-    const y = my + 84 + i * 142;
-    b.fillStyle = "#f7f9fb";
-    rr(b, px + 16, y, pw - 32, 126, 14);
-    b.fill();
+
+  // painel A: rotas
+  card(b, LX, 315, 300, 414, 12);
+  let cx = LX + 14;
+  cx += chip(b, cx, 327, "Todas", { active: true }) + 11;
+  cx += chip(b, cx, 327, "Entregas", { dot: C.green }) + 11;
+  chip(b, cx, 327, "Coletas", { dot: C.blue });
+  DEMO_ROUTES.forEach(([t, s, col], i) => {
+    const y = 372 + i * 70;
+    b.fillStyle = "#eceff4";
+    b.fillRect(LX + 14, y - 4, 272, 1.3);
     b.fillStyle = col;
     b.beginPath();
-    b.arc(px + 48, y + 38, 18, 0, 7);
+    b.arc(LX + 24, y + 28, 4.5, 0, 7);
     b.fill();
-    text(b, String(i + 1), px + 48, y + 45, 17, 700, "#fff", "center");
-    text(b, t, px + 78, y + 34, 18, 600, C.ink);
-    text(b, s, px + 78, y + 58, 15, 500, C.muted);
-    const pct = kg / cap;
-    text(b, `${kg.toLocaleString("pt-BR")} kg`, px + pw - 32, y + 34, 16, 600, C.ink, "right");
-    b.fillStyle = "#e3e9f0";
-    rr(b, px + 32, y + 86, pw - 64, 10, 5);
-    b.fill();
-    b.fillStyle = col;
-    rr(b, px + 32, y + 86, (pw - 64) * pct, 10, 5);
-    b.fill();
-    text(b, `${Math.round(pct * 100)}% da capacidade`, px + 32, y + 116, 14, 500, C.muted);
+    text(b, t, LX + 42, y + 26, 14.5, 600, C.ink);
+    text(b, s, LX + 42, y + 47, 12.5, 400, C.muted);
+    icon(b, "chevR", LX + 266, y + 21, 14, "#7d8ba0");
   });
-  b.fillStyle = C.gold;
-  rr(b, px + 16, my + mh - 70, pw - 32, 52, 14);
+
+  // painel B: mapa
+  const BX = LX + 300 + G,
+    BW = CW - 300 - 380 - 2 * G;
+  card(b, BX, 315, BW, 414, 12);
+  icon(b, "map", BX + 16, 327, 22, "#33455f");
+  text(b, "Mapa de Distribuição", BX + 46, 343, 15, 600, C.ink);
+  b.fillStyle = C.white;
+  rr(b, BX + BW - 168, 328, 154, 25, 8);
   b.fill();
-  text(b, "Roteirizar pedidos", px + pw / 2, my + mh - 37, 18, 700, C.navy, "center");
+  b.strokeStyle = "#e1e7ee";
+  b.lineWidth = 1.3;
+  b.stroke();
+  text(b, "Ver lista de paradas", BX + BW - 158, 345, 11.5, 500, C.ink);
+  icon(b, "arrowR", BX + BW - 36, 334, 12, C.ink);
+  const mx = BX + 8,
+    my = 361,
+    mw = BW - 16,
+    mh = 362;
+  b.save();
+  rr(b, mx, my, mw, mh, 10);
+  b.clip();
+  drawMapCanvas(b, generateMap(11, mw, mh), mx, my, mw, mh, 0.62);
+  b.restore();
+
+  // painel C: próximas paradas
+  const CX = BX + BW + G,
+    CWd = 380;
+  card(b, CX, 315, CWd, 414, 12);
+  icon(b, "route", CX + 16, 327, 22, "#33455f");
+  text(b, "Próximas paradas", CX + 46, 343, 15, 600, C.ink);
+  linkText(b, "Ver todas", CX + CWd - 16, 343);
+  DEMO_STOPS.forEach((s, i) => {
+    const y = 364 + i * 72,
+      k = KIND[s.kind];
+    if (i) {
+      b.fillStyle = "#eceff4";
+      b.fillRect(CX + 16, y - 6, CWd - 32, 1.3);
+    }
+    b.fillStyle = k.color;
+    b.beginPath();
+    b.arc(CX + 28, y + 17, 11, 0, 7);
+    b.fill();
+    text(b, String(i + 1), CX + 28, y + 21.5, 12.5, 700, "#fff", "center");
+    text(b, k.label, CX + 52, y + 15, 14, 600, C.ink);
+    text(b, `Pedido ${s.id} · ${s.area}`, CX + 52, y + 33, 12, 400, C.muted);
+    text(b, `${s.vol} volumes · ${kgBR(s.kg)}`, CX + 52, y + 50, 12, 400, C.muted);
+    b.fillStyle = k.color + "22";
+    rr(b, CX + CWd - 98, y + 31, 62, 21, 10.5);
+    b.fill();
+    text(b, k.label, CX + CWd - 67, y + 45.5, 11.5, 600, k.color, "center");
+    icon(b, "chevR", CX + CWd - 28, y + 9, 14, "#7d8ba0");
+  });
+
+  // painel D: pedidos por região
+  const D_W = 425;
+  card(b, LX, 743, D_W, 260, 12);
+  cardHeader(b, "bars", "Pedidos por Região", LX, 743);
+  linkText(b, "Ver mais", LX + D_W - 16, 774);
+  const total = DEMO_REGIONS.reduce((s, r) => s + r[1], 0);
+  DEMO_REGIONS.forEach(([name, n], i) => {
+    const y = 806 + i * 22.5;
+    text(b, name, LX + 16, y + 4, 12.5, 400, C.ink);
+    const tx = LX + 118,
+      tw = D_W - 118 - 92;
+    b.fillStyle = "#e9eef5";
+    rr(b, tx, y - 5, tw, 9, 4.5);
+    b.fill();
+    b.fillStyle = "#1d3d6e";
+    rr(b, tx, y - 5, Math.max(9, (tw * n) / total), 9, 4.5);
+    b.fill();
+    text(b, String(n), LX + D_W - 62, y + 4, 12, 500, C.ink, "right");
+    text(b, `(${Math.round((n / total) * 100)}%)`, LX + D_W - 14, y + 4, 12, 400, C.muted, "right");
+  });
+  text(b, `Total de ${total} pedidos`, LX + D_W / 2, 992, 12, 400, C.muted, "center");
+
+  // painel E: detalhes da rota
+  const EX = LX + D_W + G,
+    E_W = 425;
+  card(b, EX, 743, E_W, 260, 12);
+  cardHeader(b, "route", "Detalhes da Rota", EX, 743);
+  text(b, "Rota 1 - Guarulhos", EX + 16, 828, 17, 600, C.ink);
+  b.fillStyle = "#e6f0ff";
+  rr(b, EX + E_W - 100, 811, 84, 24, 12);
+  b.fill();
+  text(b, "Planejada", EX + E_W - 58, 827.5, 12, 600, C.blue, "center");
+  [
+    ["12", "paradas"],
+    ["48,2 km", "distância"],
+    ["3h 45min", "tempo estimado"],
+  ].forEach(([v, l], i) => {
+    const x = EX + 16 + i * ((E_W - 32) / 3);
+    text(b, v, x, 868, 19, 600, C.ink);
+    text(b, l, x, 887, 12, 400, C.muted);
+  });
+  b.strokeStyle = "#e4e9f0";
+  b.lineWidth = 1.3;
+  rr(b, EX + 16, 896, E_W - 32, 64, 8);
+  b.stroke();
+  const x0 = EX + 34,
+    x1 = EX + E_W - 34;
+  b.strokeStyle = "#c9d3e0";
+  b.lineWidth = 2;
+  b.beginPath();
+  b.moveTo(x0, 913);
+  b.lineTo(x1, 913);
+  b.stroke();
+  for (let i = 0; i < 12; i++) {
+    b.fillStyle = i < 4 ? C.blue : C.green;
+    b.beginPath();
+    b.arc(x0 + ((x1 - x0) * i) / 11, 913, 4.5, 0, 7);
+    b.fill();
+  }
+  b.fillStyle = C.blue;
+  b.beginPath();
+  b.arc(EX + 38, 934, 4.5, 0, 7);
+  b.fill();
+  text(b, "Coletas", EX + 48, 938, 12, 500, C.ink);
+  text(b, "4", EX + 48, 952, 11.5, 400, C.muted);
+  b.fillStyle = C.green;
+  b.beginPath();
+  b.arc(EX + E_W / 2 + 10, 934, 4.5, 0, 7);
+  b.fill();
+  text(b, "Entregas", EX + E_W / 2 + 20, 938, 12, 500, C.ink);
+  text(b, "8", EX + E_W / 2 + 20, 952, 11.5, 400, C.muted);
+  b.fillStyle = "#f1f4f8";
+  rr(b, EX + 16, 967, E_W - 32, 29, 8);
+  b.fill();
+  b.strokeStyle = "#d9e0ea";
+  b.stroke();
+  text(b, "Ver detalhes da rota", EX + E_W / 2, 986, 12.5, 500, C.ink, "center");
+
+  // painel F: veículos
+  const FX = EX + E_W + G,
+    F_W = CW - D_W - E_W - 2 * G;
+  card(b, FX, 743, F_W, 260, 12);
+  cardHeader(b, "truck", "Veículos", FX, 743);
+  text(b, "capacidade usada", FX + 214, 772, 11, 500, C.muted);
+  linkText(b, "Ver todos", FX + F_W - 16, 774);
+  DEMO_VEHICLES.forEach(([name, route, pct], i) => {
+    const y = 796 + i * 40;
+    icon(b, "truck", FX + 16, y + 2, 22, "#33455f");
+    text(b, name, FX + 52, y + 12, 12.5, 600, C.ink);
+    text(b, route, FX + 52, y + 27, 11.5, 400, C.muted);
+    b.fillStyle = C.green;
+    b.beginPath();
+    b.arc(FX + 218, y + 8, 3.5, 0, 7);
+    b.fill();
+    text(b, "Planejada", FX + 226, y + 12, 11.5, 500, C.ink);
+    const bx = FX + 214,
+      bw = F_W - 214 - 58;
+    b.fillStyle = "#e5ebf3";
+    rr(b, bx, y + 18, bw, 5, 2.5);
+    b.fill();
+    b.fillStyle = C.blue;
+    rr(b, bx, y + 18, (bw * pct) / 100, 5, 2.5);
+    b.fill();
+    text(b, `${pct}%`, FX + F_W - 16, y + 25, 11.5, 500, C.muted, "right");
+  });
+
+  // camada acima das rotas: zoom e legenda do mapa
+  const ovl = document.createElement("canvas");
+  ovl.width = W;
+  ovl.height = H;
+  const v = ovl.getContext("2d");
+  v.scale(S, S);
+  ["plus", "minus", "layers"].forEach((ic, i) => {
+    card(v, mx + 10, my + 10 + i * 32, 30, 30, 6);
+    icon(v, ic, mx + 16, my + 16 + i * 32, 18, "#33455f");
+  });
+  card(v, mx + mw - 196, my + 10, 186, 28, 8);
+  [
+    ["Entrega", C.green, 0],
+    ["Coleta", C.blue, 66],
+  ].forEach(([l, col, off]) => {
+    v.fillStyle = col;
+    v.beginPath();
+    v.arc(mx + mw - 182 + off, my + 24, 4, 0, 7);
+    v.fill();
+    text(v, l, mx + mw - 174 + off, my + 28.5, 11.5, 500, C.ink);
+  });
+  v.strokeStyle = "#7d8ba0";
+  v.lineWidth = 1.6;
+  v.beginPath();
+  v.moveTo(mx + mw - 64, my + 24);
+  v.lineTo(mx + mw - 50, my + 24);
+  v.stroke();
+  text(v, "Rota", mx + mw - 44, my + 28.5, 11.5, 500, C.ink);
 
   const R = buildRoutes(mw, mh);
   const out = document.createElement("canvas");
@@ -442,11 +754,13 @@ export function createLaptopPainter(assets) {
     paint(progress = 1) {
       o.drawImage(base, 0, 0);
       o.save();
-      rr(o, mx, my, mw, mh, 18);
+      o.scale(S, S);
+      rr(o, mx, my, mw, mh, 10);
       o.clip();
       o.translate(mx, my);
-      drawRoutes(o, R, progress, 1.1);
+      drawRoutes(o, R, progress, 0.55, 0.72);
       o.restore();
+      o.drawImage(ovl, 0, 0);
     },
   };
 }
@@ -491,6 +805,15 @@ export function createPhonePainter(assets) {
     mh = 560;
   const map = generateMap(23, W, mh);
   drawMapCanvas(b, map, 0, my, W, mh, 1.4);
+  // aviso de dados demonstrativos
+  b.fillStyle = "#fff4dc";
+  rr(b, 28, my + 20, 262, 40, 20);
+  b.fill();
+  b.fillStyle = "#f5a922";
+  b.beginPath();
+  b.arc(52, my + 40, 6, 0, 7);
+  b.fill();
+  text(b, "Dados demonstrativos", 68, my + 46, 18, 600, "#8a5a00");
   // folha inferior
   b.shadowColor = "rgba(11,27,51,.18)";
   b.shadowBlur = 30;
@@ -502,19 +825,20 @@ export function createPhonePainter(assets) {
   b.fillStyle = "#d5dce5";
   rr(b, W / 2 - 40, 718, 80, 8, 4);
   b.fill();
-  text(b, "Rota 1 · Centro", 40, 784, 32, 700, C.ink);
-  text(b, "12 paradas · 412 kg · 2h 15min", 40, 822, 21, 500, C.muted);
+  text(b, "Rota 1 - Guarulhos", 40, 784, 32, 700, C.ink);
+  text(b, "12 paradas · 48,2 km · 3h 45min", 40, 822, 21, 500, C.muted);
   b.fillStyle = "#e3e9f0";
   rr(b, 40, 848, W - 80, 12, 6);
   b.fill();
   b.fillStyle = C.blue;
-  rr(b, 40, 848, (W - 80) * 0.63, 12, 6);
+  rr(b, 40, 848, (W - 80) * 0.72, 12, 6);
   b.fill();
-  text(b, "63% da capacidade", 40, 888, 18, 500, C.muted);
-  const stops = [
-    ["#1021 · São Paulo", "Entrega · 4 volumes · 58,4 kg", C.blue],
-    ["#2031 · Barueri", "Coleta · 5 volumes · 72,0 kg", C.green],
-  ];
+  text(b, "72% da capacidade", 40, 888, 18, 500, C.muted);
+  const stops = DEMO_STOPS.slice(0, 2).map((s) => [
+    `${s.id} · ${s.area}`,
+    `${KIND[s.kind].label} · ${s.vol} volumes · ${kgBR(s.kg)}`,
+    KIND[s.kind].color,
+  ]);
   stops.forEach(([t, s, col], i) => {
     const y = 924 + i * 92;
     b.fillStyle = "#f5f7fa";
@@ -550,9 +874,13 @@ export function createPhonePainter(assets) {
     const P = (fx, fy) => [fx * W, fy * mh];
     const depot = P(0.5, 0.62);
     const defs = [
-      { color: C.blue, stops: [P(0.3, 0.42), P(0.42, 0.2), P(0.68, 0.28)] },
-      { color: C.green, stops: [P(0.24, 0.72), P(0.12, 0.5)] },
-      { color: C.red, stops: [P(0.78, 0.56), P(0.88, 0.3)] },
+      {
+        color: C.blue,
+        pinColors: [C.blue, C.green, C.green],
+        stops: [P(0.3, 0.42), P(0.42, 0.2), P(0.68, 0.28)],
+      },
+      { color: C.green, pinColors: [C.blue, C.green], stops: [P(0.24, 0.72), P(0.12, 0.5)] },
+      { color: C.red, pinColors: [C.blue, C.green], stops: [P(0.78, 0.56), P(0.88, 0.3)] },
     ];
     return {
       depot,
