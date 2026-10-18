@@ -1,0 +1,10 @@
+# Sistema / editor
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+.idea
+*.log
+
+# Segredos (nunca publique chaves no site estático)
+.env
+.env.*
