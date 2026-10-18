@@ -632,6 +632,317 @@ body::before {
   color: var(--ink);
 }
 
+/* ---------- Pedidos no mapa (mapas de ruas) ---------- */
+.omap__head {
+  max-width: 720px;
+  margin: 0 auto clamp(24px, 3vw, 36px);
+  text-align: center;
+}
+.omap__head .lead {
+  margin-inline: auto;
+}
+.omap + .section--soft {
+  border-top: 1px solid var(--line);
+}
+.omap__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(16px, 2.2vw, 26px);
+  align-items: stretch;
+}
+.mapcard {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--white);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-card);
+  padding: 14px;
+}
+.mapcard__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 2px 4px 12px;
+}
+.mapcard__head h3 {
+  margin: 0 0 2px;
+  font-size: 1.08rem;
+  color: var(--ink);
+}
+.mapcard__head p {
+  margin: 0;
+  font-size: 0.88rem;
+  color: var(--muted);
+}
+.mapcard__head p strong {
+  color: var(--ink);
+}
+.demo-tag {
+  font-size: 11px;
+  font-weight: 600;
+  color: #8a5a00;
+  background: #fff4dc;
+  border: 1px solid #f7dca0;
+  padding: 2px 8px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.mapcard__map {
+  position: relative;
+  isolation: isolate; /* mantém os controles do mapa abaixo do cabeçalho fixo */
+  z-index: 0;
+  flex: 1;
+  min-height: 380px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  overflow: hidden;
+  background: #e9eef3;
+}
+.mapcard__loading,
+.mapcard__map.is-failed {
+  display: grid;
+  place-items: center;
+  margin: 0;
+  min-height: 380px;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+.mapcard__map.is-offline::after {
+  content: "Mapa de ruas indisponível agora. Os pontos continuam no lugar.";
+  position: absolute;
+  inset: auto 10px 28px;
+  z-index: 800;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: rgb(255 255 255 / 0.94);
+  border: 1px solid var(--line);
+  font-size: 12px;
+  color: var(--muted);
+  text-align: center;
+}
+.mapcard__legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 18px;
+  margin: 12px 4px 2px;
+  font-size: 0.84rem;
+  color: var(--ink-2);
+}
+.mapcard__legend > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.mapcard__hint {
+  margin-left: auto;
+  color: var(--muted-2);
+}
+
+/* filtro Todas / Entregas / Coletas */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 4px 12px;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 36px;
+  padding: 6px 14px;
+  border: 1px solid var(--line-2);
+  border-radius: var(--radius-pill);
+  background: var(--white);
+  color: var(--ink-2);
+  font: inherit;
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+}
+.chip b {
+  font-weight: 700;
+  color: var(--muted);
+}
+.chip:hover {
+  border-color: var(--navy-600);
+}
+.chip:focus-visible {
+  outline: 3px solid var(--gold-400);
+  outline-offset: 2px;
+}
+.chip[aria-pressed="true"] {
+  background: var(--navy-800);
+  border-color: var(--navy-800);
+  color: var(--white);
+}
+.chip[aria-pressed="true"] b {
+  color: var(--gold-300);
+}
+.chip__dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--white);
+  box-shadow: 0 0 0 1px rgb(11 27 51 / 0.2);
+}
+.chip--entrega .chip__dot {
+  background: var(--mk-entrega);
+}
+.chip--coleta .chip__dot {
+  background: var(--mk-coleta);
+}
+
+/* marcadores (também usados na legenda) */
+:root {
+  --mk-pedido: #16a34a;
+  --mk-entrega: #2f6fe4;
+  --mk-coleta: #c98410;
+}
+.mk-wrap {
+  background: none;
+  border: 0;
+}
+.mk {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  border: 2.5px solid #fff;
+  box-shadow:
+    0 0 0 1px rgb(11 27 51 / 0.18),
+    0 3px 8px rgb(11 27 51 / 0.35);
+  cursor: pointer;
+  transition: transform 0.15s;
+}
+.mk-wrap:hover .mk,
+.mk-wrap:focus-visible .mk {
+  transform: scale(1.18);
+}
+.mk-wrap:focus-visible {
+  outline: none;
+}
+.mk-wrap:focus-visible .mk {
+  box-shadow:
+    0 0 0 3px var(--gold-400),
+    0 3px 8px rgb(11 27 51 / 0.35);
+}
+.mk svg {
+  width: 62%;
+  height: 62%;
+  fill: none;
+  stroke: #fff;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.mk--pedido {
+  background: var(--mk-pedido);
+}
+.mk--entrega {
+  background: var(--mk-entrega);
+}
+.mk--coleta {
+  background: var(--mk-coleta);
+}
+.mk--cd {
+  border-radius: 7px;
+  background: var(--navy-800);
+}
+.mk--cd svg {
+  stroke-width: 2;
+}
+.mapcard__legend .mk {
+  width: 16px;
+  height: 16px;
+  border-width: 2px;
+  box-shadow: 0 0 0 1px rgb(11 27 51 / 0.18);
+  cursor: default;
+}
+.mapcard__legend .mk--sm {
+  width: 20px;
+  height: 20px;
+}
+.mapcard__legend .mk--cd {
+  border-radius: 5px;
+}
+
+/* balão do pedido */
+.leaflet-container {
+  font-family: var(--font);
+}
+.leaflet-popup-content-wrapper {
+  border-radius: 10px;
+  box-shadow: 0 10px 30px -10px rgb(11 27 51 / 0.45);
+}
+.leaflet-popup-content {
+  margin: 12px 16px;
+}
+.mpop {
+  display: grid;
+  gap: 2px;
+  font-size: 13px;
+  color: var(--ink-2);
+  line-height: 1.4;
+}
+.mpop strong {
+  font-size: 14px;
+  color: var(--ink);
+}
+.mpop__kind {
+  justify-self: start;
+  margin-bottom: 4px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+.mpop__kind--entrega {
+  background: #e6efff;
+  color: #1d4fb8;
+}
+.mpop__kind--coleta {
+  background: #fff1d6;
+  color: #7a4d00;
+}
+.omap__note {
+  margin: 16px auto 0;
+  max-width: 720px;
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+@media (max-width: 980px) {
+  .omap__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 560px) {
+  .mapcard {
+    padding: 10px;
+  }
+  .mapcard__map,
+  .mapcard__loading {
+    min-height: 340px;
+  }
+  .mapcard__head {
+    flex-wrap: wrap;
+  }
+  .mapcard__hint {
+    margin-left: 0;
+  }
+}
+
 /* ---------- Seções ---------- */
 .section {
   padding: clamp(40px, 4.2vw, 62px) 0;

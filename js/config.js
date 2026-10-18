@@ -10,4 +10,15 @@ export const SITE_CONFIG = {
   // Enquanto estiver vazio, o formulário só valida os campos e avisa que está em modo de
   // demonstração — nada é enviado.
   formEndpoint: "",
+
+  // Mapa de ruas dos mapas de pedidos. Padrão: OpenStreetMap, gratuito, sem chave, com crédito
+  // obrigatório no canto do mapa e sem garantia de disponibilidade (regras em
+  // https://operations.osmfoundation.org/policies/tiles/). Com muito acesso, troque por um
+  // provedor pago (MapTiler, Stadia, Mapbox etc.) colando aqui a URL e o crédito que ele indicar.
+  mapTiles: {
+    url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+    attribution:
+      '&copy; <a href="https://www.openstreetmap.org/copyright">colaboradores do OpenStreetMap</a>',
+    maxZoom: 19,
+  },
 };

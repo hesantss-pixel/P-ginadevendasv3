@@ -409,6 +409,104 @@
         </div>
       </section>
 
+      <!-- PEDIDOS NO MAPA (mapas de ruas, dados demonstrativos) -->
+      <section class="section section--soft omap" id="mapa" aria-labelledby="omap-title">
+        <div class="container">
+          <div class="omap__head reveal">
+            <p class="eyebrow">Pedidos no mapa</p>
+            <h2 id="omap-title">Veja onde está cada pedido e separe coletas de entregas.</h2>
+            <p class="lead">
+              Cada pedido vira um ponto no mapa de ruas. Em um mapa você enxerga a operação inteira;
+              no outro, o que é para entregar e o que é para coletar.
+            </p>
+          </div>
+
+          <div class="omap__grid">
+            <article class="mapcard reveal" aria-labelledby="mapcard-all-title">
+              <header class="mapcard__head">
+                <div>
+                  <h3 id="mapcard-all-title">Todos os pedidos</h3>
+                  <p><strong data-count="todas">14</strong> pedidos na Grande São Paulo</p>
+                </div>
+                <span class="demo-tag">Dados demonstrativos</span>
+              </header>
+              <div
+                class="mapcard__map"
+                id="map-pedidos"
+                role="region"
+                aria-label="Mapa de ruas com a localização de todos os pedidos (dados demonstrativos)"
+              >
+                <p class="mapcard__loading">Carregando mapa…</p>
+              </div>
+              <footer class="mapcard__legend">
+                <span><i class="mk mk--pedido" aria-hidden="true"></i>Pedido</span>
+                <span
+                  ><i class="mk mk--cd mk--sm" aria-hidden="true"></i>Centro de distribuição</span
+                >
+                <span class="mapcard__hint">Toque em um ponto para ver o pedido</span>
+              </footer>
+            </article>
+
+            <article class="mapcard reveal" aria-labelledby="mapcard-kinds-title">
+              <header class="mapcard__head">
+                <div>
+                  <h3 id="mapcard-kinds-title">Coletas e entregas</h3>
+                  <p>
+                    <strong data-count="entrega">8</strong> entregas ·
+                    <strong data-count="coleta">6</strong> coletas
+                  </p>
+                </div>
+                <span class="demo-tag">Dados demonstrativos</span>
+              </header>
+              <div class="chips" role="group" aria-label="Mostrar no mapa">
+                <button type="button" class="chip" data-filter="todas" aria-pressed="true">
+                  Todas <b data-count="todas">14</b>
+                </button>
+                <button
+                  type="button"
+                  class="chip chip--entrega"
+                  data-filter="entrega"
+                  aria-pressed="false"
+                >
+                  <i class="chip__dot" aria-hidden="true"></i>Entregas <b data-count="entrega">8</b>
+                </button>
+                <button
+                  type="button"
+                  class="chip chip--coleta"
+                  data-filter="coleta"
+                  aria-pressed="false"
+                >
+                  <i class="chip__dot" aria-hidden="true"></i>Coletas <b data-count="coleta">6</b>
+                </button>
+              </div>
+              <div
+                class="mapcard__map"
+                id="map-tipos"
+                role="region"
+                aria-label="Mapa de ruas com coletas e entregas separadas (dados demonstrativos)"
+              >
+                <p class="mapcard__loading">Carregando mapa…</p>
+              </div>
+              <footer class="mapcard__legend">
+                <span
+                  ><i class="mk mk--entrega mk--sm" aria-hidden="true"
+                    ><svg viewBox="0 0 24 24"><path d="M12 5v13M6 12l6 6 6-6" /></svg></i
+                  >Entrega: levar a mercadoria</span
+                >
+                <span
+                  ><i class="mk mk--coleta mk--sm" aria-hidden="true"
+                    ><svg viewBox="0 0 24 24"><path d="M12 19V6M6 12l6-6 6 6" /></svg></i
+                  >Coleta: buscar a mercadoria</span
+                >
+              </footer>
+            </article>
+          </div>
+          <p class="omap__note">
+            Pedidos fictícios, posicionados no centro de cada bairro, só para mostrar a tela.
+          </p>
+        </div>
+      </section>
+
       <!-- 3. FUNCIONALIDADES -->
       <section
         class="section section--soft features"

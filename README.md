@@ -1,6 +1,6 @@
 # ROTAV3 Systems — landing page (site estático)
 
-Página de vendas do ROTAV3 Systems no layout da referência de outubro/2026: notebook e celular em 3D no topo, painel interativo de planejamento, funcionalidades, mapa 3D com rotas animadas, "Para quem é", perguntas frequentes, chamada final e formulário de demonstração.
+Página de vendas do ROTAV3 Systems no layout da referência de outubro/2026: imagem do painel no topo, modelos de empresas, painel interativo de planejamento, dois mapas de ruas com os pedidos (todos os pedidos / coletas e entregas), funcionalidades, mapa 3D com rotas animadas, "Para quem é", perguntas frequentes, chamada final e formulário de demonstração.
 
 É um site estático (HTML, CSS e JavaScript), sem etapa de build: os arquivos desta pasta são o site. Isso permite publicar direto no GitHub Pages.
 
@@ -48,17 +48,18 @@ A imagem precisa de endereço completo; por isso ela não está ligada ainda.
 
 ## Onde alterar cada coisa
 
-| O quê                                                        | Arquivo                                                          |
-| ------------------------------------------------------------ | ---------------------------------------------------------------- |
-| Textos das seções, menu, FAQ, rodapé                         | `index.html`                                                     |
-| Cores, tamanhos, espaçamentos, celular                       | `css/style.css` (variáveis no começo do arquivo)                 |
-| Pedidos, pesos e rotas do painel interativo (demonstrativos) | `js/data.js`                                                     |
-| Imagem do painel no topo                                     | `img/painel-rotav3.webp`                                         |
-| Modelos de empresas (seção "Personalização")                 | `index.html` + `img/modelo-*.webp`                               |
-| Mapa 3D da seção escura                                      | `js/city3d.js`                                                   |
-| Formulário, menu, animações                                  | `js/main.js`                                                     |
-| WhatsApp e destino do formulário                             | `js/config.js`                                                   |
-| Logo                                                         | `img/logo-rotav3.png` (troque pelo arquivo original, mesmo nome) |
+| O quê                                                        | Arquivo                                                                    |
+| ------------------------------------------------------------ | -------------------------------------------------------------------------- |
+| Textos das seções, menu, FAQ, rodapé                         | `index.html`                                                               |
+| Cores, tamanhos, espaçamentos, celular                       | `css/style.css` (variáveis no começo do arquivo)                           |
+| Pedidos, pesos e rotas do painel interativo (demonstrativos) | `js/data.js`                                                               |
+| Imagem do painel no topo                                     | `img/painel-rotav3.webp`                                                   |
+| Modelos de empresas (seção "Personalização")                 | `index.html` + `img/modelo-*.webp`                                         |
+| Mapas de ruas (pedidos, coletas e entregas)                  | `js/ordersmap.js` (pontos em `js/data.js`, mapa de ruas em `js/config.js`) |
+| Mapa 3D da seção escura                                      | `js/city3d.js`                                                             |
+| Formulário, menu, animações                                  | `js/main.js`                                                               |
+| WhatsApp e destino do formulário                             | `js/config.js`                                                             |
+| Logo                                                         | `img/logo-rotav3.png` (troque pelo arquivo original, mesmo nome)           |
 
 ## Imagens do topo e dos modelos
 
@@ -67,6 +68,16 @@ A imagem precisa de endereço completo; por isso ela não está ligada ainda.
   - `img/modelo-viaverde.webp`: a captura original era do painel "2SL LOG"; o nome no canto superior esquerdo foi substituído por "ViaVerde" na imagem. Não é uma captura de um sistema que a ViaVerde já usa.
   - `img/modelo-2sl-log.webp`: recorte da captura de celular enviada. A barra do navegador, a barra de status e o mapa foram cortados — o mapa aparecia com o aviso "API KEY REQUIRED" do Google Maps.
 - Se houver capturas novas, é só substituir os arquivos com os mesmos nomes. A proporção usada nos cartões é 2,2 : 1 (o corte é feito pelo CSS, `object-fit: cover`).
+
+## Mapas de ruas (seção "Pedidos no mapa")
+
+- Dois mapas com ruas de verdade, feitos com Leaflet 1.9.4 (arquivos em `vendor/leaflet/`, carregados só quando a seção se aproxima da tela).
+- Mapa 1, "Todos os pedidos": uma bolinha verde por pedido. Mapa 2, "Coletas e entregas": entrega em azul com seta para baixo, coleta em dourado com seta para cima, e os botões Todas / Entregas / Coletas. Os dois mostram o centro de distribuição (quadrado azul-marinho). Tocar em um ponto abre o pedido.
+- Os pedidos são fictícios e ficam no centro aproximado do bairro citado (`lat`/`lng` em `js/data.js`). Não são endereços de clientes.
+- As cores de entrega (azul) e coleta (dourado) são as mesmas do painel de planejamento.
+- O mapa de ruas vem do OpenStreetMap (gratuito, sem chave). As regras deles pedem o crédito visível no mapa (já está) e não garantem disponibilidade; se o site tiver muito acesso, troque por um provedor pago em `mapTiles`, no `js/config.js`. Se o mapa de ruas não carregar, os pontos continuam e aparece um aviso.
+- No celular, um dedo rola a página e dois dedos dão zoom (os botões + e − também funcionam). No computador, a roda do mouse só dá zoom depois de clicar no mapa.
+- Não há linha de rota nesses mapas: desenhar o caminho pelas ruas exige um serviço de rotas, que o site não tem.
 
 ## Como o 3D funciona
 
@@ -84,10 +95,13 @@ A imagem precisa de endereço completo; por isso ela não está ligada ainda.
 - Sem rolagem lateral em 360, 390, 768, 1024, 1280 e 1920 px.
 - Movimento reduzido e navegador sem WebGL (imagens estáticas aparecem), sem erros no console.
 
+- Mapas de ruas: 14 bolinhas verdes, 8 entregas e 6 coletas, contadores, balão do pedido, filtros, marcadores com nome para leitor de tela e foco pelo teclado, cabeçalho por cima dos controles, aviso quando o mapa de ruas falha, em 1440 e 390 px. Nos testes o mapa de ruas foi trocado por uma imagem local (o ambiente não acessa o OpenStreetMap).
+
 ## O que não foi testado
 
 - Celulares e placas de vídeo reais, Safari e Firefox. O desempenho do 3D em aparelhos fracos não foi medido.
 - Envio para um destino real (só simulado).
+- Os mapas com as ruas reais do OpenStreetMap (bloqueado no ambiente de teste). Confira no site publicado.
 - A fonte Inter carregando do Google Fonts (bloqueado no ambiente de teste; usada a Inter instalada localmente).
 
 ## Diferenças em relação à imagem de referência
@@ -114,6 +128,7 @@ A página ficou mais alta que a imagem porque os textos foram mantidos em tamanh
 
 ## Licenças
 
+- Leaflet 1.9.4 — BSD 2-Clause (`vendor/leaflet/LICENSE.txt`). Dados do mapa © colaboradores do OpenStreetMap (ODbL), com crédito no canto de cada mapa.
 - three.js r169, incluindo `RoomEnvironment` e `RoundedBoxGeometry` dos exemplos — MIT (`vendor/LICENSE-three.txt`).
 - Fonte Inter, via Google Fonts — SIL Open Font License 1.1.
 - Ícones e modelos 3D — feitos para este projeto.

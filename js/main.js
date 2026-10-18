@@ -1,5 +1,6 @@
 import { SITE_CONFIG } from "./config.js";
 import { initPlanMap } from "./planmap.js";
+import { initOrdersMaps } from "./ordersmap.js";
 
 const doc = document.documentElement;
 doc.classList.add("js");
@@ -210,6 +211,9 @@ form.addEventListener("submit", async (e) => {
 
 /* ---------- Painel interativo ---------- */
 initPlanMap();
+
+/* ---------- Mapas de ruas (pedidos / coletas e entregas) ---------- */
+initOrdersMaps({ reduceMotion });
 
 /* ---------- Mapa 3D (carregado só quando o navegador suporta WebGL) ---------- */
 function hasWebGL() {
