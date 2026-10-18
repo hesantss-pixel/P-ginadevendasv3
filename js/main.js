@@ -211,7 +211,7 @@ form.addEventListener("submit", async (e) => {
 /* ---------- Painel interativo ---------- */
 initPlanMap();
 
-/* ---------- Cenas 3D (carregadas só quando o navegador suporta WebGL) ---------- */
+/* ---------- Mapa 3D (carregado só quando o navegador suporta WebGL) ---------- */
 function hasWebGL() {
   try {
     const c = document.createElement("canvas");
@@ -223,7 +223,6 @@ function hasWebGL() {
 const webgl = hasWebGL();
 if (!webgl) doc.classList.add("no-webgl");
 
-const heroVisual = document.querySelector(".hero__visual");
 const cityBox = document.querySelector(".city");
 // imagem estática no lugar do 3D (sem WebGL ou se a cena falhar)
 function useFallback(box) {
@@ -232,20 +231,9 @@ function useFallback(box) {
   if (img && !img.src) img.src = img.dataset.src;
 }
 if (!webgl) {
-  useFallback(heroVisual);
   useFallback(cityBox);
 }
 if (webgl) {
-  import("./hero3d.js")
-    .then((m) => m.initHero(document.getElementById("hero3d"), heroVisual, { reduceMotion }))
-    .then((api) => {
-      window.__rotav3 = Object.assign(window.__rotav3 || {}, { hero: api });
-    })
-    .catch((err) => {
-      console.warn("3D do topo indisponível:", err);
-      useFallback(heroVisual);
-    });
-
   const cityIO = new IntersectionObserver(
     (entries) => {
       if (!entries.some((en) => en.isIntersecting)) return;

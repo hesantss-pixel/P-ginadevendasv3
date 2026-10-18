@@ -53,19 +53,26 @@ A imagem precisa de endereço completo; por isso ela não está ligada ainda.
 | Textos das seções, menu, FAQ, rodapé                         | `index.html`                                                     |
 | Cores, tamanhos, espaçamentos, celular                       | `css/style.css` (variáveis no começo do arquivo)                 |
 | Pedidos, pesos e rotas do painel interativo (demonstrativos) | `js/data.js`                                                     |
-| Conteúdo das telas do notebook e do celular 3D               | `js/screens.js`                                                  |
-| Notebook e celular 3D (modelo, câmera, animação)             | `js/hero3d.js`                                                   |
+| Imagem do painel no topo                                     | `img/painel-rotav3.webp`                                         |
+| Modelos de empresas (seção "Personalização")                 | `index.html` + `img/modelo-*.webp`                               |
 | Mapa 3D da seção escura                                      | `js/city3d.js`                                                   |
 | Formulário, menu, animações                                  | `js/main.js`                                                     |
 | WhatsApp e destino do formulário                             | `js/config.js`                                                   |
 | Logo                                                         | `img/logo-rotav3.png` (troque pelo arquivo original, mesmo nome) |
 
+## Imagens do topo e dos modelos
+
+- O topo mostra a imagem do painel (`img/painel-rotav3.webp`), enviada em 18/10/2026. O notebook e o celular em 3D foram retirados a pedido, e com eles saíram `js/hero3d.js`, `js/screens.js` e `img/hero-devices.webp` (continuam no histórico do Git).
+- A seção "Modelos de empresas parceiras" usa duas capturas de tela reais de sistemas já feitos:
+  - `img/modelo-viaverde.webp`: a captura original era do painel "2SL LOG"; o nome no canto superior esquerdo foi substituído por "ViaVerde" na imagem. Não é uma captura de um sistema que a ViaVerde já usa.
+  - `img/modelo-2sl-log.webp`: recorte da captura de celular enviada. A barra do navegador, a barra de status e o mapa foram cortados — o mapa aparecia com o aviso "API KEY REQUIRED" do Google Maps.
+- Se houver capturas novas, é só substituir os arquivos com os mesmos nomes. A proporção usada nos cartões é 2,2 : 1 (o corte é feito pelo CSS, `object-fit: cover`).
+
 ## Como o 3D funciona
 
-- Notebook, celular, prédios, rotas, veículos e marcadores são modelados em código com three.js. Nenhum modelo 3D foi baixado de terceiros.
-- As telas do notebook e do celular são desenhadas em canvas e aplicadas como textura; todos os números nelas são demonstrativos e a tela mostra "Dados demonstrativos".
+- Prédios, rotas, veículos e marcadores do mapa da seção escura são modelados em código com three.js. Nenhum modelo 3D foi baixado de terceiros.
 - O 3D só roda quando aparece na tela, pausa quando a aba fica oculta e respeita a opção do sistema "reduzir movimento" (fica parado).
-- Sem WebGL, a página mostra imagens estáticas (`img/hero-devices.webp` e `img/city-3d.webp`) geradas a partir das próprias cenas.
+- Sem WebGL, a página mostra a imagem estática `img/city-3d.webp`, gerada a partir da própria cena.
 
 ## O que foi testado (Chromium sem interface, WebGL por software)
 
@@ -95,18 +102,11 @@ Os textos foram ajustados ao que o sistema já faz:
 - "Termos de uso" e "Política de privacidade" ficaram fora do rodapé até existirem os textos.
 - Foi acrescentada a seção de Perguntas (o menu "Perguntas" precisava de destino) e o formulário de demonstração.
 
-Tela do notebook (dashboard enviado em 18/10/2026): o desenho segue o layout enviado (barra lateral, indicadores, rotas, mapa, próximas paradas, pedidos por região, detalhes da rota e veículos). Ficou diferente da imagem onde ela diria algo que o sistema não comprova:
-
-- "Dados em tempo real (Firebase)", "em rota no momento" e "Em andamento" viraram textos neutros ("pedidos para roteirizar", "veículos usados no dia", "Planejada"). A tela não mostra rastreamento de veículos.
-- A seta de variação (↑ 12%) saiu; o selo "Dados demonstrativos" ocupa o lugar de "65 pendentes".
-- Clientes, endereços, horários e placas de exemplo foram trocados por pedidos e bairros genéricos, com volumes e kg. A data virou "Hoje".
-- O mapa é o mapa ilustrativo gerado em código, sem nomes de cidades ou rodovias reais.
-- Os números são só demonstrativos e não fecham entre si (por exemplo, 65 pedidos e 50 paradas nas cinco rotas). Edite em `js/screens.js`.
-- Cores: no dashboard novo, entrega é verde e coleta é azul. O painel interativo mais abaixo na página ainda usa entrega azul e coleta verde.
+Ponto em aberto na seção "Modelos de empresas parceiras": o título fala em empresas parceiras e um dos modelos leva o nome ViaVerde. Confirme essa palavra e esse nome antes de divulgar a página, porque a imagem é um modelo com o nome aplicado, não um sistema que a ViaVerde já usa. "Exemplos de personalização" é uma alternativa que não afirma parceria.
 
 Imagens:
 
-- No topo, a foto da estrada foi substituída pelos aparelhos em 3D sobre uma estrada desenhada em CSS.
+- No topo, a imagem do painel é a enviada pelo Henrique (dados demonstrativos). A estrada ao fundo é desenhada em CSS.
 - A foto do caminhão em "Para quem é" é ilustrativa (gerada para o projeto do Lovable) e recebeu um filtro de entardecer.
 - A logo é um recorte provisório da imagem de referência e tem resolução baixa. Troque pelo arquivo original.
 
