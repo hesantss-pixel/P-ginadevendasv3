@@ -1790,8 +1790,17 @@ body::before {
   flex-wrap: wrap;
   padding-block: 12px;
 }
+.footer__legal p {
+  margin: 0;
+}
+.footer__legal p + p {
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--muted-2);
+}
 .site-footer nav {
   display: flex;
+  flex-wrap: wrap;
   gap: 6px;
   align-items: center;
 }
@@ -2301,6 +2310,13 @@ body::before {
   .footer__inner {
     justify-content: center;
     text-align: center;
+  }
+  .site-footer nav {
+    justify-content: center;
+    gap: 2px 4px;
+  }
+  .footer__link + .footer__link {
+    border-left: 0;
   }
 }
 

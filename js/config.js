@@ -2,13 +2,13 @@
 export const SITE_CONFIG = {
   // Número do WhatsApp comercial com DDI e DDD, só dígitos. Ex.: "5511912345678".
   // Enquanto estiver vazio, o botão "Falar no WhatsApp" fica escondido.
-  whatsappNumber: "",
+  whatsappNumber: "5511955914618",
   whatsappMessage: "Olá! Quero conhecer o ROTAV3 Systems.",
 
   // Endereço que recebe o formulário (POST com os campos do formulário). Pode ser um webhook do
   // n8n, Formspree, Make, Google Apps Script etc. O destino precisa responder com status 2xx.
-  // Enquanto estiver vazio, o formulário só valida os campos e avisa que está em modo de
-  // demonstração — nada é enviado.
+  // Enquanto estiver vazio, o formulário abre o WhatsApp com a mensagem pronta (se o número acima
+  // estiver preenchido). Sem número e sem endereço, ele só valida os campos e nada é enviado.
   formEndpoint: "",
 
   // Mapas de ruas (painel de planejamento e "Pedidos no mapa").

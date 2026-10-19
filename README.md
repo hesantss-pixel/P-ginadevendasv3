@@ -23,12 +23,15 @@ Hoje o `index.html` desse repositório é, na verdade, o ZIP do Lovable renomead
 
 O repositório é público, então o site e o código ficam públicos. Nunca coloque senhas ou tokens nestes arquivos.
 
-## Ligar o WhatsApp e o envio do formulário
+## WhatsApp, formulário e CNPJ
 
 Tudo fica em `js/config.js`:
 
-- `whatsappNumber`: número com DDI e DDD, só dígitos (ex.: `"5511912345678"`). Enquanto estiver vazio, o botão "Falar no WhatsApp" não aparece.
-- `formEndpoint`: endereço que recebe os pedidos de demonstração. Enquanto estiver vazio, o formulário só valida os campos e avisa que está em modo de demonstração (nada é enviado).
+- `whatsappNumber`: `5511955914618` — (11) 95591-4618. Liga os botões "Falar no WhatsApp" e o link do rodapé. Para trocar, use só dígitos com DDI e DDD.
+- `formEndpoint`: vazio por enquanto. Enquanto estiver vazio, o formulário de demonstração valida os campos e **abre o WhatsApp** com a mensagem pronta (nome, empresa, e-mail, WhatsApp, frota, tipo de operação e mensagem); o visitante só precisa tocar em enviar. Se o navegador bloquear a janela, aparece o link "Não abriu? Toque aqui."
+- Quando `formEndpoint` for preenchido, o formulário passa a enviar os dados para esse endereço (e deixa de abrir o WhatsApp).
+
+O CNPJ (68.080.201/0001-80) está escrito no rodapé, no `index.html`.
 
 O formulário envia um POST comum (`application/x-www-form-urlencoded`) com os campos `nome`, `empresa`, `email`, `telefone`, `frota`, `operacao`, `mensagem`, `origem` e `enviadoEm`. O destino precisa responder com status 2xx.
 
@@ -107,7 +110,7 @@ A imagem precisa de endereço completo; por isso ela não está ligada ainda.
 - No celular, o cartão "Alertas do dia" fica abaixo do mapa 3D, sem cobrir a cena.
 - Resumo da rota e capacidade usada recalculados a partir dos pedidos (455 kg = 70% e 312 kg = 48% de 650 kg).
 - Formulário: 4 erros com campos vazios, máscara do WhatsApp, modo de demonstração e envio real para um destino **simulado** (conferido o conteúdo recebido).
-- WhatsApp escondido sem número e com link correto quando configurado.
+- WhatsApp: botões e rodapé com o link para (11) 95591-4618; formulário com campos vazios não abre nada; formulário preenchido abre o WhatsApp com a mensagem completa (conferido o texto gerado), em 1440 e 390 px. A abertura no app do WhatsApp em um celular real não foi testada.
 - Menu do celular, item ativo do menu, FAQ, tecla Esc no formulário.
 - Sem rolagem lateral em 360, 390, 768, 1024, 1280 e 1920 px.
 - Movimento reduzido e navegador sem WebGL (imagens estáticas aparecem), sem erros no console.

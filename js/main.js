@@ -77,13 +77,18 @@ if (reduceMotion || !("IntersectionObserver" in window)) {
 
 /* ---------- WhatsApp e ano ---------- */
 const wa = String(SITE_CONFIG.whatsappNumber || "").replace(/\D/g, "");
+const hasWa = wa.length >= 12;
+const waLink = (text) => `https://wa.me/${wa}?text=${encodeURIComponent(text || "")}`;
+// (11) 95591-4618 a partir de 5511955914618
+const waLabel = wa.replace(/^55(\d{2})(\d{4,5})(\d{4})$/, "($1) $2-$3");
 document.querySelectorAll("[data-whatsapp]").forEach((a) => {
-  if (wa.length < 12) return;
-  a.href = `https://wa.me/${wa}?text=${encodeURIComponent(SITE_CONFIG.whatsappMessage || "")}`;
+  if (!hasWa) return;
+  a.href = waLink(SITE_CONFIG.whatsappMessage);
   a.target = "_blank";
   a.rel = "noopener";
   a.hidden = false;
 });
+document.querySelectorAll("[data-whatsapp-label]").forEach((el) => (el.textContent = waLabel));
 document
   .querySelectorAll("[data-year]")
   .forEach((el) => (el.textContent = new Date().getFullYear()));
@@ -94,7 +99,15 @@ const form = document.getElementById("demo-form");
 const statusEl = document.getElementById("form-status");
 const submitBtn = document.getElementById("demo-submit");
 const endpoint = String(SITE_CONFIG.formEndpoint || "").trim();
-document.getElementById("form-notice").hidden = Boolean(endpoint);
+// sem endereço de envio, mas com WhatsApp: o formulário abre o WhatsApp com a mensagem pronta
+const viaWhatsApp = !endpoint && hasWa;
+const notice = document.getElementById("form-notice");
+notice.hidden = Boolean(endpoint);
+if (viaWhatsApp) {
+  notice.textContent =
+    "Ao enviar, o WhatsApp abre com a sua mensagem pronta para a nossa equipe. É só tocar em enviar.";
+  submitBtn.firstChild.textContent = "Enviar pelo WhatsApp ";
+}
 
 function openModal() {
   if (typeof modal.showModal !== "function") {
@@ -180,6 +193,35 @@ form.addEventListener("submit", async (e) => {
   data.origem = "landing-rotav3";
   data.enviadoEm = new Date().toISOString();
 
+  if (viaWhatsApp) {
+    const labels = {
+      nome: "Nome",
+      empresa: "Empresa",
+      email: "E-mail",
+      telefone: "WhatsApp",
+      frota: "Veículos na operação",
+      operacao: "Tipo de operação",
+      mensagem: "Mensagem",
+    };
+    const lines = Object.entries(labels)
+      .filter(([k]) => String(data[k] || "").trim())
+      .map(([k, l]) => `${l}: ${String(data[k]).trim()}`);
+    const url = waLink(
+      ["Olá! Quero agendar uma demonstração do ROTAV3 Systems.", "", ...lines].join("\n"),
+    );
+    const win = window.open(url, "_blank");
+    if (win) win.opener = null;
+    else window.location.href = url;
+    statusEl.classList.add("is-ok");
+    statusEl.textContent = "Abrimos o WhatsApp com a sua mensagem. É só tocar em enviar. ";
+    const again = document.createElement("a");
+    again.href = url;
+    again.target = "_blank";
+    again.rel = "noopener";
+    again.textContent = "Não abriu? Toque aqui.";
+    statusEl.append(again);
+    return;
+  }
   if (!endpoint) {
     statusEl.classList.add("is-ok");
     statusEl.textContent =
