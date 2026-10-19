@@ -69,8 +69,9 @@ A imagem precisa de endereço completo; por isso ela não está ligada ainda.
 
 - O topo mostra a imagem do painel (`img/painel-rotav3.webp`), enviada em 18/10/2026. O notebook e o celular em 3D foram retirados a pedido, e com eles saíram `js/hero3d.js`, `js/screens.js` e `img/hero-devices.webp` (continuam no histórico do Git).
 - A seção "Modelos de empresas parceiras" usa duas capturas de tela enviadas em 19/10/2026:
-  - `img/modelo-viaverde.webp`: painel com a identidade da Via Verde Transportes, sem edição.
-  - `img/modelo-2sl-log.webp`: painel escuro da 2SL Log, editado para não repetir os números do outro modelo (42 pedidos, 3 rotas, 4h12, pedidos por região, 12 alertas). O mapa original mostrava o aviso "API KEY REQUIRED" do Google Maps; no lugar dele entrou uma versão escura do mapa da outra captura, com os pontos redesenhados.
+  - `img/modelo-viaverde.webp`: painel com a identidade da Via Verde Transportes, editado para não repetir os dados do painel do topo: 87 pedidos, 6 rotas, 7h18, data 16/10/2026, regiões da Grande São Paulo (São Paulo, Santo André, São Bernardo, Osasco, Mauá, São Caetano, Diadema), 14 alertas; usuário trocado de "Henrique Santos" para "Equipe Operacional"; os textos "dados em tempo real (Firebase)" e "última roteirização (OR-Tools)" viraram "pendentes para hoje" e "planejadas para hoje".
+  - `img/modelo-2sl-log.webp`: painel escuro da 2SL Log, editado: 42 pedidos, 3 rotas, 4h12, regiões do Alto Tietê (Guarulhos, Suzano, Mogi das Cruzes, Arujá, Poá, Santa Isabel, Salesópolis, Guararema), 12 alertas, "aguardando roteirização" e "geradas hoje às 07:40". O mapa original mostrava o aviso "API KEY REQUIRED" do Google Maps; no lugar entrou um trecho escurecido de outro mapa (região de Guarulhos), sem os marcadores antigos, com pontos e linhas redesenhados.
+  - O painel do topo (`img/painel-rotav3.webp`) não foi alterado: 65 pedidos, 5 rotas, 02/10/2026.
 - Se houver capturas novas, é só substituir os arquivos com os mesmos nomes. Os cartões mostram a imagem na proporção 16 : 15, a partir do topo (o corte é feito pelo CSS, `object-fit: cover`).
 
 ## Painel de planejamento
