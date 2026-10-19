@@ -72,14 +72,22 @@ A imagem precisa de endereço completo; por isso ela não está ligada ainda.
 
 ## Painel de planejamento
 
-- O mapa do painel também é um mapa de ruas (Leaflet + OpenStreetMap), no lugar do mapa ilustrativo desenhado em código.
+- O mapa do painel também é um mapa de ruas, no lugar do mapa ilustrativo desenhado em código.
 - As paradas aparecem numeradas na ordem da rota, e a linha pontilhada liga as paradas nessa ordem (saindo e voltando ao centro de distribuição). Ela **não** é o trajeto pelas ruas — o site não tem serviço de rotas. Os pontos da outra aba aparecem pequenos e apagados, só para dar contexto.
 - Clicar em um pedido da lista abre o balão no mapa; clicar no número no mapa marca o pedido na lista.
 - Distância e tempo do resumo são demonstrativos: soma das distâncias em linha reta × 1,3 e 30 km/h de média + 8 min por parada.
 
+## Visual dos mapas de ruas
+
+- Os três mapas (painel e "Pedidos no mapa") usam o estilo claro "Liberty" do OpenFreeMap, desenhado com MapLibre GL dentro do Leaflet, com ajustes para lembrar os aplicativos de mapa: fundo cinza-claro, ruas brancas, rodovias azul-acinzentadas, água azul, sem ícones de comércio e sem prédios em 3D (`STYLE_TWEAKS` em `js/leafletmap.js`).
+- O OpenFreeMap é gratuito, não usa chave, permite uso comercial e não tem limite de acessos; o crédito (OpenFreeMap, OpenMapTiles, OpenStreetMap) aparece no canto do mapa.
+- Sem WebGL, ou se o estilo não carregar em 8 segundos, o mapa troca sozinho para o mapa comum do OpenStreetMap, com cores suavizadas.
+- Não é o Google Maps nem o Waze: o Google exige chave de API com cobrança, e o Waze não libera o mapa para sites. Se um dia quiser o mapa do Google, dá para trocar com uma chave restrita ao domínio do site.
+- Os pedidos de demonstração ficam concentrados em Guarulhos, perto do centro de distribuição, com alguns mais longe (Arujá, Itaquaquecetuba, Tatuapé e Penha).
+
 ## Mapas de ruas (seção "Pedidos no mapa")
 
-- Dois mapas com ruas de verdade, feitos com Leaflet 1.9.4 (arquivos em `vendor/leaflet/`, carregados só quando a seção se aproxima da tela).
+- Dois mapas com ruas de verdade, feitos com Leaflet 1.9.4 e MapLibre GL 4.7.1 (arquivos em `vendor/`, carregados só quando a seção se aproxima da tela).
 - Mapa 1, "Todos os pedidos": uma bolinha verde por pedido. Mapa 2, "Coletas e entregas": entrega em azul com seta para baixo, coleta em dourado com seta para cima, e os botões Todas / Entregas / Coletas. Os dois mostram o centro de distribuição (quadrado azul-marinho). Tocar em um ponto abre o pedido.
 - Os pedidos são fictícios e ficam no centro aproximado do bairro citado (`lat`/`lng` em `js/data.js`). Não são endereços de clientes.
 - As cores de entrega (azul) e coleta (dourado) são as mesmas do painel de planejamento.
@@ -110,7 +118,7 @@ A imagem precisa de endereço completo; por isso ela não está ligada ainda.
 
 - Celulares e placas de vídeo reais, Safari e Firefox. O desempenho do 3D em aparelhos fracos não foi medido.
 - Envio para um destino real (só simulado).
-- Os mapas com as ruas reais do OpenStreetMap (bloqueado no ambiente de teste). Confira no site publicado.
+- O visual final dos mapas com as ruas reais (OpenFreeMap e OpenStreetMap são bloqueados no ambiente de teste). Testado: o mapa vetorial carrega, os ajustes de cor são aplicados (com um estilo de teste) e a troca para o mapa de reserva funciona. Confira no site publicado.
 - A fonte Inter carregando do Google Fonts (bloqueado no ambiente de teste; usada a Inter instalada localmente).
 
 ## Diferenças em relação à imagem de referência
@@ -137,6 +145,7 @@ A página ficou mais alta que a imagem porque os textos foram mantidos em tamanh
 
 ## Licenças
 
+- MapLibre GL JS 4.7.1 — BSD 3-Clause (`vendor/maplibre/LICENSE.txt`); @maplibre/maplibre-gl-leaflet 0.1.4 — ISC (`vendor/maplibre-gl-leaflet/LICENSE.txt`), adaptado para carregar sem build. Mapa: OpenFreeMap, © OpenMapTiles, © colaboradores do OpenStreetMap.
 - Leaflet 1.9.4 — BSD 2-Clause (`vendor/leaflet/LICENSE.txt`). Dados do mapa © colaboradores do OpenStreetMap (ODbL), com crédito no canto de cada mapa.
 - three.js r169, incluindo `RoomEnvironment` e `RoundedBoxGeometry` dos exemplos — MIT (`vendor/LICENSE-three.txt`).
 - Fonte Inter, via Google Fonts — SIL Open Font License 1.1.

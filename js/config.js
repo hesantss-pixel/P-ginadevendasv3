@@ -11,11 +11,15 @@ export const SITE_CONFIG = {
   // demonstração — nada é enviado.
   formEndpoint: "",
 
-  // Mapa de ruas dos mapas de pedidos. Padrão: OpenStreetMap, gratuito, sem chave, com crédito
-  // obrigatório no canto do mapa e sem garantia de disponibilidade (regras em
-  // https://operations.osmfoundation.org/policies/tiles/). Com muito acesso, troque por um
-  // provedor pago (MapTiler, Stadia, Mapbox etc.) colando aqui a URL e o crédito que ele indicar.
+  // Mapas de ruas (painel de planejamento e "Pedidos no mapa").
+  // vectorStyle: mapa claro no estilo dos aplicativos de mapa, do OpenFreeMap (gratuito, sem chave,
+  // uso comercial permitido, sem limite de acessos — https://openfreemap.org). Precisa de WebGL.
+  // url/attribution: reserva usada quando o mapa vetorial não carrega (OpenStreetMap; regras em
+  // https://operations.osmfoundation.org/policies/tiles/).
   mapTiles: {
+    vectorStyle: "https://tiles.openfreemap.org/styles/liberty",
+    vectorAttribution:
+      '<a href="https://openfreemap.org" target="_blank" rel="noopener">OpenFreeMap</a> · &copy; <a href="https://www.openmaptiles.org/" target="_blank" rel="noopener">OpenMapTiles</a> · &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>',
     url: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
     attribution:
       '&copy; <a href="https://www.openstreetmap.org/copyright">colaboradores do OpenStreetMap</a>',

@@ -54,7 +54,12 @@ function labelMarker(m, text) {
 }
 
 function fit(map, latlngs, reduceMotion) {
-  map.fitBounds(latlngs, { padding: [28, 28], maxZoom: 13, animate: !reduceMotion });
+  map.fitBounds(latlngs, {
+    paddingTopLeft: [52, 30],
+    paddingBottomRight: [30, 34],
+    maxZoom: 13,
+    animate: !reduceMotion,
+  });
 }
 
 /* ---------- Mapa 1: todos os pedidos (bolinhas verdes) ---------- */

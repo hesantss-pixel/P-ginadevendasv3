@@ -26,7 +26,7 @@ export function initPlanMap({ reduceMotion = false } = {}) {
       const li = document.createElement("li");
       li.innerHTML = `<button type="button" class="order" aria-pressed="false" data-id="${esc(it.id)}">
         <span class="order__seq" style="background:${o.color}" aria-label="Parada ${i + 1}">${i + 1}</span>
-        <span><strong>${esc(it.id)} · ${esc(it.city)}</strong><small>${esc(it.area)} · ${volumes(it.vol)} · ${fmtKg(it.kg)}</small></span></button>`;
+        <span><strong>${esc(it.id)} · ${esc(it.area === "Centro" ? it.city : it.area)}</strong><small>${esc(it.area === "Centro" ? "Centro" : it.city)} · ${volumes(it.vol)} · ${fmtKg(it.kg)}</small></span></button>`;
       li.firstElementChild.addEventListener("click", () => select(it.id, true));
       list.appendChild(li);
     });
@@ -164,7 +164,8 @@ export function initPlanMap({ reduceMotion = false } = {}) {
 
     const fitActive = (animate) =>
       map.fitBounds(groups[active].bounds, {
-        padding: [34, 34],
+        paddingTopLeft: [34, 58],
+        paddingBottomRight: [64, 34],
         maxZoom: 13,
         animate: animate && !reduceMotion,
       });
