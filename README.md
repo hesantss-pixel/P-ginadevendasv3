@@ -33,7 +33,7 @@ Tudo fica em `js/config.js`:
 
 O CNPJ (68.080.201/0001-80) está escrito no rodapé e na seção Transparência, no `index.html`, e nos dados estruturados (JSON-LD). O número do WhatsApp também está escrito em `privacidade.html`; se mudar, troque lá também.
 
-No modo com endereço, o formulário envia um POST comum (`application/x-www-form-urlencoded`) com os campos `nome`, `empresa`, `frota`, `email`, `telefone`, `origem` e `enviadoEm`. O destino precisa responder com status 2xx.
+No modo com endereço, o formulário envia um POST comum (`application/x-www-form-urlencoded`) com os campos `nome`, `empresa`, `frota`, `email`, `telefone`, `interesse` (vazio ou `rastreamento`), `origem` e `enviadoEm`. O destino precisa responder com status 2xx.
 
 Exemplo com **n8n**: crie um nó _Webhook_ (método POST), copie a _Production URL_ para `formEndpoint`, ative o workflow e, nas opções do Webhook, libere o domínio do site em _Allowed Origins (CORS)_. Depois ligue o nó seguinte (planilha, e-mail, CRM). Também funciona com Formspree, Make ou Google Apps Script.
 
@@ -81,10 +81,19 @@ Baseada na pesquisa "como levar a landing page de boa a 100%" (conversão B2B, d
 - **Seção escura:** virou "dores → solução" (montar rotas de cabeça/planilha, veículo com espaço sobrando, listas separadas) com o mapa 3D e uma calculadora que multiplica só os números do visitante (horas por dia × dias × custo da hora). Não é promessa de economia. O cartão de alertas mostra só alertas de planejamento (região isolada, capacidade, horário marcado, rota gerada).
 - **Funcionalidades:** grade "bento" com recortes reais do painel do sistema.
 - **Personalização:** título "Modelos com a identidade de cada empresa" e a nota "Telas ilustrativas, com dados demonstrativos", para não sugerir que essas empresas já são clientes. Para voltar ao título anterior, troque o `<h2 id="models-title">` no `index.html`.
-- **Transparência:** o que o sistema faz hoje, o que ainda não faz (rastreamento em tempo real, relatórios prontos) e quem está por trás (CNPJ, atendimento direto, política de privacidade).
+- **Transparência:** o que o sistema faz hoje, o que fica fora do plano padrão (rastreamento como módulo opcional, relatórios prontos) e quem está por trás (CNPJ, atendimento direto, política de privacidade).
 - **Preço:** sob consulta, com o que define o valor (veículos, volume de pedidos, personalização). Confirme se esses critérios são os que você usa.
 - **FAQ:** novas perguntas de objeção (trocar de sistema, rastreamento, coletas, dados).
 - **Visual:** dourado metálico (#f3d27a → #d4a93c → #b8862b) com texto escuro nos botões, títulos em Sora e texto em Inter. Contraste conferido pela fórmula do WCAG: todos os textos ≥ 4,5 : 1.
+
+## Rastreamento — módulo opcional, com orçamento separado (19/10/2026)
+
+O sistema ainda não rastreia veículos. A página oferece o rastreamento como **módulo opcional, contratado à parte e com orçamento separado**, sem apresentá-lo como algo que já vem no plano padrão:
+
+- **Planejador:** um veículo percorre a ordem das paradas no mapa, para em cada uma e volta ao centro de distribuição. Um cartão mostra "Fiorino · em rota", a próxima parada e a etiqueta "Simulação do módulo opcional". O botão "Rastreamento (opcional)" liga e desliga. A animação pausa fora da tela e, com "reduzir movimento", o veículo fica parado a caminho da 3ª parada. Nenhuma localização real é usada; o veículo anda em linha reta entre as paradas. O código fica em `js/planmap.js` (trecho "rastreamento (SIMULAÇÃO do módulo opcional)").
+- **Preço:** bloco "Rastreamento no mapa — Módulo opcional · orçamento separado", com o botão "Pedir orçamento do rastreamento". Esse botão abre o formulário, e a mensagem do WhatsApp termina com "Também quero um orçamento do módulo de rastreamento." (campo `interesse` = `rastreamento`).
+- **Transparência:** o cartão "Fora do plano padrão" lista o rastreamento como módulo opcional com orçamento separado, e os relatórios prontos como em construção.
+- **FAQ:** "Dá para rastrear os veículos no mapa?" — sim, com o módulo opcional. A forma de enviar a localização (celular do motorista ou rastreador já instalado) é combinada no orçamento.
 
 ## Painel de planejamento
 

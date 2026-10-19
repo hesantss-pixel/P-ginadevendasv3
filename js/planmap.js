@@ -170,8 +170,107 @@ export function initPlanMap({ reduceMotion = false } = {}) {
         animate: animate && !reduceMotion,
       });
 
+    /* ---------- rastreamento (SIMULAÇÃO do módulo opcional) ---------- */
+    // Um veículo percorre a ordem das paradas (linha reta entre elas), para no ponto de cada
+    // parada e volta ao centro de distribuição. Não usa nenhuma localização real.
+    const trackBtn = root.parentElement.querySelector("[data-track-toggle]");
+    const trackCard = root.parentElement.querySelector("[data-track]");
+    const trackNext = trackCard && trackCard.querySelector("[data-track-next]");
+    const van = L.marker(depotLL, {
+      icon: L.divIcon({
+        className: "mk-wrap mk-wrap--van",
+        html: '<span class="mk mk--van"><svg class="ico" aria-hidden="true"><use href="#i-truck"/></svg></span>',
+        iconSize: [34, 34],
+        iconAnchor: [17, 17],
+      }),
+      keyboard: false,
+      interactive: false,
+      zIndexOffset: 1000,
+    });
+    const tracker = { on: false, raf: 0, visible: true, plan: null, t: 0, last: 0, label: "" };
+    function buildPlan(kind) {
+      const items = ORDERS[kind].items;
+      const pts = [depotLL, ...items.map((o) => [o.lat, o.lng]), depotLL];
+      const k = Math.cos((DEPOT_GEO.lat * Math.PI) / 180);
+      const lens = pts.slice(1).map((b, i) => Math.hypot(b[0] - pts[i][0], (b[1] - pts[i][1]) * k));
+      const sum = lens.reduce((x, y) => x + y, 0);
+      const segs = [];
+      let T = 0;
+      lens.forEach((len, i) => {
+        const travel = 1.2 + (len / sum) * 18; // segundos: a volta inteira leva ~40 s
+        const dwell = i < items.length ? 1.1 : 0.6;
+        segs.push({ a: pts[i], b: pts[i + 1], start: T, travel, dwell, i });
+        T += travel + dwell;
+      });
+      return { segs, total: T, items };
+    }
+    function trackAt(time) {
+      const plan = tracker.plan;
+      const t = time % plan.total;
+      const seg = plan.segs.find((s) => t < s.start + s.travel + s.dwell) || plan.segs.at(-1);
+      const u = Math.min(1, (t - seg.start) / seg.travel);
+      const e = u < 0.5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2; // acelera e freia
+      van.setLatLng([seg.a[0] + (seg.b[0] - seg.a[0]) * e, seg.a[1] + (seg.b[1] - seg.a[1]) * e]);
+      const n = seg.i + 1;
+      const item = plan.items[seg.i];
+      let label;
+      const place = item && (item.area === "Centro" ? item.city : item.area);
+      if (n > plan.items.length) label = "Voltando ao centro de distribuição";
+      else if (u >= 1) label = `Na parada ${n} · ${place}`;
+      else label = `Próxima parada: ${n} · ${place}`;
+      if (label !== tracker.label && trackNext) trackNext.textContent = tracker.label = label;
+    }
+    function loop(ts) {
+      tracker.raf = 0;
+      if (!tracker.on || !tracker.visible || document.hidden) return;
+      const dt = tracker.last ? Math.min(0.1, (ts - tracker.last) / 1000) : 0;
+      tracker.last = ts;
+      tracker.t += dt;
+      trackAt(tracker.t);
+      tracker.raf = requestAnimationFrame(loop);
+    }
+    function kick() {
+      if (tracker.raf || !tracker.on || reduceMotion) return;
+      tracker.last = 0;
+      tracker.raf = requestAnimationFrame(loop);
+    }
+    function setTracking(on) {
+      tracker.on = on;
+      if (trackBtn) trackBtn.setAttribute("aria-pressed", String(on));
+      if (trackCard) trackCard.hidden = !on;
+      if (!on) {
+        cancelAnimationFrame(tracker.raf);
+        tracker.raf = 0;
+        map.removeLayer(van);
+        return;
+      }
+      van.addTo(map);
+      // com "reduzir movimento", o veículo fica parado a caminho da 3ª parada
+      if (reduceMotion) trackAt(tracker.plan.segs[2].start + tracker.plan.segs[2].travel * 0.5);
+      else {
+        trackAt(tracker.t);
+        kick();
+      }
+    }
+    function resetTracking(kind) {
+      tracker.plan = buildPlan(kind);
+      tracker.t = 0;
+      tracker.label = "";
+      if (tracker.on) setTracking(true);
+    }
+    new IntersectionObserver((en) => {
+      tracker.visible = en.some((x) => x.isIntersecting);
+      kick();
+    }).observe(root);
+    document.addEventListener("visibilitychange", kick);
+    if (trackBtn) {
+      trackBtn.hidden = false;
+      trackBtn.addEventListener("click", () => setTracking(!tracker.on));
+    }
+
     function showKind(kind) {
       map.closePopup();
+      resetTracking(kind);
       for (const [k, g] of Object.entries(groups)) {
         if (k === kind) {
           map.removeLayer(g.ghosts);
@@ -201,7 +300,8 @@ export function initPlanMap({ reduceMotion = false } = {}) {
 
     showKind(active);
     fitActive(false);
-    return { map, showKind, focusStop };
+    setTracking(true);
+    return { map, showKind, focusStop, setTracking, tracker };
   }
 
   const start = () =>

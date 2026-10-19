@@ -113,7 +113,15 @@ if (endpoint) {
   submitBtn.firstChild.textContent = "Enviar solicitação ";
 }
 
-function openModal() {
+const intro = document.getElementById("form-intro");
+const introDefault = intro.textContent;
+// interesse vem do botão que abriu o formulário (ex.: data-open-demo="rastreamento")
+function openModal(interest = "") {
+  form.elements.interesse.value = interest;
+  intro.textContent =
+    interest === "rastreamento"
+      ? "Conte sobre a sua frota: a conversa abre no WhatsApp com o pedido de orçamento do rastreamento já escrito."
+      : introDefault;
   if (typeof modal.showModal !== "function") {
     modal.setAttribute("open", "");
   } else modal.showModal();
@@ -127,7 +135,7 @@ modal.addEventListener("close", () => doc.classList.remove("modal-open"));
 document.querySelectorAll("[data-open-demo]").forEach((b) =>
   b.addEventListener("click", (e) => {
     e.preventDefault();
-    openModal();
+    openModal(b.dataset.openDemo || "");
   }),
 );
 modal.querySelector("[data-close-demo]").addEventListener("click", closeModal);
@@ -215,6 +223,9 @@ form.addEventListener("submit", async (e) => {
       `Olá! Sou ${data.nome.trim()}, da ${data.empresa.trim()}.`,
       frota ? `Temos ${frota} veículos.` : "",
       "Quero ver o ROTAV3 com os nossos pedidos.",
+      data.interesse === "rastreamento"
+        ? "Também quero um orçamento do módulo de rastreamento."
+        : "",
     ]
       .filter(Boolean)
       .join(" ");

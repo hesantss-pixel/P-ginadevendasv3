@@ -365,7 +365,8 @@
             <h2 id="plan-title">Teste o planejador agora mesmo.</h2>
             <p class="lead">
               Troque entre entregas e coletas, toque nas paradas na ordem da rota e veja o resumo e
-              quanto da capacidade do veículo foi usada. Os pedidos são fictícios.
+              quanto da capacidade do veículo foi usada. O veículo em movimento simula o módulo
+              opcional de rastreamento. Os pedidos são fictícios.
             </p>
             <button class="btn btn--outline" type="button" data-open-demo>
               Ver com os meus pedidos <svg class="ico"><use href="#i-arrow" /></svg>
@@ -435,6 +436,26 @@
                 <span class="map__credit"
                   ><i class="map__dots" aria-hidden="true"></i>Ordem das paradas</span
                 >
+                <button
+                  class="track-toggle"
+                  type="button"
+                  aria-pressed="false"
+                  data-track-toggle
+                  hidden
+                >
+                  <span class="track-toggle__switch" aria-hidden="true"></span>Rastreamento
+                  <small>opcional</small>
+                </button>
+                <div class="track" data-track hidden>
+                  <span class="track__ico"
+                    ><svg class="ico"><use href="#i-truck" /></svg
+                  ></span>
+                  <span class="track__text"
+                    ><strong>Fiorino · em rota</strong
+                    ><small data-track-next>Saindo do centro de distribuição</small></span
+                  >
+                  <em class="track__tag">Simulação do módulo opcional</em>
+                </div>
               </div>
               <div class="app__side">
                 <div class="panel">
@@ -956,13 +977,18 @@
             </article>
             <article class="trust__card reveal">
               <h3>
-                <svg class="ico"><use href="#i-clock" /></svg>O que ainda não faz
+                <svg class="ico"><use href="#i-clock" /></svg>Fora do plano padrão
               </h3>
               <ul class="trust__list trust__list--no">
-                <li>Rastreamento de veículos em tempo real</li>
+                <li>
+                  Rastreamento dos veículos no mapa: módulo opcional, com
+                  <a href="#rastreamento">orçamento separado</a>
+                </li>
                 <li>Relatórios gerenciais prontos (em construção)</li>
               </ul>
-              <p class="trust__hint">Se isso for essencial para você, conte na demonstração.</p>
+              <p class="trust__hint">
+                Se algum desses for essencial para você, conte na demonstração.
+              </p>
             </article>
             <article class="trust__card reveal">
               <h3>
@@ -994,6 +1020,20 @@
               O valor é sob consulta e depende do tamanho da sua operação. Na demonstração
               entendemos o seu cenário e montamos a proposta.
             </p>
+            <div class="addon" id="rastreamento">
+              <p class="addon__tag">
+                <svg class="ico"><use href="#i-locate" /></svg>Módulo opcional · orçamento separado
+              </p>
+              <h3>Rastreamento no mapa</h3>
+              <p>
+                Veja a posição dos veículos junto com as rotas planejadas e acompanhe a próxima
+                parada de cada um. A forma de enviar a localização (pelo celular do motorista ou por
+                um rastreador já instalado) é definida no orçamento.
+              </p>
+              <button class="link-arrow" type="button" data-open-demo="rastreamento">
+                Pedir orçamento do rastreamento <svg class="ico"><use href="#i-arrow" /></svg>
+              </button>
+            </div>
           </div>
           <div class="price__card reveal">
             <h3>
@@ -1058,13 +1098,16 @@
             </details>
             <details class="reveal">
               <summary>
-                O ROTAV3 rastreia os veículos em tempo real?<svg class="ico">
+                Dá para rastrear os veículos no mapa?<svg class="ico">
                   <use href="#i-plus" />
                 </svg>
               </summary>
               <p>
-                Ainda não. O foco do ROTAV3 é o planejamento: montar as rotas antes da saída,
-                respeitando o peso dos pedidos e a capacidade de cada veículo.
+                Sim, com o módulo opcional de rastreamento, que tem orçamento separado. Ele mostra a
+                posição dos veículos junto com as rotas planejadas. A forma de enviar a localização
+                (pelo celular do motorista ou por um rastreador já instalado) é combinada no
+                orçamento. Sem o módulo, o ROTAV3 cuida do planejamento: monta as rotas antes da
+                saída.
               </p>
             </details>
             <details class="reveal">
@@ -1227,6 +1270,7 @@
               placeholder="(11) 90000-0000"
               maxlength="20" /><small class="field__error" aria-live="polite"></small
           ></label>
+          <input type="hidden" name="interesse" value="" />
           <label class="hp" aria-hidden="true"
             >Não preencha<input name="website" tabindex="-1" autocomplete="off"
           /></label>
