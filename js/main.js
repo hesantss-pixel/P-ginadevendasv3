@@ -38,8 +38,7 @@ const spy = new IntersectionObserver(
   (entries) => {
     for (const en of entries) {
       if (!en.isIntersecting) continue;
-      let id = en.target.id;
-      if (id === "planejamento") id = "inicio";
+      const id = en.target.id;
       navLinks.forEach((a) =>
         a.dataset.nav === id
           ? a.setAttribute("aria-current", "true")
@@ -49,7 +48,7 @@ const spy = new IntersectionObserver(
   },
   { rootMargin: "-45% 0px -50% 0px" },
 );
-[...sectionIds, "planejamento"].forEach((id) => {
+sectionIds.forEach((id) => {
   const el = document.getElementById(id);
   if (el) spy.observe(el);
 });
@@ -100,13 +99,18 @@ const statusEl = document.getElementById("form-status");
 const submitBtn = document.getElementById("demo-submit");
 const endpoint = String(SITE_CONFIG.formEndpoint || "").trim();
 // sem endereço de envio, mas com WhatsApp: o formulário abre o WhatsApp com a mensagem pronta
+// (só nome, empresa e frota — o próprio WhatsApp já identifica o número de quem escreve)
 const viaWhatsApp = !endpoint && hasWa;
 const notice = document.getElementById("form-notice");
-notice.hidden = Boolean(endpoint);
-if (viaWhatsApp) {
-  notice.textContent =
-    "Ao enviar, o WhatsApp abre com a sua mensagem pronta para a nossa equipe. É só tocar em enviar.";
-  submitBtn.firstChild.textContent = "Enviar pelo WhatsApp ";
+notice.hidden = Boolean(endpoint) || viaWhatsApp;
+if (endpoint) {
+  // com endereço de envio, pede também e-mail e WhatsApp para o retorno
+  form.querySelectorAll("[data-endpoint-only]").forEach((el) => (el.hidden = false));
+  document.getElementById("form-intro").textContent =
+    "Conte um pouco da sua operação. Retornamos para combinar o melhor horário.";
+  submitBtn.firstChild.textContent = "Enviar solicitação ";
+} else if (!hasWa) {
+  submitBtn.firstChild.textContent = "Enviar solicitação ";
 }
 
 function openModal() {
@@ -143,29 +147,43 @@ tel.addEventListener("input", () => {
 const rules = {
   nome: (v) => (v.trim().length >= 2 ? "" : "Informe seu nome."),
   empresa: (v) => (v.trim().length >= 2 ? "" : "Informe o nome da empresa."),
-  email: (v) => (/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()) ? "" : "Informe um e-mail válido."),
-  telefone: (v) => {
+  frota: (v) => (v ? "" : "Escolha uma opção."),
+};
+if (endpoint) {
+  rules.email = (v) =>
+    /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v.trim()) ? "" : "Informe um e-mail válido.";
+  rules.telefone = (v) => {
     const n = v.replace(/\D/g, "").length;
     return n >= 10 && n <= 11 ? "" : "Informe um WhatsApp com DDD.";
-  },
+  };
+}
+// campos de rádio (frota) vêm como RadioNodeList
+const fieldEl = (name) => {
+  const el = form.elements[name];
+  return el instanceof RadioNodeList ? el[0] : el;
 };
-function validateField(input) {
-  const rule = rules[input.name];
+function validateField(name) {
+  const rule = rules[name];
   if (!rule) return true;
-  const msg = rule(input.value);
-  const field = input.closest(".field");
+  const msg = rule(form.elements[name].value || "");
+  const field = fieldEl(name).closest(".field");
   field.classList.toggle("is-invalid", Boolean(msg));
   field.querySelector(".field__error").textContent = msg;
-  input.setAttribute("aria-invalid", msg ? "true" : "false");
+  const targets =
+    form.elements[name] instanceof RadioNodeList ? [...form.elements[name]] : [fieldEl(name)];
+  targets.forEach((t) => t.setAttribute("aria-invalid", msg ? "true" : "false"));
   return !msg;
 }
 Object.keys(rules).forEach((name) => {
-  const input = form.elements[name];
-  input.addEventListener("blur", () => {
-    if (input.value) validateField(input);
-  });
-  input.addEventListener("input", () => {
-    if (input.closest(".field").classList.contains("is-invalid")) validateField(input);
+  const el = form.elements[name];
+  const list = el instanceof RadioNodeList ? [...el] : [el];
+  list.forEach((input) => {
+    input.addEventListener("blur", () => {
+      if (input.type !== "radio" && input.value) validateField(name);
+    });
+    input.addEventListener(input.type === "radio" ? "change" : "input", () => {
+      if (input.closest(".field").classList.contains("is-invalid")) validateField(name);
+    });
   });
 });
 
@@ -173,11 +191,9 @@ form.addEventListener("submit", async (e) => {
   e.preventDefault();
   statusEl.className = "form-status";
   statusEl.textContent = "";
-  const invalid = Object.keys(rules)
-    .map((n) => form.elements[n])
-    .filter((i) => !validateField(i));
+  const invalid = Object.keys(rules).filter((n) => !validateField(n));
   if (invalid.length) {
-    invalid[0].focus();
+    fieldEl(invalid[0]).focus();
     statusEl.classList.add("is-error");
     statusEl.textContent = "Confira os campos destacados.";
     return;
@@ -194,21 +210,15 @@ form.addEventListener("submit", async (e) => {
   data.enviadoEm = new Date().toISOString();
 
   if (viaWhatsApp) {
-    const labels = {
-      nome: "Nome",
-      empresa: "Empresa",
-      email: "E-mail",
-      telefone: "WhatsApp",
-      frota: "Veículos na operação",
-      operacao: "Tipo de operação",
-      mensagem: "Mensagem",
-    };
-    const lines = Object.entries(labels)
-      .filter(([k]) => String(data[k] || "").trim())
-      .map(([k, l]) => `${l}: ${String(data[k]).trim()}`);
-    const url = waLink(
-      ["Olá! Quero agendar uma demonstração do ROTAV3 Systems.", "", ...lines].join("\n"),
-    );
+    const frota = String(data.frota || "").toLowerCase();
+    const text = [
+      `Olá! Sou ${data.nome.trim()}, da ${data.empresa.trim()}.`,
+      frota ? `Temos ${frota} veículos.` : "",
+      "Quero ver o ROTAV3 com os nossos pedidos.",
+    ]
+      .filter(Boolean)
+      .join(" ");
+    const url = waLink(text);
     const win = window.open(url, "_blank");
     if (win) win.opener = null;
     else window.location.href = url;
@@ -250,6 +260,46 @@ form.addEventListener("submit", async (e) => {
     submitBtn.removeAttribute("aria-busy");
   }
 });
+
+/* ---------- Calculadora: quanto custa montar rotas à mão ---------- */
+const calcIn = ["calc-h", "calc-d", "calc-r"].map((id) => document.getElementById(id));
+if (calcIn.every(Boolean)) {
+  // aceita vírgula decimal; limita a valores possíveis (24 h por dia, 31 dias por mês)
+  const num = (el, max) =>
+    Math.min(max, Math.max(0, Number(String(el.value).replace(/\s/g, "").replace(",", ".")) || 0));
+  const fmtH = (n) => n.toLocaleString("pt-BR", { maximumFractionDigits: 1 }) + " h";
+  const fmtR = (n) =>
+    n.toLocaleString("pt-BR", { style: "currency", currency: "BRL", maximumFractionDigits: 0 });
+  const update = () => {
+    const hours = num(calcIn[0], 24) * num(calcIn[1], 31);
+    document.getElementById("calc-hours").textContent = fmtH(hours);
+    document.getElementById("calc-cost").textContent = fmtR(hours * num(calcIn[2], 100000));
+  };
+  calcIn.forEach((el) => el.addEventListener("input", update));
+  update();
+}
+
+/* ---------- Painel do topo em perspectiva 3D (só com mouse e sem "reduzir movimento") ---------- */
+const tiltEl = document.querySelector("[data-tilt]");
+if (tiltEl && !reduceMotion && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+  const heroEl = document.querySelector(".hero");
+  let raf = 0;
+  heroEl.addEventListener("pointermove", (e) => {
+    if (raf) return;
+    raf = requestAnimationFrame(() => {
+      raf = 0;
+      const r = heroEl.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5;
+      const y = (e.clientY - r.top) / r.height - 0.5;
+      tiltEl.style.setProperty("--ry", `${(-9 + x * 6).toFixed(2)}deg`);
+      tiltEl.style.setProperty("--rx", `${(3 - y * 4).toFixed(2)}deg`);
+    });
+  });
+  heroEl.addEventListener("pointerleave", () => {
+    tiltEl.style.removeProperty("--ry");
+    tiltEl.style.removeProperty("--rx");
+  });
+}
 
 /* ---------- Painel interativo ---------- */
 initPlanMap({ reduceMotion });

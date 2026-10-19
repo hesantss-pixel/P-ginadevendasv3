@@ -274,8 +274,8 @@ export async function initCity(canvas, container, { reduceMotion = false } = {})
   const cdRoof = new THREE.Mesh(
     new THREE.BoxGeometry(1.32, 0.06, 1.02),
     new THREE.MeshStandardMaterial({
-      color: 0xf5a922,
-      emissive: 0xf5a922,
+      color: 0xe0b450,
+      emissive: 0xe0b450,
       emissiveIntensity: 0.45,
       roughness: 0.4,
     }),
@@ -298,7 +298,7 @@ export async function initCity(canvas, container, { reduceMotion = false } = {})
   // rotas pela grade de ruas (índices das ruas: -1 .. N-1)
   const routeDefs = [
     {
-      color: 0xf5a922,
+      color: 0xe0b450,
       grid: [
         [4, 5],
         [4, 2],

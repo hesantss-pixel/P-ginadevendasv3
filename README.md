@@ -1,6 +1,6 @@
 # ROTAV3 Systems — landing page (site estático)
 
-Página de vendas do ROTAV3 Systems no layout da referência de outubro/2026: imagem do painel no topo, modelos de empresas, painel interativo de planejamento, dois mapas de ruas com os pedidos (todos os pedidos / coletas e entregas), funcionalidades, mapa 3D com rotas animadas, "Para quem é", perguntas frequentes, chamada final e formulário de demonstração.
+Página de vendas do ROTAV3 Systems. Versão 3 (19/10/2026), reorganizada a partir da pesquisa de conversão: topo com o mecanismo do produto e o painel em perspectiva 3D, "Como funciona" em 3 passos, planejador interativo logo em seguida, seção escura de dores com mapa 3D e calculadora, mapas de pedidos, funcionalidades em bento com telas reais, modelos de personalização, "Para quem é", transparência (o que faz e o que ainda não faz), preço, perguntas, chamada final, formulário de 3 campos que abre o WhatsApp e política de privacidade.
 
 É um site estático (HTML, CSS e JavaScript), sem etapa de build: os arquivos desta pasta são o site. Isso permite publicar direto no GitHub Pages.
 
@@ -28,32 +28,30 @@ O repositório é público, então o site e o código ficam públicos. Nunca col
 Tudo fica em `js/config.js`:
 
 - `whatsappNumber`: `5511955914618` — (11) 95591-4618. Liga os botões "Falar no WhatsApp" e o link do rodapé. Para trocar, use só dígitos com DDI e DDD.
-- `formEndpoint`: vazio por enquanto. Enquanto estiver vazio, o formulário de demonstração valida os campos e **abre o WhatsApp** com a mensagem pronta (nome, empresa, e-mail, WhatsApp, frota, tipo de operação e mensagem); o visitante só precisa tocar em enviar. Se o navegador bloquear a janela, aparece o link "Não abriu? Toque aqui."
-- Quando `formEndpoint` for preenchido, o formulário passa a enviar os dados para esse endereço (e deixa de abrir o WhatsApp).
+- `formEndpoint`: vazio por enquanto. Enquanto estiver vazio, o formulário pede só **nome, empresa e quantidade de veículos** e **abre o WhatsApp** com a mensagem pronta ("Olá! Sou …, da …. Temos … veículos. Quero ver o ROTAV3 com os nossos pedidos."). O próprio WhatsApp já identifica o número de quem escreve. Se o navegador bloquear a janela, aparece o link "Não abriu? Toque aqui."
+- Quando `formEndpoint` for preenchido, o formulário passa a pedir também e-mail e WhatsApp e envia os dados para esse endereço (e deixa de abrir o WhatsApp).
 
-O CNPJ (68.080.201/0001-80) está escrito no rodapé, no `index.html`.
+O CNPJ (68.080.201/0001-80) está escrito no rodapé e na seção Transparência, no `index.html`, e nos dados estruturados (JSON-LD). O número do WhatsApp também está escrito em `privacidade.html`; se mudar, troque lá também.
 
-O formulário envia um POST comum (`application/x-www-form-urlencoded`) com os campos `nome`, `empresa`, `email`, `telefone`, `frota`, `operacao`, `mensagem`, `origem` e `enviadoEm`. O destino precisa responder com status 2xx.
+No modo com endereço, o formulário envia um POST comum (`application/x-www-form-urlencoded`) com os campos `nome`, `empresa`, `frota`, `email`, `telefone`, `origem` e `enviadoEm`. O destino precisa responder com status 2xx.
 
 Exemplo com **n8n**: crie um nó _Webhook_ (método POST), copie a _Production URL_ para `formEndpoint`, ative o workflow e, nas opções do Webhook, libere o domínio do site em _Allowed Origins (CORS)_. Depois ligue o nó seguinte (planilha, e-mail, CRM). Também funciona com Formspree, Make ou Google Apps Script.
 
-Antes de ativar o envio real, publique uma política de privacidade (LGPD) e coloque o link no rodapé.
+A política de privacidade fica em `privacidade.html` (link no rodapé, no formulário, na Transparência e no FAQ). Ela descreve o que o site faz hoje (sem cookies de publicidade, sem análise de visitantes, formulário que só abre o WhatsApp). Se o site passar a guardar dados (por exemplo, com `formEndpoint`) ou ganhar uma ferramenta de análise, atualize o texto. Vale uma revisão por um advogado.
 
-## Imagem de compartilhamento
+## Endereço do site, imagem de compartilhamento e SEO
 
-Quando o endereço definitivo existir, acrescente no `<head>` do `index.html`:
-
-```html
-<meta property="og:image" content="https://SEU-ENDERECO/img/og-rotav3.jpg" />
-```
-
-A imagem precisa de endereço completo; por isso ela não está ligada ainda.
+- `og:url`, `og:image` e os dados estruturados (JSON-LD `Organization` + `SoftwareApplication`) usam o endereço atual `https://hesantss-pixel.github.io/P-ginadevendasv3/`. Quando o domínio próprio (rotav3.com.br) estiver ligado, troque esse endereço no `<head>` do `index.html`.
+- Não há avaliações (`aggregateRating`) nos dados estruturados, porque não existem avaliações reais.
 
 ## Onde alterar cada coisa
 
 | O quê                                                        | Arquivo                                                                    |
 | ------------------------------------------------------------ | -------------------------------------------------------------------------- |
-| Textos das seções, menu, FAQ, rodapé                         | `index.html`                                                               |
+| Textos das seções, menu, FAQ, preço, transparência, rodapé   | `index.html`                                                               |
+| Política de privacidade                                      | `privacidade.html`                                                         |
+| Calculadora "Quanto custa montar rotas à mão?"               | `index.html` (valores iniciais) + `js/main.js`                             |
+| Telas do sistema nas funcionalidades (bento)                 | `img/ui-*.webp` (recortes de `img/painel-rotav3.webp`)                     |
 | Cores, tamanhos, espaçamentos, celular                       | `css/style.css` (variáveis no começo do arquivo)                           |
 | Pedidos, pesos e rotas do painel interativo (demonstrativos) | `js/data.js`                                                               |
 | Imagem do painel no topo                                     | `img/painel-rotav3.webp`                                                   |
@@ -61,7 +59,7 @@ A imagem precisa de endereço completo; por isso ela não está ligada ainda.
 | Mapa do painel de planejamento (paradas numeradas)           | `js/planmap.js`                                                            |
 | Mapas de ruas (pedidos, coletas e entregas)                  | `js/ordersmap.js` (pontos em `js/data.js`, mapa de ruas em `js/config.js`) |
 | Mapa 3D da seção escura                                      | `js/city3d.js`                                                             |
-| Formulário, menu, animações                                  | `js/main.js`                                                               |
+| Formulário, menu, animações, inclinação 3D do painel do topo | `js/main.js`                                                               |
 | WhatsApp e destino do formulário                             | `js/config.js`                                                             |
 | Logo                                                         | `img/logo-rotav3.png` (original, fundo transparente)                       |
 
@@ -71,8 +69,22 @@ A imagem precisa de endereço completo; por isso ela não está ligada ainda.
 - A seção "Modelos de empresas parceiras" usa duas capturas de tela enviadas em 19/10/2026:
   - `img/modelo-viaverde.webp`: painel com a identidade da Via Verde Transportes, editado para não repetir os dados do painel do topo: 87 pedidos, 6 rotas, 7h18, data 16/10/2026, regiões da Grande São Paulo (São Paulo, Santo André, São Bernardo, Osasco, Mauá, São Caetano, Diadema), 14 alertas; usuário trocado de "Henrique Santos" para "Equipe Operacional"; os textos "dados em tempo real (Firebase)" e "última roteirização (OR-Tools)" viraram "pendentes para hoje" e "planejadas para hoje".
   - `img/modelo-2sl-log.webp`: painel escuro da 2SL Log, editado: 42 pedidos, 3 rotas, 4h12, regiões do Alto Tietê (Guarulhos, Suzano, Mogi das Cruzes, Arujá, Poá, Santa Isabel, Salesópolis, Guararema), 12 alertas, "aguardando roteirização" e "geradas hoje às 07:40". O mapa original mostrava o aviso "API KEY REQUIRED" do Google Maps; no lugar entrou um trecho escurecido de outro mapa (região de Guarulhos), sem os marcadores antigos, com pontos e linhas redesenhados.
-  - O painel do topo (`img/painel-rotav3.webp`) não foi alterado: 65 pedidos, 5 rotas, 02/10/2026.
+  - O painel do topo (`img/painel-rotav3.webp`): 65 pedidos, 5 rotas, 02/10/2026. Em 19/10/2026 foram tirados o "↑ 12%" e o texto "dados em tempo real (Firebase)" do indicador de pedidos (agora "pedidos do dia"), para não mostrar um número de crescimento sem fonte.
 - Se houver capturas novas, é só substituir os arquivos com os mesmos nomes. Os cartões mostram a imagem na proporção 16 : 15, a partir do topo (o corte é feito pelo CSS, `object-fit: cover`).
+
+## Versão 3 — o que mudou e por quê (19/10/2026)
+
+Baseada na pesquisa "como levar a landing page de boa a 100%" (conversão B2B, design, 3D e SEO):
+
+- **Topo:** título pelo que o sistema faz ("Rotas que respeitam o peso de cada pedido e a capacidade de cada veículo."), botão principal "Agendar demonstração" (abre o formulário → WhatsApp), botão "Testar o planejador" e uma linha de expectativa ("Pelo WhatsApp, direto com quem desenvolve o sistema. Sem compromisso."). O painel aparece em perspectiva 3D com brilho atrás; no computador ele acompanha levemente o mouse. No celular fica reto.
+- **Ordem:** o planejador interativo subiu para logo depois de "Como funciona", para o visitante testar antes de falar com alguém.
+- **Seção escura:** virou "dores → solução" (montar rotas de cabeça/planilha, veículo com espaço sobrando, listas separadas) com o mapa 3D e uma calculadora que multiplica só os números do visitante (horas por dia × dias × custo da hora). Não é promessa de economia. O cartão de alertas mostra só alertas de planejamento (região isolada, capacidade, horário marcado, rota gerada).
+- **Funcionalidades:** grade "bento" com recortes reais do painel do sistema.
+- **Personalização:** título "Modelos com a identidade de cada empresa" e a nota "Telas ilustrativas, com dados demonstrativos", para não sugerir que essas empresas já são clientes. Para voltar ao título anterior, troque o `<h2 id="models-title">` no `index.html`.
+- **Transparência:** o que o sistema faz hoje, o que ainda não faz (rastreamento em tempo real, relatórios prontos) e quem está por trás (CNPJ, atendimento direto, política de privacidade).
+- **Preço:** sob consulta, com o que define o valor (veículos, volume de pedidos, personalização). Confirme se esses critérios são os que você usa.
+- **FAQ:** novas perguntas de objeção (trocar de sistema, rastreamento, coletas, dados).
+- **Visual:** dourado metálico (#f3d27a → #d4a93c → #b8862b) com texto escuro nos botões, títulos em Sora e texto em Inter. Contraste conferido pela fórmula do WCAG: todos os textos ≥ 4,5 : 1.
 
 ## Painel de planejamento
 
@@ -110,8 +122,8 @@ A imagem precisa de endereço completo; por isso ela não está ligada ainda.
 - Painel: abas Entregas/Coletas, paradas numeradas 1–8 e 1–6 na mesma ordem da lista, lista → balão e marcador → lista, zoom e botão de centralizar, troca de aba pelo teclado.
 - No celular, o cartão "Alertas do dia" fica abaixo do mapa 3D, sem cobrir a cena.
 - Resumo da rota e capacidade usada recalculados a partir dos pedidos (455 kg = 70% e 312 kg = 48% de 650 kg).
-- Formulário: 4 erros com campos vazios, máscara do WhatsApp, modo de demonstração e envio real para um destino **simulado** (conferido o conteúdo recebido).
-- WhatsApp: botões e rodapé com o link para (11) 95591-4618; formulário com campos vazios não abre nada; formulário preenchido abre o WhatsApp com a mensagem completa (conferido o texto gerado), em 1440 e 390 px. A abertura no app do WhatsApp em um celular real não foi testada.
+- Formulário (versão 3): 3 campos, 3 avisos com tudo vazio, nada abre; preenchido, abre o WhatsApp com "Olá! Sou …, da …. Temos … veículos. Quero ver o ROTAV3 com os nossos pedidos." (conferido o texto), em 1440 e 390 px. Com `formEndpoint` simulado: e-mail e WhatsApp aparecem, 5 avisos com tudo vazio, POST conferido. A abertura no app do WhatsApp em um celular real não foi testada.
+- Calculadora (aceita vírgula, campo vazio vira zero), inclinação 3D só no computador, ordem das seções, menu apontando para seções existentes, imagem do topo com prioridade alta e sem carregamento tardio, política de privacidade no celular, sem rolagem lateral em 360, 390, 768, 1024 e 1440 px, sem erros no console.
 - Menu do celular, item ativo do menu, FAQ, tecla Esc no formulário.
 - Sem rolagem lateral em 360, 390, 768, 1024, 1280 e 1920 px.
 - Movimento reduzido e navegador sem WebGL (imagens estáticas aparecem), sem erros no console.
@@ -123,7 +135,7 @@ A imagem precisa de endereço completo; por isso ela não está ligada ainda.
 - Celulares e placas de vídeo reais, Safari e Firefox. O desempenho do 3D em aparelhos fracos não foi medido.
 - Envio para um destino real (só simulado).
 - O visual final dos mapas com as ruas reais (OpenFreeMap e OpenStreetMap são bloqueados no ambiente de teste). Testado: o mapa vetorial carrega, os ajustes de cor são aplicados (com um estilo de teste) e a troca para o mapa de reserva funciona. Confira no site publicado.
-- A fonte Inter carregando do Google Fonts (bloqueado no ambiente de teste; usada a Inter instalada localmente).
+- As fontes Inter e Sora carregando do Google Fonts (bloqueado no ambiente de teste; usadas cópias instaladas localmente).
 
 ## Diferenças em relação à imagem de referência
 
@@ -134,10 +146,10 @@ Os textos foram ajustados ao que o sistema já faz:
 - "Cases" no menu virou "Para quem é". Não há estudos de caso publicados.
 - "Menos custos. Mais resultados." virou "Menos retrabalho. Mais controle.", para não prometer resultado sem número que o comprove.
 - "Ver todas as funcionalidades" abre o pedido de demonstração, porque não existe página separada de funcionalidades.
-- "Termos de uso" e "Política de privacidade" ficaram fora do rodapé até existirem os textos.
+- "Termos de uso" segue fora do rodapé até existir o texto. A política de privacidade foi criada em 19/10/2026.
 - Foi acrescentada a seção de Perguntas (o menu "Perguntas" precisava de destino) e o formulário de demonstração.
 
-Ponto em aberto na seção "Modelos de empresas parceiras": o título fala em empresas parceiras e um dos modelos leva o nome ViaVerde. Confirme essa palavra e esse nome antes de divulgar a página, porque a imagem é um modelo com o nome aplicado, não um sistema que a ViaVerde já usa. "Exemplos de personalização" é uma alternativa que não afirma parceria.
+Na seção de personalização, os modelos levam os nomes Via Verde Transportes e 2SL Log. Desde a versão 3 o título não fala mais em "empresas parceiras" e há a nota "Telas ilustrativas". Se alguma delas for cliente de fato, dá para voltar a dizer isso.
 
 Imagens:
 
@@ -152,5 +164,5 @@ A página ficou mais alta que a imagem porque os textos foram mantidos em tamanh
 - MapLibre GL JS 4.7.1 — BSD 3-Clause (`vendor/maplibre/LICENSE.txt`); @maplibre/maplibre-gl-leaflet 0.1.4 — ISC (`vendor/maplibre-gl-leaflet/LICENSE.txt`), adaptado para carregar sem build. Mapa: OpenFreeMap, © OpenMapTiles, © colaboradores do OpenStreetMap.
 - Leaflet 1.9.4 — BSD 2-Clause (`vendor/leaflet/LICENSE.txt`). Dados do mapa © colaboradores do OpenStreetMap (ODbL), com crédito no canto de cada mapa.
 - three.js r169, incluindo `RoomEnvironment` e `RoundedBoxGeometry` dos exemplos — MIT (`vendor/LICENSE-three.txt`).
-- Fonte Inter, via Google Fonts — SIL Open Font License 1.1.
+- Fontes Inter e Sora, via Google Fonts — SIL Open Font License 1.1.
 - Ícones e modelos 3D — feitos para este projeto.
