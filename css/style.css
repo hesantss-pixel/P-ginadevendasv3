@@ -622,9 +622,9 @@ body::before {
   display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 2.2 / 1;
+  aspect-ratio: 16 / 15;
   object-fit: cover;
-  object-position: left top;
+  object-position: center top;
   border-radius: var(--radius-sm);
   border: 1px solid var(--line);
   background: var(--bg-soft);

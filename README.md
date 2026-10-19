@@ -65,10 +65,10 @@ A imagem precisa de endereço completo; por isso ela não está ligada ainda.
 ## Imagens do topo e dos modelos
 
 - O topo mostra a imagem do painel (`img/painel-rotav3.webp`), enviada em 18/10/2026. O notebook e o celular em 3D foram retirados a pedido, e com eles saíram `js/hero3d.js`, `js/screens.js` e `img/hero-devices.webp` (continuam no histórico do Git).
-- A seção "Modelos de empresas parceiras" usa duas capturas de tela reais de sistemas já feitos:
-  - `img/modelo-viaverde.webp`: a captura original era do painel "2SL LOG"; o nome no canto superior esquerdo foi substituído por "ViaVerde" na imagem. Não é uma captura de um sistema que a ViaVerde já usa.
-  - `img/modelo-2sl-log.webp`: recorte da captura de celular enviada. A barra do navegador, a barra de status e o mapa foram cortados — o mapa aparecia com o aviso "API KEY REQUIRED" do Google Maps.
-- Se houver capturas novas, é só substituir os arquivos com os mesmos nomes. A proporção usada nos cartões é 2,2 : 1 (o corte é feito pelo CSS, `object-fit: cover`).
+- A seção "Modelos de empresas parceiras" usa duas capturas de tela enviadas em 19/10/2026:
+  - `img/modelo-viaverde.webp`: painel com a identidade da Via Verde Transportes, sem edição.
+  - `img/modelo-2sl-log.webp`: painel escuro da 2SL Log, editado para não repetir os números do outro modelo (42 pedidos, 3 rotas, 4h12, pedidos por região, 12 alertas). O mapa original mostrava o aviso "API KEY REQUIRED" do Google Maps; no lugar dele entrou uma versão escura do mapa da outra captura, com os pontos redesenhados.
+- Se houver capturas novas, é só substituir os arquivos com os mesmos nomes. Os cartões mostram a imagem na proporção 16 : 15, a partir do topo (o corte é feito pelo CSS, `object-fit: cover`).
 
 ## Painel de planejamento
 
