@@ -85,9 +85,9 @@ export function initPlanMap({ reduceMotion = false } = {}) {
       icon: L.divIcon({
         className: "mk-wrap",
         html: '<span class="mk mk--cd"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 10.5 12 5l9 5.5V20H3z"/><path d="M8 20v-6h8v6"/></svg></span>',
-        iconSize: [28, 28],
-        iconAnchor: [14, 14],
-        popupAnchor: [0, -12],
+        iconSize: [32, 32],
+        iconAnchor: [16, 16],
+        popupAnchor: [0, -14],
       }),
       title: `${DEPOT_GEO.name} (demonstrativo)`,
       keyboard: false,
@@ -100,22 +100,37 @@ export function initPlanMap({ reduceMotion = false } = {}) {
 
     for (const [kind, g] of Object.entries(ORDERS)) {
       const pts = g.items.map((o) => [o.lat, o.lng]);
-      // linha pontilhada = ordem das paradas (não é o trajeto pelas ruas)
-      const seqLine = L.polyline([depotLL, ...pts, depotLL], {
-        color: g.color,
-        weight: 3.5,
-        opacity: 0.9,
-        dashArray: "1 9",
-        lineCap: "round",
-        interactive: false,
-      });
-      const seqHalo = L.polyline([depotLL, ...pts, depotLL], {
+      // linha = ordem das paradas (liga os pontos em linha reta; não é o trajeto pelas ruas).
+      // Visual de rota dos aplicativos de mapa: contorno branco, linha colorida e um brilho que
+      // corre no sentido da rota.
+      const path = [depotLL, ...pts, depotLL];
+      const seqHalo = L.polyline(path, {
         color: "#ffffff",
-        weight: 7,
-        opacity: 0.7,
+        weight: 9,
+        opacity: 0.95,
         lineCap: "round",
+        lineJoin: "round",
         interactive: false,
       });
+      const seqLine = L.layerGroup([
+        L.polyline(path, {
+          color: g.color,
+          weight: 4.5,
+          opacity: 1,
+          lineCap: "round",
+          lineJoin: "round",
+          interactive: false,
+        }),
+        L.polyline(path, {
+          color: "#ffffff",
+          weight: 2.5,
+          opacity: 0.85,
+          dashArray: "2 16",
+          lineCap: "round",
+          className: reduceMotion ? "" : "route-flow",
+          interactive: false,
+        }),
+      ]);
       // pontos pequenos da outra aba, só para dar contexto
       const ghosts = g.items.map((o) =>
         L.circleMarker([o.lat, o.lng], {
@@ -133,10 +148,10 @@ export function initPlanMap({ reduceMotion = false } = {}) {
         const m = L.marker([o.lat, o.lng], {
           icon: L.divIcon({
             className: "mk-wrap",
-            html: `<span class="mk mk--seq" style="--c:${g.color}">${i + 1}</span>`,
-            iconSize: [28, 28],
-            iconAnchor: [14, 14],
-            popupAnchor: [0, -13],
+            html: `<span class="mk mk--seq mk--pin" style="--c:${g.color}"><b>${i + 1}</b></span>`,
+            iconSize: [30, 38],
+            iconAnchor: [15, 37],
+            popupAnchor: [0, -34],
           }),
           title: text,
           riseOnHover: true,

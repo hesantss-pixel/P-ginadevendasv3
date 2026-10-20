@@ -95,7 +95,7 @@ Baseada na pesquisa "como levar a landing page de boa a 100%" (conversão B2B, d
 - **Inclinação 3D mais leve:** −6° em vez de −9°, e o painel fica reto quando o mouse está em cima, para ser lido com nitidez. O brilho atrás deixou de usar filtro de desfoque, que pesa no celular.
 - **Ampliar ao tocar:** o painel do topo, as telas das funcionalidades e os dois modelos abrem em tela cheia ao clicar ou tocar. No celular a imagem abre maior que a tela, para arrastar e ler os detalhes. O código está em `js/main.js` (trecho "Imagens que ampliam ao toque").
 - **Telas das funcionalidades** (`img/ui-*.webp`): recortadas de novo da versão ampliada, agora com o dobro da resolução de antes.
-- **Modelo 2SL Log:** ampliado 2× (`img/modelo-2sl-log-2x.webp`). **Foto do caminhão:** ampliada 2× (`img/truck-illustrativo-2x.webp`). As duas são usadas automaticamente em telas de alta densidade.
+- **Modelo 2SL Log:** ampliado 2× (`img/modelo-2sl-log-2x.webp`). A foto do caminhão foi retirada na versão 4. É usada automaticamente em telas de alta densidade.
 - **Mapas:**
   - o planejador ocupa agora a largura toda da página, com o mapa em 480 px de altura no computador;
   - os mapas de "Pedidos no mapa" passaram para 420 px;
@@ -192,3 +192,11 @@ A página ficou mais alta que a imagem porque os textos foram mantidos em tamanh
 - three.js r169, incluindo `RoomEnvironment` e `RoundedBoxGeometry` dos exemplos — MIT (`vendor/LICENSE-three.txt`).
 - Fontes Inter e Sora, via Google Fonts — SIL Open Font License 1.1.
 - Ícones e modelos 3D — feitos para este projeto.
+
+
+## Versão 4 (20/10/2026) — visual escuro premium
+- Página inteira em preto-azulado, com cartões de vidro e dourado só nos botões e destaques (referências de design lidas com o Firecrawl: Linear e Onfleet).
+- Telas do sistema, mapas e janelas continuam claros, como uma tela real em destaque.
+- A foto do caminhão saiu. No lugar há uma ilustração em SVG de uma rota (centro de distribuição, entregas e coletas), feita no próprio código.
+- Planejador: paradas em formato de alfinete numerado, linha da rota com contorno branco e brilho correndo no sentido da rota (desliga com "reduzir movimento"). Centro de distribuição em dourado.
+- Ajustes de tema ficam no fim de `css/style.css` (bloco "VERSÃO 4").
