@@ -116,6 +116,7 @@ function addRasterTiles(L, map, el) {
   const tiles = L.tileLayer(t.url, {
     attribution: t.attribution,
     maxZoom: t.maxZoom || 19,
+    detectRetina: true, // telas de alta densidade recebem blocos mais detalhados
     crossOrigin: false,
   }).addTo(map);
   let loaded = 0;

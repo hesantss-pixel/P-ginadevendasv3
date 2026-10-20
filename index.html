@@ -297,18 +297,32 @@
           <figure class="hero__visual">
             <div class="hero__glow" aria-hidden="true"></div>
             <div class="hero__frame" data-tilt>
-              <img
-                class="hero__shot"
-                src="img/painel-rotav3.webp"
-                alt="Painel do ROTAV3 Systems com indicadores, lista de rotas, mapa de distribuição, próximas paradas e veículos. Dados demonstrativos."
-                width="1440"
-                height="960"
-                fetchpriority="high"
-                decoding="async"
-              />
+              <picture>
+                <!-- no celular: o mapa do painel, ampliado e nítido -->
+                <source
+                  media="(max-width: 640px)"
+                  srcset="img/painel-mapa.webp 1064w"
+                  sizes="calc(100vw - 32px)"
+                  width="1064"
+                  height="826"
+                />
+                <img
+                  class="hero__shot"
+                  src="img/painel-rotav3.webp"
+                  srcset="img/painel-rotav3.webp 1536w, img/painel-rotav3-2x.webp 2560w"
+                  sizes="(max-width: 980px) 100vw, 56vw"
+                  alt="Painel do ROTAV3 Systems com indicadores, lista de rotas, mapa de distribuição, próximas paradas e veículos. Dados demonstrativos."
+                  width="1536"
+                  height="1024"
+                  fetchpriority="high"
+                  decoding="async"
+                  data-zoom="img/painel-rotav3-2x.webp"
+                />
+              </picture>
             </div>
             <figcaption class="hero__caption">
               Painel do ROTAV3 Systems com dados demonstrativos.
+              <span class="hero__caption-tip">Toque na imagem para ampliar.</span>
             </figcaption>
           </figure>
         </div>
@@ -772,8 +786,9 @@
                 class="tile__shot"
                 src="img/ui-mapa.webp"
                 alt="Mapa de distribuição do ROTAV3 com rotas coloridas e paradas numeradas"
-                width="498"
-                height="386"
+                width="1062"
+                height="824"
+                data-zoom
                 loading="lazy"
                 decoding="async"
               />
@@ -788,8 +803,9 @@
                 class="tile__shot"
                 src="img/ui-veiculos.webp"
                 alt="Lista de veículos com a rota atendida e a capacidade usada"
-                width="382"
-                height="240"
+                width="815"
+                height="512"
+                data-zoom
                 loading="lazy"
                 decoding="async"
               />
@@ -817,8 +833,9 @@
                 class="tile__shot"
                 src="img/ui-paradas.webp"
                 alt="Lista de próximas paradas com coletas e entregas, endereços e horários"
-                width="342"
-                height="386"
+                width="730"
+                height="824"
+                data-zoom
                 loading="lazy"
                 decoding="async"
               />
@@ -836,8 +853,9 @@
                 class="tile__shot"
                 src="img/ui-regioes.webp"
                 alt="Gráfico de pedidos por região"
-                width="363"
-                height="240"
+                width="774"
+                height="512"
+                data-zoom
                 loading="lazy"
                 decoding="async"
               />
@@ -876,6 +894,7 @@
               <img
                 class="model__shot"
                 src="img/modelo-viaverde.webp"
+                data-zoom
                 alt="Painel de roteirização com a identidade visual da Via Verde Transportes, em verde e branco: pedidos, rotas, tempo estimado, pedidos por região, mapa de distribuição e assistente"
                 width="1536"
                 height="1441"
@@ -888,6 +907,9 @@
               <img
                 class="model__shot"
                 src="img/modelo-2sl-log.webp"
+                srcset="img/modelo-2sl-log.webp 1077w, img/modelo-2sl-log-2x.webp 2154w"
+                sizes="(max-width: 980px) 100vw, 580px"
+                data-zoom="img/modelo-2sl-log-2x.webp"
                 alt="Painel de roteirização com a identidade visual da 2SL Log, em azul-escuro: pedidos, rotas, tempo estimado, pedidos por região, mapa de distribuição e assistente"
                 width="1077"
                 height="1346"
@@ -938,6 +960,8 @@
           <figure class="photo-card reveal">
             <img
               src="img/truck-illustrativo.jpg"
+              srcset="img/truck-illustrativo.jpg 1088w, img/truck-illustrativo-2x.webp 2176w"
+              sizes="(max-width: 1180px) 100vw, 420px"
               alt="Caminhão em um centro de distribuição (imagem ilustrativa)"
               width="1088"
               height="608"
@@ -1286,6 +1310,14 @@
         </div>
         <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
       </form>
+    </dialog>
+
+    <dialog class="zoom" id="zoom-dialog" aria-label="Imagem ampliada">
+      <button class="zoom__close" type="button" aria-label="Fechar imagem ampliada" data-zoom-close>
+        <svg class="ico ico--lg"><use href="#i-close" /></svg>
+      </button>
+      <div class="zoom__scroll"><img alt="" id="zoom-img" /></div>
+      <p class="zoom__hint">Arraste para ver as outras partes da imagem.</p>
     </dialog>
 
     <script type="module" src="js/main.js"></script>

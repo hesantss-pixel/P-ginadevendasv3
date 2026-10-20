@@ -225,6 +225,7 @@ export function initPlanMap({ reduceMotion = false } = {}) {
       if (!tracker.on || !tracker.visible || document.hidden) return;
       const dt = tracker.last ? Math.min(0.1, (ts - tracker.last) / 1000) : 0;
       tracker.last = ts;
+      tracker.wall = performance.now();
       tracker.t += dt;
       trackAt(tracker.t);
       tracker.raf = requestAnimationFrame(loop);
@@ -232,8 +233,17 @@ export function initPlanMap({ reduceMotion = false } = {}) {
     function kick() {
       if (tracker.raf || !tracker.on || reduceMotion) return;
       tracker.last = 0;
+      tracker.wall = performance.now();
       tracker.raf = requestAnimationFrame(loop);
     }
+    // vigia: se o navegador deixar de chamar a animação (aconteceu em testes), ela recomeça
+    setInterval(() => {
+      if (!tracker.on || reduceMotion || !tracker.visible || document.hidden) return;
+      if (performance.now() - (tracker.wall || 0) < 700) return;
+      cancelAnimationFrame(tracker.raf);
+      tracker.raf = 0;
+      kick();
+    }, 1000);
     function setTracking(on) {
       tracker.on = on;
       if (trackBtn) trackBtn.setAttribute("aria-pressed", String(on));

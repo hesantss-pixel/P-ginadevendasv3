@@ -272,6 +272,44 @@ form.addEventListener("submit", async (e) => {
   }
 });
 
+/* ---------- Imagens que ampliam ao toque ---------- */
+// cada <img data-zoom> ganha um botão em volta; data-zoom="url" abre uma versão maior
+const zoomDlg = document.getElementById("zoom-dialog");
+const zoomImg = document.getElementById("zoom-img");
+if (zoomDlg && zoomImg) {
+  document.querySelectorAll("img[data-zoom]").forEach((img) => {
+    const target = img.closest("picture") || img;
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "zoomable";
+    btn.setAttribute("aria-label", `Ampliar imagem: ${img.alt}`);
+    target.replaceWith(btn);
+    btn.append(target);
+    const hint = document.createElement("span");
+    hint.className = "zoomable__hint";
+    hint.setAttribute("aria-hidden", "true");
+    hint.innerHTML = '<svg class="ico"><use href="#i-search"/></svg>Ampliar';
+    btn.append(hint);
+    btn.addEventListener("click", () => {
+      zoomImg.src = img.dataset.zoom || img.currentSrc || img.src;
+      zoomImg.alt = img.alt;
+      zoomImg.classList.toggle("is-tall", img.naturalHeight > img.naturalWidth * 0.9);
+      if (typeof zoomDlg.showModal === "function") zoomDlg.showModal();
+      else zoomDlg.setAttribute("open", "");
+      doc.classList.add("modal-open");
+    });
+  });
+  const closeZoom = () => (zoomDlg.close ? zoomDlg.close() : zoomDlg.removeAttribute("open"));
+  zoomDlg.querySelector("[data-zoom-close]").addEventListener("click", closeZoom);
+  zoomDlg.addEventListener("click", (e) => {
+    if (e.target === zoomDlg) closeZoom();
+  });
+  zoomDlg.addEventListener("close", () => {
+    doc.classList.remove("modal-open");
+    zoomImg.removeAttribute("src");
+  });
+}
+
 /* ---------- Calculadora: quanto custa montar rotas à mão ---------- */
 const calcIn = ["calc-h", "calc-d", "calc-r"].map((id) => document.getElementById(id));
 if (calcIn.every(Boolean)) {
@@ -302,8 +340,8 @@ if (tiltEl && !reduceMotion && window.matchMedia("(hover: hover) and (pointer: f
       const r = heroEl.getBoundingClientRect();
       const x = (e.clientX - r.left) / r.width - 0.5;
       const y = (e.clientY - r.top) / r.height - 0.5;
-      tiltEl.style.setProperty("--ry", `${(-9 + x * 6).toFixed(2)}deg`);
-      tiltEl.style.setProperty("--rx", `${(3 - y * 4).toFixed(2)}deg`);
+      tiltEl.style.setProperty("--ry", `${(-6 + x * 4).toFixed(2)}deg`);
+      tiltEl.style.setProperty("--rx", `${(2 - y * 3).toFixed(2)}deg`);
     });
   });
   heroEl.addEventListener("pointerleave", () => {

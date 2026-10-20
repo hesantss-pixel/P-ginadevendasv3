@@ -86,6 +86,23 @@ Baseada na pesquisa "como levar a landing page de boa a 100%" (conversão B2B, d
 - **FAQ:** novas perguntas de objeção (trocar de sistema, rastreamento, coletas, dados).
 - **Visual:** dourado metálico (#f3d27a → #d4a93c → #b8862b) com texto escuro nos botões, títulos em Sora e texto em Inter. Contraste conferido pela fórmula do WCAG: todos os textos ≥ 4,5 : 1.
 
+## Imagens nítidas (19/10/2026)
+
+- **Painel do topo:** feito a partir da imagem original (1536 × 1024), ampliada 2× com super-resolução (modelo EDSR, rodado aqui no ambiente, com OpenCV) e com um leve realce. O "↑ 12%" e o "dados em tempo real (Firebase)" continuam fora. Arquivos:
+  - `img/painel-rotav3.webp` (1536 px), para telas comuns;
+  - `img/painel-rotav3-2x.webp` (2560 px), para telas de alta densidade e para a imagem ampliada;
+  - `img/painel-mapa.webp`, o recorte do "Mapa de distribuição" mostrado no celular, onde o painel inteiro ficaria pequeno demais para ler.
+- **Inclinação 3D mais leve:** −6° em vez de −9°, e o painel fica reto quando o mouse está em cima, para ser lido com nitidez. O brilho atrás deixou de usar filtro de desfoque, que pesa no celular.
+- **Ampliar ao tocar:** o painel do topo, as telas das funcionalidades e os dois modelos abrem em tela cheia ao clicar ou tocar. No celular a imagem abre maior que a tela, para arrastar e ler os detalhes. O código está em `js/main.js` (trecho "Imagens que ampliam ao toque").
+- **Telas das funcionalidades** (`img/ui-*.webp`): recortadas de novo da versão ampliada, agora com o dobro da resolução de antes.
+- **Modelo 2SL Log:** ampliado 2× (`img/modelo-2sl-log-2x.webp`). **Foto do caminhão:** ampliada 2× (`img/truck-illustrativo-2x.webp`). As duas são usadas automaticamente em telas de alta densidade.
+- **Mapas:**
+  - o planejador ocupa agora a largura toda da página, com o mapa em 480 px de altura no computador;
+  - os mapas de "Pedidos no mapa" passaram para 420 px;
+  - o mapa de reserva (OpenStreetMap) pede blocos de alta resolução em telas de alta densidade;
+  - o mapa 3D renderiza até 2× a densidade da tela.
+- A super-resolução deixa as bordas e o texto mais limpos, mas não inventa detalhe que não existe na imagem original. Para ficar perfeito, o ideal é uma captura de tela nova do sistema, feita numa tela grande, com zoom de 150–200% no navegador.
+
 ## Rastreamento — módulo opcional, com orçamento separado (19/10/2026)
 
 O sistema ainda não rastreia veículos. A página oferece o rastreamento como **módulo opcional, contratado à parte e com orçamento separado**, sem apresentá-lo como algo que já vem no plano padrão:
