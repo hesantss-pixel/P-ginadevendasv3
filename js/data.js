@@ -90,7 +90,7 @@ export const ORDERS = {
     ],
   },
   coleta: {
-    color: "#c98410",
+    color: "#e08a00",
     label: "Coletas",
     distance: "63 km",
     time: "2h 55min",

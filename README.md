@@ -203,3 +203,10 @@ A página ficou mais alta que a imagem porque os textos foram mantidos em tamanh
 
 ## Versão 4.1 (20/10/2026) — cores vivas e animações
 Inspirada em elevatelp.com.br (estrutura lida com o Firecrawl): brilhos coloridos que se movem devagar no topo, notificações do planejamento (dados demonstrativos) aparecendo sobre o painel, faixa que corre com o que o sistema faz, dourado do título brilhando, botão dourado com reflexo, luz que segue o mouse nos cartões e entradas com desfoque. Tudo desliga com "reduzir movimento". Bloco "VERSÃO 4.1" no fim de `css/style.css`.
+
+## Versão 4.2 (21/10/2026) — telas e mapa desenhados em código
+- As imagens recortadas da captura antiga (painel do topo, mapa, próximas paradas, veículos, pedidos por região) saíram. Eram borradas e tinham dados que não batiam com o resto da página.
+- No lugar: telas em HTML e um mapa em SVG (`img/mapa-rotas.svg`), nítidos em qualquer tela, com os mesmos pedidos demonstrativos de `js/data.js`: entregas em azul (8 paradas, 455 kg, Fiorino 1) e coletas em laranja (6 paradas, 312 kg, Fiorino 2), saindo do centro de distribuição em Guarulhos.
+- O mapa usa as coordenadas reais dos bairros e mostra Via Dutra (BR-116), Ayrton Senna (SP-070), Fernão Dias (BR-381), Rio Tietê, Aeroporto de Guarulhos e as cidades. É um mapa ilustrativo, com o aviso "dados demonstrativos".
+- Os scripts que geram o mapa e as telas ficaram fora do site (gerados uma vez). Para mudar os pedidos, altere `js/data.js` e peça para regenerar.
+- A cor das coletas passou para #e08a00 (laranja mais vivo) no site inteiro.

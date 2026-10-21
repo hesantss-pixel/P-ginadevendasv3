@@ -302,35 +302,133 @@
           <figure class="hero__visual">
             <div class="hero__glow" aria-hidden="true"></div>
             <div class="hero__frame" data-tilt>
-              <picture>
-                <!-- no celular: o mapa do painel, ampliado e nítido -->
-                <source
-                  media="(max-width: 640px)"
-                  srcset="img/painel-mapa.webp 1064w"
-                  sizes="calc(100vw - 32px)"
-                  width="1064"
-                  height="826"
-                />
-                <img
-                  class="hero__shot"
-                  src="img/painel-rotav3.webp"
-                  srcset="img/painel-rotav3.webp 1536w, img/painel-rotav3-2x.webp 2560w"
-                  sizes="(max-width: 980px) 100vw, 56vw"
-                  alt="Painel do ROTAV3 Systems com indicadores, lista de rotas, mapa de distribuição, próximas paradas e veículos. Dados demonstrativos."
-                  width="1536"
-                  height="1024"
-                  fetchpriority="high"
-                  decoding="async"
-                  data-zoom="img/painel-rotav3-2x.webp"
-                />
-              </picture>
+              <div class="dash">
+                <aside class="dash__side" aria-hidden="true">
+                  <img class="dash__logo" src="img/favicon.png" alt="" width="32" height="32" />
+                  <ul>
+                    <li class="is-on">
+                      <svg class="ico"><use href="#i-monitor" /></svg>
+                    </li>
+                    <li>
+                      <svg class="ico"><use href="#i-package" /></svg>
+                    </li>
+                    <li>
+                      <svg class="ico"><use href="#i-route" /></svg>
+                    </li>
+                    <li>
+                      <svg class="ico"><use href="#i-map" /></svg>
+                    </li>
+                    <li>
+                      <svg class="ico"><use href="#i-truck" /></svg>
+                    </li>
+                  </ul>
+                </aside>
+                <div class="dash__main">
+                  <div class="dash__top">
+                    <strong>Planejamento de hoje</strong
+                    ><span class="ui-chip ui-chip--demo">Dados demonstrativos</span>
+                  </div>
+                  <div class="dash__kpis" aria-hidden="true">
+                    <div class="ui-kpi" style="--c: #2f6fe4">
+                      <span class="ui-kpi__ico"
+                        ><svg class="ico"><use href="#i-package" /></svg></span
+                      ><small>Pedidos do dia</small><b>14</b><em>8 entregas · 6 coletas</em>
+                    </div>
+                    <div class="ui-kpi" style="--c: #f3c24f">
+                      <span class="ui-kpi__ico"
+                        ><svg class="ico"><use href="#i-route" /></svg></span
+                      ><small>Rotas</small><b>2</b><em>entregas e coletas</em>
+                    </div>
+                    <div class="ui-kpi" style="--c: #22b07d">
+                      <span class="ui-kpi__ico"
+                        ><svg class="ico"><use href="#i-ruler" /></svg></span
+                      ><small>Distância</small><b>155 km</b><em>estimada</em>
+                    </div>
+                    <div class="ui-kpi" style="--c: #e08a00">
+                      <span class="ui-kpi__ico"
+                        ><svg class="ico"><use href="#i-weight" /></svg></span
+                      ><small>Peso total</small><b>767 kg</b><em>de 1.300 kg</em>
+                    </div>
+                  </div>
+                  <div class="dash__body">
+                    <div class="ui-card dash__map">
+                      <div class="ui-card__head">
+                        <svg class="ico"><use href="#i-map" /></svg
+                        ><strong>Mapa de distribuição</strong><span class="ui-chip">2 rotas</span>
+                      </div>
+                      <img
+                        class="hero__shot"
+                        src="img/mapa-rotas.svg"
+                        width="1200"
+                        height="793"
+                        alt="Mapa com duas rotas demonstrativas saindo do centro de distribuição em Guarulhos: entregas em azul (8 paradas, até Arujá e Tatuapé) e coletas em laranja (6 paradas, até Penha e Itaquaquecetuba)."
+                        fetchpriority="high"
+                        decoding="async"
+                        data-zoom="img/mapa-rotas.svg"
+                      />
+                      <div class="ui-legs">
+                        <span class="ui-leg"><i style="--c: #2f6fe4"></i>Entregas</span
+                        ><span class="ui-leg"><i style="--c: #e08a00"></i>Coletas</span
+                        ><span class="ui-leg ui-leg--cd"><i></i>Centro de distribuição</span>
+                      </div>
+                    </div>
+                    <div class="dash__col" aria-hidden="true">
+                      <div class="ui-card">
+                        <div class="ui-card__head">
+                          <svg class="ico"><use href="#i-pin" /></svg
+                          ><strong>Próximas paradas</strong><span class="ui-chip">hoje</span>
+                        </div>
+                        <ol class="ui-stops">
+                          <li class="ui-stop ui-stop--coleta">
+                            <span class="ui-stop__n">1</span
+                            ><span class="ui-stop__txt"
+                              ><strong>#2032 · Macedo</strong
+                              ><small><em>Coleta</em> · 18,5 kg</small></span
+                            ><span class="ui-stop__eta"><b>08:16</b><small>Fiorino 2</small></span>
+                          </li>
+                          <li class="ui-stop ui-stop--entrega">
+                            <span class="ui-stop__n">1</span
+                            ><span class="ui-stop__txt"
+                              ><strong>#1024 · Pimentas</strong
+                              ><small><em>Entrega</em> · 87,2 kg</small></span
+                            ><span class="ui-stop__eta"><b>08:23</b><small>Fiorino 1</small></span>
+                          </li>
+                          <li class="ui-stop ui-stop--coleta">
+                            <span class="ui-stop__n">2</span
+                            ><span class="ui-stop__txt"
+                              ><strong>#2031 · Itapegica</strong
+                              ><small><em>Coleta</em> · 72,0 kg</small></span
+                            ><span class="ui-stop__eta"><b>08:29</b><small>Fiorino 2</small></span>
+                          </li>
+                          <li class="ui-stop ui-stop--coleta">
+                            <span class="ui-stop__n">3</span
+                            ><span class="ui-stop__txt"
+                              ><strong>#2036 · Penha</strong
+                              ><small><em>Coleta</em> · 49,0 kg</small></span
+                            ><span class="ui-stop__eta"><b>08:48</b><small>Fiorino 2</small></span>
+                          </li>
+                          <li class="ui-stop ui-stop--entrega">
+                            <span class="ui-stop__n">2</span
+                            ><span class="ui-stop__txt"
+                              ><strong>#1028 · Arujá</strong
+                              ><small><em>Entrega</em> · 120,2 kg</small></span
+                            ><span class="ui-stop__eta"><b>08:56</b><small>Fiorino 1</small></span>
+                          </li>
+                        </ol>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
             <div class="toasts" aria-hidden="true">
               <div class="toast toast--1">
                 <span class="toast__ico toast__ico--gold"
                   ><svg class="ico"><use href="#i-route" /></svg
                 ></span>
-                <span><strong>Rota 1 gerada</strong><small>12 paradas · 412 kg</small></span>
+                <span
+                  ><strong>Rota de coletas gerada</strong><small>6 paradas · 312 kg</small></span
+                >
               </div>
               <div class="toast toast--2">
                 <span class="toast__ico toast__ico--amber"
@@ -343,13 +441,14 @@
                   ><svg class="ico"><use href="#i-gauge" /></svg
                 ></span>
                 <span
-                  ><strong>Fiorino com 70% da capacidade</strong><small>455 de 650 kg</small></span
+                  ><strong>Fiorino 1 com 70% da capacidade</strong
+                  ><small>455 de 650 kg</small></span
                 >
               </div>
             </div>
             <figcaption class="hero__caption">
-              Painel do ROTAV3 Systems com dados demonstrativos.
-              <span class="hero__caption-tip">Toque na imagem para ampliar.</span>
+              Tela demonstrativa do ROTAV3: pedidos e rotas fictícios.
+              <span class="hero__caption-tip">Toque no mapa para ampliar.</span>
             </figcaption>
           </figure>
         </div>
@@ -638,26 +737,29 @@
                 <li>
                   <i class="dot dot--amber"></i
                   ><span
-                    ><strong>3 pedidos em região isolada</strong
-                    ><small>Sugestão: agendar separadamente</small></span
+                    ><strong>2 pedidos mais distantes</strong
+                    ><small>Arujá e Itaquaquecetuba</small></span
                   >
                 </li>
                 <li>
                   <i class="dot dot--blue"></i
                   ><span
-                    ><strong>Rota 2 com 82% da capacidade</strong><small>533 de 650 kg</small></span
+                    ><strong>Entregas com 70% da capacidade</strong
+                    ><small>455 de 650 kg · Fiorino 1</small></span
                   >
                 </li>
                 <li>
                   <i class="dot dot--gold"></i
                   ><span
                     ><strong>Pedido #1022 com horário marcado</strong
-                    ><small>Entrega até 14h · Rota 2</small></span
+                    ><small>Entrega até 14h · previsão 10:53</small></span
                   >
                 </li>
                 <li>
                   <i class="dot dot--green"></i
-                  ><span><strong>Rota 1 gerada</strong><small>12 paradas · 412 kg</small></span>
+                  ><span
+                    ><strong>Rota de entregas gerada</strong><small>8 paradas · 455 kg</small></span
+                  >
                 </li>
               </ul>
               <p class="alerts__note">Dados demonstrativos</p>
@@ -850,8 +952,8 @@
             <p class="eyebrow">Funcionalidades</p>
             <h2 id="feat-title">Tudo o que o planejamento precisa, em um só painel.</h2>
             <p class="lead">
-              Do pedido à rota pronta. As imagens abaixo são telas do próprio sistema, com dados
-              demonstrativos.
+              Do pedido à rota pronta. As telas abaixo mostram como o sistema organiza o
+              planejamento, com pedidos demonstrativos.
             </p>
           </div>
           <div class="bento">
@@ -866,10 +968,10 @@
               </div>
               <img
                 class="tile__shot"
-                src="img/ui-mapa.webp"
-                alt="Mapa de distribuição do ROTAV3 com rotas coloridas e paradas numeradas"
-                width="1062"
-                height="824"
+                src="img/mapa-rotas.svg"
+                alt="Mapa demonstrativo com a rota de entregas (azul) e a rota de coletas (laranja) saindo do centro de distribuição em Guarulhos"
+                width="1200"
+                height="793"
                 data-zoom
                 loading="lazy"
                 decoding="async"
@@ -881,16 +983,38 @@
                 <h3>Capacidade dos veículos</h3>
                 <p>Cadastre veículos e motoristas e veja quanto da capacidade cada rota usa.</p>
               </div>
-              <img
-                class="tile__shot"
-                src="img/ui-veiculos.webp"
-                alt="Lista de veículos com a rota atendida e a capacidade usada"
-                width="815"
-                height="512"
-                data-zoom
-                loading="lazy"
-                decoding="async"
-              />
+              <div
+                class="tile__shot ui"
+                role="img"
+                aria-label="Dois veículos demonstrativos: Fiorino 1 na rota de entregas com 455 de 650 kg (70%) e Fiorino 2 na rota de coletas com 312 de 650 kg (48%)."
+              >
+                <div class="ui-card__head">
+                  <svg class="ico"><use href="#i-truck" /></svg><strong>Veículos</strong
+                  ><span class="ui-chip">capacidade</span>
+                </div>
+                <ul class="ui-vehs">
+                  <li class="ui-veh">
+                    <span class="ui-veh__ico" style="--c: #2f6fe4"
+                      ><svg class="ico"><use href="#i-truck" /></svg></span
+                    ><span class="ui-veh__txt"
+                      ><strong>Fiorino 1</strong><small>Rota de entregas · 8 paradas</small></span
+                    ><span class="ui-veh__cap"
+                      ><span class="ui-bar"><i style="width: 70%; --c: #2f6fe4"></i></span
+                      ><small>455 kg de 650 kg · <b>70%</b></small></span
+                    >
+                  </li>
+                  <li class="ui-veh">
+                    <span class="ui-veh__ico" style="--c: #e08a00"
+                      ><svg class="ico"><use href="#i-truck" /></svg></span
+                    ><span class="ui-veh__txt"
+                      ><strong>Fiorino 2</strong><small>Rota de coletas · 6 paradas</small></span
+                    ><span class="ui-veh__cap"
+                      ><span class="ui-bar"><i style="width: 48%; --c: #e08a00"></i></span
+                      ><small>312 kg de 650 kg · <b>48%</b></small></span
+                    >
+                  </li>
+                </ul>
+              </div>
             </article>
             <article class="tile tile--nf reveal">
               <div class="tile__text">
@@ -911,16 +1035,51 @@
                 <h3>Próximas paradas</h3>
                 <p>Cada parada com tipo (entrega ou coleta), endereço e horário previsto.</p>
               </div>
-              <img
-                class="tile__shot"
-                src="img/ui-paradas.webp"
-                alt="Lista de próximas paradas com coletas e entregas, endereços e horários"
-                width="730"
-                height="824"
-                data-zoom
-                loading="lazy"
-                decoding="async"
-              />
+              <div
+                class="tile__shot ui"
+                role="img"
+                aria-label="Próximas paradas demonstrativas, com tipo, pedido, bairro, peso, horário previsto e veículo."
+              >
+                <div class="ui-card__head">
+                  <svg class="ico"><use href="#i-pin" /></svg><strong>Próximas paradas</strong
+                  ><span class="ui-chip">hoje</span>
+                </div>
+                <ol class="ui-stops">
+                  <li class="ui-stop ui-stop--coleta">
+                    <span class="ui-stop__n">1</span
+                    ><span class="ui-stop__txt"
+                      ><strong>#2032 · Macedo</strong><small><em>Coleta</em> · 18,5 kg</small></span
+                    ><span class="ui-stop__eta"><b>08:16</b><small>Fiorino 2</small></span>
+                  </li>
+                  <li class="ui-stop ui-stop--entrega">
+                    <span class="ui-stop__n">1</span
+                    ><span class="ui-stop__txt"
+                      ><strong>#1024 · Pimentas</strong
+                      ><small><em>Entrega</em> · 87,2 kg</small></span
+                    ><span class="ui-stop__eta"><b>08:23</b><small>Fiorino 1</small></span>
+                  </li>
+                  <li class="ui-stop ui-stop--coleta">
+                    <span class="ui-stop__n">2</span
+                    ><span class="ui-stop__txt"
+                      ><strong>#2031 · Itapegica</strong
+                      ><small><em>Coleta</em> · 72,0 kg</small></span
+                    ><span class="ui-stop__eta"><b>08:29</b><small>Fiorino 2</small></span>
+                  </li>
+                  <li class="ui-stop ui-stop--coleta">
+                    <span class="ui-stop__n">3</span
+                    ><span class="ui-stop__txt"
+                      ><strong>#2036 · Penha</strong><small><em>Coleta</em> · 49,0 kg</small></span
+                    ><span class="ui-stop__eta"><b>08:48</b><small>Fiorino 2</small></span>
+                  </li>
+                  <li class="ui-stop ui-stop--entrega">
+                    <span class="ui-stop__n">2</span
+                    ><span class="ui-stop__txt"
+                      ><strong>#1028 · Arujá</strong
+                      ><small><em>Entrega</em> · 120,2 kg</small></span
+                    ><span class="ui-stop__eta"><b>08:56</b><small>Fiorino 1</small></span>
+                  </li>
+                </ol>
+              </div>
             </article>
             <article class="tile tile--wide reveal">
               <div class="tile__text">
@@ -931,16 +1090,38 @@
                   regiões isoladas.
                 </p>
               </div>
-              <img
-                class="tile__shot"
-                src="img/ui-regioes.webp"
-                alt="Gráfico de pedidos por região"
-                width="774"
-                height="512"
-                data-zoom
-                loading="lazy"
-                decoding="async"
-              />
+              <div
+                class="tile__shot ui"
+                role="img"
+                aria-label="Pedidos demonstrativos por cidade: Guarulhos 10, São Paulo 2, Arujá 1 e Itaquaquecetuba 1."
+              >
+                <div class="ui-card__head">
+                  <svg class="ico"><use href="#i-layers" /></svg><strong>Pedidos por região</strong
+                  ><span class="ui-chip">14 pedidos</span>
+                </div>
+                <ul class="ui-regs">
+                  <li>
+                    <span>Guarulhos</span
+                    ><span class="ui-bar"><i style="width: 71%; --c: #f3c24f"></i></span><b>10</b
+                    ><small>71%</small>
+                  </li>
+                  <li>
+                    <span>São Paulo</span
+                    ><span class="ui-bar"><i style="width: 14%; --c: #2f6fe4"></i></span><b>2</b
+                    ><small>14%</small>
+                  </li>
+                  <li>
+                    <span>Arujá</span
+                    ><span class="ui-bar"><i style="width: 7%; --c: #e08a00"></i></span><b>1</b
+                    ><small>7%</small>
+                  </li>
+                  <li>
+                    <span>Itaquaquecetuba</span
+                    ><span class="ui-bar"><i style="width: 7%; --c: #22b07d"></i></span><b>1</b
+                    ><small>7%</small>
+                  </li>
+                </ul>
+              </div>
             </article>
             <article class="tile tile--wide tile--brand reveal">
               <div class="tile__text">
