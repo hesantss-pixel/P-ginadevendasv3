@@ -74,6 +74,23 @@ if (reduceMotion || !("IntersectionObserver" in window)) {
   });
 }
 
+/* ---------- Luz que segue o mouse nos cartões ---------- */
+if (!reduceMotion && window.matchMedia("(hover: hover)").matches) {
+  document.addEventListener(
+    "pointermove",
+    (e) => {
+      const card =
+        e.target.closest &&
+        e.target.closest(".step, .tile, .trust__card, .price__card, .addon, .calc");
+      if (!card) return;
+      const r = card.getBoundingClientRect();
+      card.style.setProperty("--mx", `${e.clientX - r.left}px`);
+      card.style.setProperty("--my", `${e.clientY - r.top}px`);
+    },
+    { passive: true },
+  );
+}
+
 /* ---------- WhatsApp e ano ---------- */
 const wa = String(SITE_CONFIG.whatsappNumber || "").replace(/\D/g, "");
 const hasWa = wa.length >= 12;

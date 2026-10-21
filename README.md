@@ -200,3 +200,6 @@ A página ficou mais alta que a imagem porque os textos foram mantidos em tamanh
 - A foto do caminhão saiu. No lugar há uma ilustração em SVG de uma rota (centro de distribuição, entregas e coletas), feita no próprio código.
 - Planejador: paradas em formato de alfinete numerado, linha da rota com contorno branco e brilho correndo no sentido da rota (desliga com "reduzir movimento"). Centro de distribuição em dourado.
 - Ajustes de tema ficam no fim de `css/style.css` (bloco "VERSÃO 4").
+
+## Versão 4.1 (20/10/2026) — cores vivas e animações
+Inspirada em elevatelp.com.br (estrutura lida com o Firecrawl): brilhos coloridos que se movem devagar no topo, notificações do planejamento (dados demonstrativos) aparecendo sobre o painel, faixa que corre com o que o sistema faz, dourado do título brilhando, botão dourado com reflexo, luz que segue o mouse nos cartões e entradas com desfoque. Tudo desliga com "reduzir movimento". Bloco "VERSÃO 4.1" no fim de `css/style.css`.
