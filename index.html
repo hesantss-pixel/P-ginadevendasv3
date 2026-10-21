@@ -302,124 +302,28 @@
           <figure class="hero__visual">
             <div class="hero__glow" aria-hidden="true"></div>
             <div class="hero__frame" data-tilt>
-              <div class="dash">
-                <aside class="dash__side" aria-hidden="true">
-                  <img class="dash__logo" src="img/favicon.png" alt="" width="32" height="32" />
-                  <ul>
-                    <li class="is-on">
-                      <svg class="ico"><use href="#i-monitor" /></svg>
-                    </li>
-                    <li>
-                      <svg class="ico"><use href="#i-package" /></svg>
-                    </li>
-                    <li>
-                      <svg class="ico"><use href="#i-route" /></svg>
-                    </li>
-                    <li>
-                      <svg class="ico"><use href="#i-map" /></svg>
-                    </li>
-                    <li>
-                      <svg class="ico"><use href="#i-truck" /></svg>
-                    </li>
-                  </ul>
-                </aside>
-                <div class="dash__main">
-                  <div class="dash__top">
-                    <strong>Planejamento de hoje</strong
-                    ><span class="ui-chip ui-chip--demo">Dados demonstrativos</span>
-                  </div>
-                  <div class="dash__kpis" aria-hidden="true">
-                    <div class="ui-kpi" style="--c: #2f6fe4">
-                      <span class="ui-kpi__ico"
-                        ><svg class="ico"><use href="#i-package" /></svg></span
-                      ><small>Pedidos do dia</small><b>14</b><em>8 entregas · 6 coletas</em>
-                    </div>
-                    <div class="ui-kpi" style="--c: #f3c24f">
-                      <span class="ui-kpi__ico"
-                        ><svg class="ico"><use href="#i-route" /></svg></span
-                      ><small>Rotas</small><b>2</b><em>entregas e coletas</em>
-                    </div>
-                    <div class="ui-kpi" style="--c: #22b07d">
-                      <span class="ui-kpi__ico"
-                        ><svg class="ico"><use href="#i-ruler" /></svg></span
-                      ><small>Distância</small><b>155 km</b><em>estimada</em>
-                    </div>
-                    <div class="ui-kpi" style="--c: #e08a00">
-                      <span class="ui-kpi__ico"
-                        ><svg class="ico"><use href="#i-weight" /></svg></span
-                      ><small>Peso total</small><b>767 kg</b><em>de 1.300 kg</em>
-                    </div>
-                  </div>
-                  <div class="dash__body">
-                    <div class="ui-card dash__map">
-                      <div class="ui-card__head">
-                        <svg class="ico"><use href="#i-map" /></svg
-                        ><strong>Mapa de distribuição</strong><span class="ui-chip">2 rotas</span>
-                      </div>
-                      <img
-                        class="hero__shot"
-                        src="img/mapa-rotas.svg"
-                        width="1200"
-                        height="793"
-                        alt="Mapa com duas rotas demonstrativas saindo do centro de distribuição em Guarulhos: entregas em azul (8 paradas, até Arujá e Tatuapé) e coletas em laranja (6 paradas, até Penha e Itaquaquecetuba)."
-                        fetchpriority="high"
-                        decoding="async"
-                        data-zoom="img/mapa-rotas.svg"
-                      />
-                      <div class="ui-legs">
-                        <span class="ui-leg"><i style="--c: #2f6fe4"></i>Entregas</span
-                        ><span class="ui-leg"><i style="--c: #e08a00"></i>Coletas</span
-                        ><span class="ui-leg ui-leg--cd"><i></i>Centro de distribuição</span>
-                      </div>
-                    </div>
-                    <div class="dash__col" aria-hidden="true">
-                      <div class="ui-card">
-                        <div class="ui-card__head">
-                          <svg class="ico"><use href="#i-pin" /></svg
-                          ><strong>Próximas paradas</strong><span class="ui-chip">hoje</span>
-                        </div>
-                        <ol class="ui-stops">
-                          <li class="ui-stop ui-stop--coleta">
-                            <span class="ui-stop__n">1</span
-                            ><span class="ui-stop__txt"
-                              ><strong>#2032 · Macedo</strong
-                              ><small><em>Coleta</em> · 18,5 kg</small></span
-                            ><span class="ui-stop__eta"><b>08:16</b><small>Fiorino 2</small></span>
-                          </li>
-                          <li class="ui-stop ui-stop--entrega">
-                            <span class="ui-stop__n">1</span
-                            ><span class="ui-stop__txt"
-                              ><strong>#1024 · Pimentas</strong
-                              ><small><em>Entrega</em> · 87,2 kg</small></span
-                            ><span class="ui-stop__eta"><b>08:23</b><small>Fiorino 1</small></span>
-                          </li>
-                          <li class="ui-stop ui-stop--coleta">
-                            <span class="ui-stop__n">2</span
-                            ><span class="ui-stop__txt"
-                              ><strong>#2031 · Itapegica</strong
-                              ><small><em>Coleta</em> · 72,0 kg</small></span
-                            ><span class="ui-stop__eta"><b>08:29</b><small>Fiorino 2</small></span>
-                          </li>
-                          <li class="ui-stop ui-stop--coleta">
-                            <span class="ui-stop__n">3</span
-                            ><span class="ui-stop__txt"
-                              ><strong>#2036 · Penha</strong
-                              ><small><em>Coleta</em> · 49,0 kg</small></span
-                            ><span class="ui-stop__eta"><b>08:48</b><small>Fiorino 2</small></span>
-                          </li>
-                          <li class="ui-stop ui-stop--entrega">
-                            <span class="ui-stop__n">2</span
-                            ><span class="ui-stop__txt"
-                              ><strong>#1028 · Arujá</strong
-                              ><small><em>Entrega</em> · 120,2 kg</small></span
-                            ><span class="ui-stop__eta"><b>08:56</b><small>Fiorino 1</small></span>
-                          </li>
-                        </ol>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <picture>
+                <!-- no celular: o mapa do painel, grande e nítido -->
+                <source
+                  media="(max-width: 640px)"
+                  srcset="img/dashboard-mapa.webp 1584w"
+                  sizes="calc(100vw - 32px)"
+                  width="1584"
+                  height="1208"
+                />
+                <img
+                  class="hero__shot"
+                  src="img/dashboard-rotav3.webp"
+                  srcset="img/dashboard-rotav3.webp 1600w, img/dashboard-rotav3-2x.webp 3200w"
+                  sizes="(max-width: 980px) 100vw, 56vw"
+                  alt="Dashboard do ROTAV3 com pedidos, rotas, tempo estimado, veículos, mapa de distribuição com rotas de entrega e coleta em Guarulhos, pedidos por região, próximas paradas, assistente e alertas. Dados demonstrativos."
+                  width="1600"
+                  height="1228"
+                  fetchpriority="high"
+                  decoding="async"
+                  data-zoom="img/dashboard-rotav3-2x.webp"
+                />
+              </picture>
             </div>
             <div class="toasts" aria-hidden="true">
               <div class="toast toast--1">
@@ -447,8 +351,8 @@
               </div>
             </div>
             <figcaption class="hero__caption">
-              Tela demonstrativa do ROTAV3: pedidos e rotas fictícios.
-              <span class="hero__caption-tip">Toque no mapa para ampliar.</span>
+              Dashboard do ROTAV3 com dados demonstrativos.
+              <span class="hero__caption-tip">Toque na imagem para ampliar.</span>
             </figcaption>
           </figure>
         </div>

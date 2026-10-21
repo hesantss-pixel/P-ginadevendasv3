@@ -210,3 +210,9 @@ Inspirada em elevatelp.com.br (estrutura lida com o Firecrawl): brilhos colorido
 - O mapa usa as coordenadas reais dos bairros e mostra Via Dutra (BR-116), Ayrton Senna (SP-070), Fernão Dias (BR-381), Rio Tietê, Aeroporto de Guarulhos e as cidades. É um mapa ilustrativo, com o aviso "dados demonstrativos".
 - Os scripts que geram o mapa e as telas ficaram fora do site (gerados uma vez). Para mudar os pedidos, altere `js/data.js` e peça para regenerar.
 - A cor das coletas passou para #e08a00 (laranja mais vivo) no site inteiro.
+
+## Versão 4.3 (21/10/2026) — Dashboard recriado em alta resolução
+- O topo mostra o Dashboard do ROTAV3 recriado no layout do sistema (barra lateral, indicadores, mapa de distribuição, pedidos por região, próximas paradas, assistente, agendados e alertas), exportado a 2× (`img/dashboard-rotav3.webp`, `-2x.webp`; no celular `img/dashboard-mapa.webp`).
+- Ícones: Lucide (licença ISC). Emojis 3D: Microsoft Fluent Emoji (licença MIT). Fonte: Inter.
+- Números coerentes com o planejador: 14 pedidos (8 entregas, 6 coletas), 2 rotas, 155 km, 7h05, 767 kg em 2 Fiorinos.
+- Nomes de fornecedores que apareciam na tela (Gemini, Firebase, QR-Tools) foram trocados por termos genéricos ("Assistente IA").
