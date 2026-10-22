@@ -621,26 +621,33 @@
       <!-- 4. DORES → SOLUÇÃO (escuro, mapa 3D e calculadora) -->
       <section class="section section--dark benefits" id="beneficios" aria-labelledby="ben-title">
         <div class="container benefits__grid">
-          <figure
-            class="city3d"
-            aria-label="Mapa 3D ilustrativo: cidade à noite com rotas de entrega, coleta e atraso saindo do depósito, e veículos em movimento"
-          >
-            <canvas class="city3d__canvas" id="city3d" aria-hidden="true"></canvas>
-            <img
-              class="city3d__fallback"
-              data-src="img/cidade-3d.webp"
-              alt=""
-              width="1600"
-              height="683"
-              decoding="async"
-            />
+          <figure class="city3d">
+            <picture>
+              <source
+                media="(max-width: 640px)"
+                srcset="
+                  img/cidade-maquete-celular.webp     720w,
+                  img/cidade-maquete-celular-2x.webp 1080w
+                "
+                sizes="100vw"
+                width="1080"
+                height="1166"
+              />
+              <img
+                class="city3d__img"
+                src="img/cidade-maquete.webp"
+                srcset="img/cidade-maquete.webp 1200w, img/cidade-maquete-2x.webp 2400w"
+                sizes="(max-width: 1240px) 100vw, 1200px"
+                alt="Ilustração 3D de um bairro em maquete: a rota do veículo sai do depósito e passa por duas entregas, uma coleta e um pedido urgente"
+                width="2400"
+                height="1021"
+                loading="lazy"
+                decoding="async"
+              />
+            </picture>
             <div class="city3d__card city3d__card--depot" aria-hidden="true">
               <svg class="ico"><use href="#i-warehouse" /></svg>
               <span><b>Depósito</b><small>Guarulhos · SP</small></span>
-            </div>
-            <div class="city3d__card city3d__card--fleet" aria-hidden="true">
-              <svg class="ico"><use href="#i-truck" /></svg>
-              <span>Veículos em rota</span><b>5</b>
             </div>
             <ul class="city3d__legend" aria-hidden="true">
               <li><i style="--c: #2ee66b"></i>Entrega</li>

@@ -58,7 +58,7 @@ A política de privacidade fica em `privacidade.html` (link no rodapé, no formu
 | Modelos de empresas (seção "Personalização")                 | `index.html` + `img/modelo-*.webp`                                         |
 | Mapa do painel de planejamento (paradas numeradas)           | `js/planmap.js`                                                            |
 | Mapas de ruas (pedidos, coletas e entregas)                  | `js/ordersmap.js` (pontos em `js/data.js`, mapa de ruas em `js/config.js`) |
-| Mapa 3D da seção escura                                      | `js/city3d.js`                                                             |
+| Maquete 3D da seção escura (imagem)                          | `img/cidade-maquete*.webp`, gerada por `ferramentas/maquete-3d/cena.html`  |
 | Formulário, menu, animações, inclinação 3D do painel do topo | `js/main.js`                                                               |
 | WhatsApp e destino do formulário                             | `js/config.js`                                                             |
 | Logo                                                         | `img/logo-rotav3.png` (original, fundo transparente)                       |
@@ -137,11 +137,11 @@ O sistema ainda não rastreia veículos. A página oferece o rastreamento como *
 - No celular, um dedo rola a página e dois dedos dão zoom (os botões + e − também funcionam). No computador, a roda do mouse só dá zoom depois de clicar no mapa.
 - Não há linha de rota nesses mapas: desenhar o caminho pelas ruas exige um serviço de rotas, que o site não tem.
 
-## Como o 3D funciona
+## Como a maquete 3D é feita
 
-- Prédios, rotas, veículos e marcadores do mapa da seção escura são modelados em código com three.js. Nenhum modelo 3D foi baixado de terceiros.
-- O 3D só roda quando aparece na tela, pausa quando a aba fica oculta e respeita a opção do sistema "reduzir movimento" (fica parado).
-- Sem WebGL, a página mostra a imagem estática `img/city-3d.webp`, gerada a partir da própria cena.
+- A imagem da seção escura é uma maquete modelada em código com three.js (prédios, depósito, rota, alfinetes e caminhões). Nenhum modelo 3D foi baixado de terceiros.
+- No site ela é só uma imagem (`img/cidade-maquete.webp` e `-2x` para computador; `img/cidade-maquete-celular.webp` e `-2x` para celular). Nada de 3D roda no navegador do visitante, o que deixa a página leve.
+- Para mudar a maquete: abra `ferramentas/maquete-3d/cena.html` num servidor local (ex.: `python3 -m http.server`) e acesse `.../ferramentas/maquete-3d/cena.html` (computador) ou `...?view=mob` (celular). Clique em "Baixar PNG", converta para WebP e troque os arquivos em `img/`. O arquivo usa three.js r169 pelo jsDelivr.
 
 ## O que foi testado (Chromium sem interface, WebGL por software)
 
@@ -189,12 +189,12 @@ A página ficou mais alta que a imagem porque os textos foram mantidos em tamanh
 
 - MapLibre GL JS 4.7.1 — BSD 3-Clause (`vendor/maplibre/LICENSE.txt`); @maplibre/maplibre-gl-leaflet 0.1.4 — ISC (`vendor/maplibre-gl-leaflet/LICENSE.txt`), adaptado para carregar sem build. Mapa: OpenFreeMap, © OpenMapTiles, © colaboradores do OpenStreetMap.
 - Leaflet 1.9.4 — BSD 2-Clause (`vendor/leaflet/LICENSE.txt`). Dados do mapa © colaboradores do OpenStreetMap (ODbL), com crédito no canto de cada mapa.
-- three.js r169, incluindo `RoomEnvironment` e `RoundedBoxGeometry` dos exemplos — MIT (`vendor/LICENSE-three.txt`).
+- three.js r169 (só no gerador `ferramentas/maquete-3d/cena.html`, carregado do jsDelivr) — MIT.
 - Fontes Inter e Sora, via Google Fonts — SIL Open Font License 1.1.
 - Ícones e modelos 3D — feitos para este projeto.
 
-
 ## Versão 4 (20/10/2026) — visual escuro premium
+
 - Página inteira em preto-azulado, com cartões de vidro e dourado só nos botões e destaques (referências de design lidas com o Firecrawl: Linear e Onfleet).
 - Telas do sistema, mapas e janelas continuam claros, como uma tela real em destaque.
 - A foto do caminhão saiu. No lugar há uma ilustração em SVG de uma rota (centro de distribuição, entregas e coletas), feita no próprio código.
@@ -202,9 +202,11 @@ A página ficou mais alta que a imagem porque os textos foram mantidos em tamanh
 - Ajustes de tema ficam no fim de `css/style.css` (bloco "VERSÃO 4").
 
 ## Versão 4.1 (20/10/2026) — cores vivas e animações
+
 Inspirada em elevatelp.com.br (estrutura lida com o Firecrawl): brilhos coloridos que se movem devagar no topo, notificações do planejamento (dados demonstrativos) aparecendo sobre o painel, faixa que corre com o que o sistema faz, dourado do título brilhando, botão dourado com reflexo, luz que segue o mouse nos cartões e entradas com desfoque. Tudo desliga com "reduzir movimento". Bloco "VERSÃO 4.1" no fim de `css/style.css`.
 
 ## Versão 4.2 (21/10/2026) — telas e mapa desenhados em código
+
 - As imagens recortadas da captura antiga (painel do topo, mapa, próximas paradas, veículos, pedidos por região) saíram. Eram borradas e tinham dados que não batiam com o resto da página.
 - No lugar: telas em HTML e um mapa em SVG (`img/mapa-rotas.svg`), nítidos em qualquer tela, com os mesmos pedidos demonstrativos de `js/data.js`: entregas em azul (8 paradas, 455 kg, Fiorino 1) e coletas em laranja (6 paradas, 312 kg, Fiorino 2), saindo do centro de distribuição em Guarulhos.
 - O mapa usa as coordenadas reais dos bairros e mostra Via Dutra (BR-116), Ayrton Senna (SP-070), Fernão Dias (BR-381), Rio Tietê, Aeroporto de Guarulhos e as cidades. É um mapa ilustrativo, com o aviso "dados demonstrativos".
@@ -212,22 +214,26 @@ Inspirada em elevatelp.com.br (estrutura lida com o Firecrawl): brilhos colorido
 - A cor das coletas passou para #e08a00 (laranja mais vivo) no site inteiro.
 
 ## Versão 4.3 (21/10/2026) — Dashboard recriado em alta resolução
+
 - O topo mostra o Dashboard do ROTAV3 recriado no layout do sistema (barra lateral, indicadores, mapa de distribuição, pedidos por região, próximas paradas, assistente, agendados e alertas), exportado a 2× (`img/dashboard-rotav3.webp`, `-2x.webp`; no celular `img/dashboard-mapa.webp`).
 - Ícones: Lucide (licença ISC). Emojis 3D: Microsoft Fluent Emoji (licença MIT). Fonte: Inter.
 - Números coerentes com o planejador: 14 pedidos (8 entregas, 6 coletas), 2 rotas, 155 km, 7h05, 767 kg em 2 Fiorinos.
 - Nomes de fornecedores que apareciam na tela (Gemini, Firebase, QR-Tools) foram trocados por termos genéricos ("Assistente IA").
 
 ## Versão 4.4 (21/10/2026) — Dashboard igual ao do sistema, mais nítido
+
 - O topo mostra o Dashboard no layout enviado pelo Henrique (mesmas seções e números: 65 pedidos, 1 rota, 2h49, pedidos por região, agendados, IA Assistente, alertas), recriado em código e exportado a 2×.
 - Mapa no estilo do Google Maps (paleta e tipos de via), com uma bolinha verde para cada pedido e o centro de distribuição em dourado. O traçado é desenhado à mão sobre as posições reais dos bairros; não é mapa de ruas real (o servidor do OpenStreetMap não foi acessível daqui).
 - Sem quilometragem e sem a etiqueta "dados demonstrativos" dentro da imagem; o texto alternativo diz que os números são de exemplo.
 
 ## Versão 4.5 (22/10/2026) — painel com outra operação e teste grátis de 5 dias
+
 - O painel do topo mostra uma operação diferente do resto da página (região de Barueri, Osasco, Carapicuíba, Alphaville, Santana de Parnaíba, Cotia, Jandira, Itapevi): 48 pedidos, 3 rotas, 6h15, 31 pendentes, 2 pedidos agendados, 6 em regiões isoladas. Mapa estilo Google com um ponto por pedido.
 - No celular o topo mostra a interface do sistema em versão de celular (`img/dashboard-celular.webp` e `-3x.webp`), não só o mapa.
 - Oferta "5 dias de teste grátis": botões do cabeçalho, do topo e da chamada final abrem o formulário em modo teste (`data-open-demo="teste"`), com título próprio e a mensagem "Quero começar o teste grátis de 5 dias do ROTAV3." no WhatsApp. Nova seção `#teste-gratis` (Dia 1, Dias 1 a 5, Dia 5), aviso na seção de preço e pergunta frequente "Tem teste grátis?".
 
 ## Versão 4.6 (22/10/2026) — entrada reescrita a partir de pesquisa de conversão
+
 - Título: "Rotas do dia prontas em minutos, sem planilha." (resultado, não regra técnica). Selo: "Roteirização para transportadoras".
 - Subtítulo diz como funciona (notas fiscais → mapa → rotas por peso e capacidade → painel com a marca).
 - Um botão principal em primeira pessoa ("Quero testar 5 dias grátis") e um link secundário ("Ver o sistema funcionando").
@@ -236,15 +242,24 @@ Inspirada em elevatelp.com.br (estrutura lida com o Firecrawl): brilhos colorido
 - Seção do teste, pergunta frequente, chamada final e descrições para Google/WhatsApp no mesmo tom.
 
 ## Versão 4.7 (22/10/2026) — cidade iluminada no lugar da cena 3D
+
 - A seção "Antes do ROTAV3" abre com a ilustração enviada pelo Henrique (cidade à noite com rotas iluminadas, depósito em Guarulhos, entregas, coletas e atrasos), ampliada 2× com super-resolução: `img/cidade-rotas.webp` e `img/cidade-rotas-2x.webp`.
 - Animações só em CSS: aproximação lenta da "câmera", anéis pulsando nos alfinetes e um brilho que atravessa a imagem. Desligam com "reduzir movimento". No celular, recorte que mantém o depósito, a legenda e as rotas.
 - A cena 3D (three.js) e os arquivos dela foram removidos (`js/city3d.js`, `vendor/three*`, `img/city-3d.webp`), o que deixa a página mais leve. O cartão "Alertas do planejamento" saiu desta seção, porque a ilustração já tem a própria legenda.
 
 ## Versão 4.8 (22/10/2026) — conteúdo aparece rápido e nítido ao rolar
+
 - Removido o desfoque da animação de entrada; a entrada virou um deslize curto (0,35 s), sem atraso entre blocos, e começa antes de o bloco entrar na tela (`rootMargin` 15%). Teste: rolando o celular em passos de 600 px, 100 ms depois de cada passo nenhum bloco visível estava pendente ou desfocado.
 
 ## Versão 4.9 (22/10/2026) — cidade 3D noturna no estilo da ilustração
+
 - `js/city3d.js` (three.js r169): cidade à noite com prédios baixos de janelas acesas (uma malha só, leve), ruas com faixas e postes, árvores, depósito iluminado com caminhões na doca, 5 rotas neon com fluxo animado (entrega verde, coleta azul, rota do veículo amarela, atraso vermelho), 7 alfinetes 3D com ícone e anel pulsando, 5 veículos percorrendo as ruas e brilho (bloom) só nos elementos de neon.
 - Cartões "Depósito · Guarulhos" e "Veículos em rota", legenda e selo "Ilustração" em HTML, por cima da cena (texto nítido).
 - Carrega só quando a seção se aproxima da tela; pausa fora da tela e com a aba em segundo plano; com "reduzir movimento" mostra um quadro parado. Sem WebGL, mostra `img/cidade-3d.webp` (render da própria cena).
 - Brilho: `vendor/three-post/` (EffectComposer, RenderPass, UnrealBloomPass, OutputPass e shaders do three.js r169, licença MIT, `vendor/LICENSE-three.txt`). A ilustração estática da versão 4.7 saiu.
+
+## Versão 5.0 (22/10/2026) — maquete 3D simples no lugar da cidade neon
+
+- A seção "Antes do ROTAV3" abre com uma maquete 3D limpa: um bairro sobre uma base azul-marinho, prédios claros, o depósito, uma rota dourada saindo dele e alfinetes de entrega (verde), coleta (azul) e urgente (vermelho), com dois caminhões. Versões próprias para computador e celular (`<picture>`), com fundo transparente.
+- Saíram a cena animada (`js/city3d.js`), o three.js e os efeitos de brilho de `vendor/`, a imagem `img/cidade-3d.webp` e o cartão "Veículos em rota". Ficaram o cartão do depósito, a legenda e o selo "Ilustração".
+- O gerador da imagem fica em `ferramentas/maquete-3d/cena.html` (ver "Como a maquete 3D é feita").

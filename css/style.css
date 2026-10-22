@@ -4667,8 +4667,8 @@ body {
 }
 
 /* =====================================================================
-   VERSÃO 4.9 — cidade 3D noturna (three.js) no estilo da ilustração:
-   rotas neon, alfinetes 3D, veículos andando; cartões e legenda em HTML.
+   VERSÃO 5.0 — maquete 3D simples (imagem estática renderizada em 3D):
+   um bairro, o depósito, uma rota dourada e os alfinetes; legenda em HTML.
    ===================================================================== */
 .benefits__grid {
   grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
@@ -4681,37 +4681,22 @@ body {
   aspect-ratio: 2.35 / 1;
   border-radius: 22px;
   overflow: hidden;
-  background: #070d18;
+  background: radial-gradient(55% 75% at 50% 52%, rgb(37 78 140 / 0.38), transparent 70%), #070d18;
   border: 1px solid rgb(255 255 255 / 0.1);
   box-shadow:
     0 40px 90px -40px rgb(0 0 0 / 0.9),
     0 0 140px -40px rgb(47 123 255 / 0.4),
     0 0 90px -50px rgb(243 194 79 / 0.35);
 }
-.city3d__canvas,
-.city3d__fallback {
+.city3d picture,
+.city3d__img {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
 }
-.city3d__fallback {
+.city3d__img {
   object-fit: cover;
-  opacity: 0;
-  transition: opacity 0.4s;
-}
-.city3d.is-fallback .city3d__fallback {
-  opacity: 1;
-}
-.city3d.is-fallback .city3d__canvas {
-  display: none;
-}
-.city3d__canvas {
-  opacity: 0;
-  transition: opacity 0.6s;
-}
-.city3d.is-ready .city3d__canvas {
-  opacity: 1;
 }
 .city3d::after {
   /* vinheta para a cena "afundar" nas bordas */
@@ -4761,17 +4746,6 @@ body {
 }
 .city3d__card--depot .ico {
   color: #e9eef5;
-}
-.city3d__card--fleet {
-  right: 18px;
-  top: 18px;
-}
-.city3d__card--fleet .ico {
-  color: var(--gold-300);
-}
-.city3d__card--fleet b {
-  margin-left: 14px;
-  font-size: 18px;
 }
 .city3d__legend {
   left: 18px;
@@ -4833,20 +4807,12 @@ body {
     left: 10px;
     top: 10px;
   }
-  .city3d__card--fleet {
-    right: 10px;
-    top: 10px;
-  }
   .city3d__card .ico {
     width: 18px;
     height: 18px;
   }
   .city3d__card b {
     font-size: 13px;
-  }
-  .city3d__card--fleet b {
-    margin-left: 6px;
-    font-size: 15px;
   }
   .city3d__legend {
     left: 10px;
