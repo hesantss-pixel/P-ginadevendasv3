@@ -216,3 +216,8 @@ Inspirada em elevatelp.com.br (estrutura lida com o Firecrawl): brilhos colorido
 - Ícones: Lucide (licença ISC). Emojis 3D: Microsoft Fluent Emoji (licença MIT). Fonte: Inter.
 - Números coerentes com o planejador: 14 pedidos (8 entregas, 6 coletas), 2 rotas, 155 km, 7h05, 767 kg em 2 Fiorinos.
 - Nomes de fornecedores que apareciam na tela (Gemini, Firebase, QR-Tools) foram trocados por termos genéricos ("Assistente IA").
+
+## Versão 4.4 (21/10/2026) — Dashboard igual ao do sistema, mais nítido
+- O topo mostra o Dashboard no layout enviado pelo Henrique (mesmas seções e números: 65 pedidos, 1 rota, 2h49, pedidos por região, agendados, IA Assistente, alertas), recriado em código e exportado a 2×.
+- Mapa no estilo do Google Maps (paleta e tipos de via), com uma bolinha verde para cada pedido e o centro de distribuição em dourado. O traçado é desenhado à mão sobre as posições reais dos bairros; não é mapa de ruas real (o servidor do OpenStreetMap não foi acessível daqui).
+- Sem quilometragem e sem a etiqueta "dados demonstrativos" dentro da imagem; o texto alternativo diz que os números são de exemplo.
