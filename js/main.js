@@ -382,5 +382,41 @@ initPlanMap({ reduceMotion });
 /* ---------- Mapas de ruas (pedidos / coletas e entregas) ---------- */
 initOrdersMaps({ reduceMotion });
 
-/* ---------- Ilustração da cidade ---------- */
-// a seção "Antes do ROTAV3" usa uma ilustração estática com animações em CSS (sem 3D)
+/* ---------- Cidade 3D (carregada só perto da tela e se o navegador tiver WebGL) ---------- */
+const cityBox = document.querySelector(".city3d");
+function cityFallback() {
+  if (!cityBox) return;
+  cityBox.classList.add("is-fallback");
+  const img = cityBox.querySelector("img[data-src]");
+  if (img && !img.src) img.src = img.dataset.src;
+}
+function hasWebGL() {
+  try {
+    const c = document.createElement("canvas");
+    return Boolean(c.getContext("webgl2") || c.getContext("webgl"));
+  } catch {
+    return false;
+  }
+}
+if (cityBox) {
+  if (!hasWebGL()) cityFallback();
+  else {
+    const cityIO = new IntersectionObserver(
+      (entries) => {
+        if (!entries.some((en) => en.isIntersecting)) return;
+        cityIO.disconnect();
+        import("./city3d.js")
+          .then((m) => m.initCity(document.getElementById("city3d"), cityBox, { reduceMotion }))
+          .then((api) => {
+            window.__rotav3 = Object.assign(window.__rotav3 || {}, { city: api });
+          })
+          .catch((err) => {
+            console.warn("Cidade 3D indisponível:", err);
+            cityFallback();
+          });
+      },
+      { rootMargin: "400px 0px" },
+    );
+    cityIO.observe(cityBox);
+  }
+}

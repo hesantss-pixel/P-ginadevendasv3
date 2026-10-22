@@ -242,3 +242,9 @@ Inspirada em elevatelp.com.br (estrutura lida com o Firecrawl): brilhos colorido
 
 ## Versão 4.8 (22/10/2026) — conteúdo aparece rápido e nítido ao rolar
 - Removido o desfoque da animação de entrada; a entrada virou um deslize curto (0,35 s), sem atraso entre blocos, e começa antes de o bloco entrar na tela (`rootMargin` 15%). Teste: rolando o celular em passos de 600 px, 100 ms depois de cada passo nenhum bloco visível estava pendente ou desfocado.
+
+## Versão 4.9 (22/10/2026) — cidade 3D noturna no estilo da ilustração
+- `js/city3d.js` (three.js r169): cidade à noite com prédios baixos de janelas acesas (uma malha só, leve), ruas com faixas e postes, árvores, depósito iluminado com caminhões na doca, 5 rotas neon com fluxo animado (entrega verde, coleta azul, rota do veículo amarela, atraso vermelho), 7 alfinetes 3D com ícone e anel pulsando, 5 veículos percorrendo as ruas e brilho (bloom) só nos elementos de neon.
+- Cartões "Depósito · Guarulhos" e "Veículos em rota", legenda e selo "Ilustração" em HTML, por cima da cena (texto nítido).
+- Carrega só quando a seção se aproxima da tela; pausa fora da tela e com a aba em segundo plano; com "reduzir movimento" mostra um quadro parado. Sem WebGL, mostra `img/cidade-3d.webp` (render da própria cena).
+- Brilho: `vendor/three-post/` (EffectComposer, RenderPass, UnrealBloomPass, OutputPass e shaders do three.js r169, licença MIT, `vendor/LICENSE-three.txt`). A ilustração estática da versão 4.7 saiu.

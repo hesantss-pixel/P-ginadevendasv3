@@ -4667,149 +4667,196 @@ body {
 }
 
 /* =====================================================================
-   VERSÃO 4.7 — ilustração da cidade (no lugar da cena 3D): faixa larga
-   com aproximação lenta, anéis pulsando nos alfinetes e um brilho que passa.
+   VERSÃO 4.9 — cidade 3D noturna (three.js) no estilo da ilustração:
+   rotas neon, alfinetes 3D, veículos andando; cartões e legenda em HTML.
    ===================================================================== */
 .benefits__grid {
   grid-template-columns: minmax(0, 1.25fr) minmax(0, 0.75fr);
   align-items: start;
 }
-.cityart {
+.city3d {
   grid-column: 1 / -1;
   position: relative;
   margin: 0;
-}
-.cityart__view {
-  position: relative;
-  overflow: hidden;
-  aspect-ratio: 1144 / 402;
+  aspect-ratio: 2.35 / 1;
   border-radius: 22px;
-  background: #0b1424;
+  overflow: hidden;
+  background: #070d18;
   border: 1px solid rgb(255 255 255 / 0.1);
   box-shadow:
     0 40px 90px -40px rgb(0 0 0 / 0.9),
-    0 0 140px -40px rgb(47 123 255 / 0.45),
-    0 0 90px -50px rgb(243 194 79 / 0.4);
+    0 0 140px -40px rgb(47 123 255 / 0.4),
+    0 0 90px -50px rgb(243 194 79 / 0.35);
 }
-.cityart__view::after {
-  /* borda interna suave para a imagem "afundar" no fundo da seção */
-  content: "";
+.city3d__canvas,
+.city3d__fallback {
   position: absolute;
   inset: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  box-shadow: inset 0 0 60px rgb(3 10 20 / 0.55);
-}
-.cityart__stage {
-  position: absolute;
-  inset: 0;
-  transform-origin: 46% 55%;
-  animation: city-camera 26s ease-in-out infinite alternate;
-}
-.cityart__stage img {
-  display: block;
   width: 100%;
   height: 100%;
+}
+.city3d__fallback {
   object-fit: cover;
-}
-@keyframes city-camera {
-  from {
-    transform: scale(1);
-  }
-  to {
-    transform: scale(1.07) translate(-1.2%, 0.8%);
-  }
-}
-.cityart__pulse {
-  position: absolute;
-  left: var(--x);
-  top: var(--y);
-  width: 0;
-  height: 0;
-  pointer-events: none;
-}
-.cityart__pulse::before,
-.cityart__pulse::after {
-  content: "";
-  position: absolute;
-  left: -14px;
-  top: -6px;
-  width: 28px;
-  height: 12px;
-  border-radius: 50%;
-  border: 2px solid var(--c);
-  box-shadow: 0 0 12px var(--c);
   opacity: 0;
-  animation: pin-ring 2.8s ease-out infinite;
-  animation-delay: var(--d);
+  transition: opacity 0.4s;
 }
-.cityart__pulse::after {
-  animation-delay: calc(var(--d) + 1.4s);
+.city3d.is-fallback .city3d__fallback {
+  opacity: 1;
 }
-@keyframes pin-ring {
-  0% {
-    transform: scale(0.4);
-    opacity: 0.95;
-  }
-  100% {
-    transform: scale(2.4);
-    opacity: 0;
-  }
+.city3d.is-fallback .city3d__canvas {
+  display: none;
 }
-.cityart__sweep {
+.city3d__canvas {
+  opacity: 0;
+  transition: opacity 0.6s;
+}
+.city3d.is-ready .city3d__canvas {
+  opacity: 1;
+}
+.city3d::after {
+  /* vinheta para a cena "afundar" nas bordas */
+  content: "";
   position: absolute;
   inset: 0;
   pointer-events: none;
-  background: linear-gradient(
-    105deg,
-    transparent 38%,
-    rgb(255 236 180 / 0.1) 47%,
-    rgb(140 190 255 / 0.12) 53%,
-    transparent 62%
-  );
-  background-size: 260% 100%;
-  background-position: 130% 0;
-  mix-blend-mode: screen;
-  animation: city-sweep 10s ease-in-out infinite;
+  border-radius: inherit;
+  box-shadow: inset 0 0 80px rgb(4 9 18 / 0.75);
 }
-@keyframes city-sweep {
-  0%,
-  55% {
-    background-position: 130% 0;
-  }
-  100% {
-    background-position: -30% 0;
-  }
+.city3d__card,
+.city3d__legend,
+.city3d__tag {
+  position: absolute;
+  z-index: 2;
+  color: #e9eef5;
+  background: rgb(9 18 34 / 0.72);
+  border: 1px solid rgb(255 255 255 / 0.12);
+  box-shadow: 0 12px 30px -14px rgb(0 0 0 / 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.city3d__card {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px 10px 12px;
+  border-radius: 12px;
+  font-size: 14px;
+}
+.city3d__card .ico {
+  width: 24px;
+  height: 24px;
+}
+.city3d__card b {
+  display: block;
+  font-size: 15px;
+}
+.city3d__card small {
+  display: block;
+  font-size: 12.5px;
+  color: #a9b6c7;
+}
+.city3d__card--depot {
+  left: 18px;
+  top: 18px;
+}
+.city3d__card--depot .ico {
+  color: #e9eef5;
+}
+.city3d__card--fleet {
+  right: 18px;
+  top: 18px;
+}
+.city3d__card--fleet .ico {
+  color: var(--gold-300);
+}
+.city3d__card--fleet b {
+  margin-left: 14px;
+  font-size: 18px;
+}
+.city3d__legend {
+  left: 18px;
+  bottom: 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin: 0;
+  padding: 10px 16px;
+  border-radius: 12px;
+  list-style: none;
+  font-size: 13px;
+  font-weight: 500;
+}
+.city3d__legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.city3d__legend i {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: var(--c);
+  box-shadow: 0 0 10px var(--c);
+}
+.city3d__legend i.line {
+  width: 18px;
+  height: 4px;
+  border-radius: 4px;
+}
+.city3d__tag {
+  right: 18px;
+  bottom: 18px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  color: #a9b6c7;
 }
 @media (max-width: 980px) {
   .benefits__grid {
     grid-template-columns: minmax(0, 1fr);
   }
+  .city3d {
+    aspect-ratio: 1.5 / 1;
+  }
 }
 @media (max-width: 640px) {
-  /* no celular, recorte que mantém o depósito, a legenda e as rotas grandes */
-  .cityart__view {
-    aspect-ratio: 700 / 402;
+  .city3d {
+    aspect-ratio: 1 / 1.08;
     border-radius: 18px;
   }
-  .cityart__stage {
-    left: -8.57%;
-    right: auto;
-    width: 163.43%;
+  .city3d__card {
+    padding: 7px 11px 7px 9px;
+    gap: 8px;
+    font-size: 12px;
   }
-  .cityart__pulse::before,
-  .cityart__pulse::after {
-    left: -10px;
-    top: -4px;
-    width: 20px;
-    height: 8px;
+  .city3d__card--depot {
+    left: 10px;
+    top: 10px;
   }
-}
-@media (prefers-reduced-motion: reduce) {
-  .cityart__stage,
-  .cityart__sweep,
-  .cityart__pulse::before,
-  .cityart__pulse::after {
-    animation: none;
+  .city3d__card--fleet {
+    right: 10px;
+    top: 10px;
+  }
+  .city3d__card .ico {
+    width: 18px;
+    height: 18px;
+  }
+  .city3d__card b {
+    font-size: 13px;
+  }
+  .city3d__card--fleet b {
+    margin-left: 6px;
+    font-size: 15px;
+  }
+  .city3d__legend {
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    gap: 6px 12px;
+    padding: 8px 12px;
+    font-size: 11.5px;
+  }
+  .city3d__tag {
+    display: none;
   }
 }

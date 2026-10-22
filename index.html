@@ -621,54 +621,34 @@
       <!-- 4. DORES → SOLUÇÃO (escuro, mapa 3D e calculadora) -->
       <section class="section section--dark benefits" id="beneficios" aria-labelledby="ben-title">
         <div class="container benefits__grid">
-          <figure class="cityart reveal">
-            <div class="cityart__view">
-              <div class="cityart__stage">
-                <img
-                  src="img/cidade-rotas.webp"
-                  srcset="img/cidade-rotas.webp 1144w, img/cidade-rotas-2x.webp 2288w"
-                  sizes="(max-width: 640px) 165vw, (max-width: 1200px) 100vw, 1200px"
-                  width="1144"
-                  height="402"
-                  alt="Ilustração: cidade à noite com rotas iluminadas saindo do depósito em Guarulhos, com paradas de entrega, coleta e atraso e os veículos em rota"
-                  loading="lazy"
-                  decoding="async"
-                />
-                <span
-                  class="cityart__pulse"
-                  style="--x: 39.9%; --y: 15.4%; --c: #22c55e; --d: 0s"
-                ></span>
-                <span
-                  class="cityart__pulse"
-                  style="--x: 66.2%; --y: 13.7%; --c: #22c55e; --d: 0.45s"
-                ></span>
-                <span
-                  class="cityart__pulse"
-                  style="--x: 21.9%; --y: 58.7%; --c: #22c55e; --d: 0.9s"
-                ></span>
-                <span
-                  class="cityart__pulse"
-                  style="--x: 62.9%; --y: 77.6%; --c: #22c55e; --d: 1.35s"
-                ></span>
-                <span
-                  class="cityart__pulse"
-                  style="--x: 51.4%; --y: 36.3%; --c: #3b82f6; --d: 1.8s"
-                ></span>
-                <span
-                  class="cityart__pulse"
-                  style="--x: 77.2%; --y: 27.9%; --c: #ef4444; --d: 2.25s"
-                ></span>
-                <span
-                  class="cityart__pulse"
-                  style="--x: 70.1%; --y: 47.3%; --c: #f59e0b; --d: 2.7s"
-                ></span>
-                <span
-                  class="cityart__pulse"
-                  style="--x: 81.7%; --y: 79.1%; --c: #f59e0b; --d: 3.15s"
-                ></span>
-                <span class="cityart__sweep" aria-hidden="true"></span>
-              </div>
+          <figure
+            class="city3d"
+            aria-label="Mapa 3D ilustrativo: cidade à noite com rotas de entrega, coleta e atraso saindo do depósito, e veículos em movimento"
+          >
+            <canvas class="city3d__canvas" id="city3d" aria-hidden="true"></canvas>
+            <img
+              class="city3d__fallback"
+              data-src="img/cidade-3d.webp"
+              alt=""
+              width="1600"
+              height="683"
+              decoding="async"
+            />
+            <div class="city3d__card city3d__card--depot" aria-hidden="true">
+              <svg class="ico"><use href="#i-warehouse" /></svg>
+              <span><b>Depósito</b><small>Guarulhos · SP</small></span>
             </div>
+            <div class="city3d__card city3d__card--fleet" aria-hidden="true">
+              <svg class="ico"><use href="#i-truck" /></svg>
+              <span>Veículos em rota</span><b>5</b>
+            </div>
+            <ul class="city3d__legend" aria-hidden="true">
+              <li><i style="--c: #2ee66b"></i>Entrega</li>
+              <li><i style="--c: #3b8bff"></i>Coleta</li>
+              <li><i style="--c: #ff3b4e"></i>Atraso / Urgente</li>
+              <li><i class="line" style="--c: #ffb21e"></i>Rota do veículo</li>
+            </ul>
+            <span class="city3d__tag" aria-hidden="true">Ilustração</span>
           </figure>
           <div class="benefits__copy reveal">
             <p class="badge">
