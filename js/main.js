@@ -137,14 +137,14 @@ const eyebrowDefault = formEyebrow ? formEyebrow.textContent : "";
 // interesse vem do botão que abriu o formulário (ex.: data-open-demo="rastreamento")
 function openModal(interest = "") {
   form.elements.interesse.value = interest;
-  const trial = interest === "teste";
-  formTitle.textContent = trial ? "Comece seus 5 dias grátis" : titleDefault;
-  if (formEyebrow) formEyebrow.textContent = trial ? "Teste grátis" : eyebrowDefault;
+  const trial = interest === "demo";
+  formTitle.textContent = trial ? "Veja as suas rotas prontas" : titleDefault;
+  if (formEyebrow) formEyebrow.textContent = trial ? "Demonstração grátis" : eyebrowDefault;
   intro.textContent =
     interest === "rastreamento"
       ? "Conte sobre a sua frota: a conversa abre no WhatsApp com o pedido de orçamento do rastreamento já escrito."
       : trial
-        ? "Três informações e pronto: a conversa abre no WhatsApp para combinarmos o início do seu teste."
+        ? "Três informações e pronto: a conversa abre no WhatsApp para combinarmos o envio das notas e a chamada."
         : introDefault;
   if (typeof modal.showModal !== "function") {
     modal.setAttribute("open", "");
@@ -246,8 +246,8 @@ form.addEventListener("submit", async (e) => {
     const text = [
       `Olá! Sou ${data.nome.trim()}, da ${data.empresa.trim()}.`,
       frota ? `Temos ${frota} veículos.` : "",
-      data.interesse === "teste"
-        ? "Quero começar o teste grátis de 5 dias do ROTAV3."
+      data.interesse === "demo"
+        ? "Quero ver as rotas de um dia da nossa operação montadas no ROTAV3. Posso mandar as notas."
         : "Quero ver o ROTAV3 com os nossos pedidos.",
       data.interesse === "rastreamento"
         ? "Também quero um orçamento do módulo de rastreamento."

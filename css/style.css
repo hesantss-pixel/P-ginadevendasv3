@@ -4826,3 +4826,143 @@ body {
     display: none;
   }
 }
+
+/* =====================================================================
+   VERSÃO 5.1 — oferta do playbook: demonstração grátis com as notas do
+   cliente, plano fundador (3 meses) e tabela de planos com preço.
+   ===================================================================== */
+.price__head {
+  max-width: 46em;
+}
+.tiers {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 34px;
+}
+.tier {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 26px;
+  border-radius: 20px;
+  border: 1px solid var(--glass-line);
+  background: var(--glass);
+  box-shadow: var(--glass-shadow);
+  color: var(--ink);
+}
+.tier--mid {
+  border-color: rgb(243 194 79 / 0.45);
+  background:
+    radial-gradient(70% 60% at 100% 0%, rgb(212 169 60 / 0.16), transparent 70%), var(--glass);
+}
+.tier__name {
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: #fff;
+}
+.tier__for {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  color: var(--ink-2);
+}
+.tier__for .ico {
+  width: 18px;
+  height: 18px;
+  color: var(--gold-300);
+}
+.tier__price {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-top: 6px;
+  font-family: var(--font-display);
+  color: #fff;
+}
+.tier__price strong {
+  font-size: clamp(40px, 5vw, 52px);
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+}
+.tier__cur,
+.tier__per {
+  font-size: 17px;
+  color: var(--muted);
+}
+.tier__setup {
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--glass-line);
+  font-size: 14px;
+  color: var(--muted);
+}
+.tier__btn {
+  width: 100%;
+  margin-top: auto;
+}
+.price__foot {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 18px;
+}
+.price__box {
+  padding: 22px 24px;
+  border-radius: 18px;
+  border: 1px solid var(--glass-line);
+  background: var(--glass);
+}
+.price__box h3 {
+  font-family: var(--font-display);
+  font-size: 17px;
+  color: #fff;
+}
+.price__box > p:not(.addon__tag) {
+  margin-top: 8px;
+  font-size: 14.5px;
+  line-height: 1.55;
+  color: var(--muted);
+}
+.price__box--founder {
+  border-color: rgb(61 220 132 / 0.3);
+  background:
+    radial-gradient(80% 70% at 0% 0%, rgb(61 220 132 / 0.08), transparent 70%), var(--glass);
+}
+.price__box--founder .addon__tag {
+  color: #3ddc84;
+}
+.price__incl {
+  display: grid;
+  gap: 10px;
+  margin-top: 12px;
+}
+.price__incl li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14.5px;
+  line-height: 1.45;
+  color: var(--ink-2);
+}
+.price__incl .ico {
+  flex: none;
+  width: 17px;
+  height: 17px;
+  margin-top: 2px;
+  color: #3ddc84;
+}
+.price__foot .addon {
+  margin-top: 0;
+}
+@media (max-width: 980px) {
+  .tiers,
+  .price__foot {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .tiers {
+    max-width: 520px;
+  }
+}

@@ -263,3 +263,14 @@ Inspirada em elevatelp.com.br (estrutura lida com o Firecrawl): brilhos colorido
 - A seção "Antes do ROTAV3" abre com uma maquete 3D limpa: um bairro sobre uma base azul-marinho, prédios claros, o depósito, uma rota dourada saindo dele e alfinetes de entrega (verde), coleta (azul) e urgente (vermelho), com dois caminhões. Versões próprias para computador e celular (`<picture>`), com fundo transparente.
 - Saíram a cena animada (`js/city3d.js`), o three.js e os efeitos de brilho de `vendor/`, a imagem `img/cidade-3d.webp` e o cartão "Veículos em rota". Ficaram o cartão do depósito, a legenda e o selo "Ilustração".
 - O gerador da imagem fica em `ferramentas/maquete-3d/cena.html` (ver "Como a maquete 3D é feita").
+
+## Versão 5.1 (22/10/2026) — oferta do playbook: demonstração grátis e plano fundador
+
+- Saiu o "teste de 5 dias grátis". A oferta agora segue o playbook de venda:
+  - **Grátis:** o cliente manda as notas fiscais de um dia; montamos as rotas desse dia no ROTAV3 e mostramos numa chamada de 20 minutos.
+  - **Plano fundador:** os 3 primeiros meses são pagos; se em 3 meses não estiver valendo, o cliente para e não deve mais nada.
+- Botões: "Demonstração grátis" (cabeçalho) e "Quero ver minhas rotas prontas" (topo, "Como começar" e chamada final). O formulário abre o WhatsApp com "Quero ver as rotas de um dia da nossa operação montadas no ROTAV3. Posso mandar as notas." (`data-open-demo="demo"`).
+- A seção "Teste grátis" virou "Como começar" (`#como-comecar`), em 3 passos.
+- Preço publicado (seção `#preco`, classes `.tier*`): Essencial (até 5 veículos) R$ 390/mês, Operação (6 a 15) R$ 590/mês, Frota (acima de 15) R$ 890/mês; implantação paga uma vez, R$ 990 / R$ 990 / R$ 1.900. Também: o que todos os planos incluem, o plano fundador e o rastreamento como módulo opcional com orçamento separado.
+- Perguntas frequentes: "Quanto custa?" com os valores, "Dá para ver funcionando antes de pagar?" e "Tem fidelidade?". Descrições para Google/WhatsApp e dados estruturados (`AggregateOffer` de R$ 390 a R$ 890) atualizados.
+- Para mudar preços: seção `#preco` e a pergunta "Quanto custa?" no `index.html`, a descrição no `<head>` e o `AggregateOffer` no JSON-LD.
