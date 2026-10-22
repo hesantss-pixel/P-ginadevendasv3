@@ -223,12 +223,16 @@
           <a href="#funcionalidades" data-nav="funcionalidades">Funcionalidades</a>
           <a href="#preco" data-nav="preco">Preço</a>
           <a href="#perguntas" data-nav="perguntas">Perguntas</a>
-          <button class="btn btn--gold btn--sm nav__cta-mobile" type="button" data-open-demo>
-            <svg class="ico"><use href="#i-calendar" /></svg>Agendar demonstração
+          <button
+            class="btn btn--gold btn--sm nav__cta-mobile"
+            type="button"
+            data-open-demo="teste"
+          >
+            <svg class="ico"><use href="#i-calendar" /></svg>Testar 5 dias grátis
           </button>
         </nav>
-        <button class="btn btn--gold btn--sm header__cta" type="button" data-open-demo>
-          <svg class="ico"><use href="#i-calendar" /></svg>Agendar demonstração
+        <button class="btn btn--gold btn--sm header__cta" type="button" data-open-demo="teste">
+          <svg class="ico"><use href="#i-calendar" /></svg>Testar 5 dias grátis
         </button>
         <button
           class="menu-toggle"
@@ -273,16 +277,19 @@
               mapa e monta o planejamento da frota em um painel com a marca da sua empresa.
             </p>
             <div class="hero__actions">
-              <button class="btn btn--gold btn--lg" type="button" data-open-demo>
-                <svg class="ico"><use href="#i-calendar" /></svg>Agendar demonstração
+              <button class="btn btn--gold btn--lg" type="button" data-open-demo="teste">
+                <svg class="ico"><use href="#i-calendar" /></svg>Testar 5 dias grátis
               </button>
               <a class="btn btn--ghost btn--lg" href="#planejamento"
-                ><svg class="ico"><use href="#i-down" /></svg>Testar o planejador</a
+                ><svg class="ico"><use href="#i-down" /></svg>Ver o planejador</a
               >
             </div>
             <p class="hero__note">
-              <svg class="ico"><use href="#i-chat" /></svg>Pelo WhatsApp, direto com quem desenvolve
-              o sistema. Sem compromisso.
+              <svg class="ico"><use href="#i-check" /></svg
+              ><span
+                ><strong>5 dias grátis, sem compromisso:</strong> te ensinamos a usar e, se não
+                gostar, não paga nada.</span
+              >
             </p>
             <ul class="hero__features" aria-label="Destaques">
               <li>
@@ -303,22 +310,22 @@
             <div class="hero__glow" aria-hidden="true"></div>
             <div class="hero__frame" data-tilt>
               <picture>
-                <!-- no celular: o mapa do painel, grande e nítido -->
+                <!-- no celular: a interface do sistema em versão de celular -->
                 <source
                   media="(max-width: 640px)"
-                  srcset="img/dashboard-mapa.webp 1614w"
+                  srcset="img/dashboard-celular.webp 840w, img/dashboard-celular-3x.webp 1260w"
                   sizes="calc(100vw - 32px)"
-                  width="1614"
-                  height="1164"
+                  width="840"
+                  height="1814"
                 />
                 <img
                   class="hero__shot"
                   src="img/dashboard-rotav3.webp"
                   srcset="img/dashboard-rotav3.webp 1600w, img/dashboard-rotav3-2x.webp 3200w"
                   sizes="(max-width: 980px) 100vw, 56vw"
-                  alt="Dashboard do ROTAV3: 65 pedidos, 1 rota, tempo estimado de 2h49, pedidos por região, mapa de distribuição com um ponto para cada pedido na região de Guarulhos, pedidos agendados, IA Assistente e alertas. Números de exemplo."
+                  alt="Dashboard do ROTAV3: 48 pedidos, 3 rotas, tempo estimado de 6h15, pedidos por região (Barueri, Osasco, Carapicuíba, Santana de Parnaíba, Cotia e outras), mapa de distribuição com um ponto para cada pedido, pedidos agendados, IA Assistente e alertas. Números de exemplo."
                   width="1600"
-                  height="1335"
+                  height="1464"
                   fetchpriority="high"
                   decoding="async"
                   data-zoom="img/dashboard-rotav3-2x.webp"
@@ -331,21 +338,25 @@
                   ><svg class="ico"><use href="#i-route" /></svg
                 ></span>
                 <span
-                  ><strong>Rota gerada às 07:40</strong><small>tempo estimado de 2h49</small></span
+                  ><strong>3 rotas geradas às 06:50</strong><small>tempo total de 6h15</small></span
                 >
               </div>
               <div class="toast toast--2">
                 <span class="toast__ico toast__ico--amber"
                   ><svg class="ico"><use href="#i-invoice" /></svg
                 ></span>
-                <span><strong>65 pedidos importados</strong><small>a partir das notas fiscais</small></span>
+                <span
+                  ><strong>48 pedidos importados</strong
+                  ><small>a partir das notas fiscais</small></span
+                >
               </div>
               <div class="toast toast--3">
                 <span class="toast__ico toast__ico--blue"
                   ><svg class="ico"><use href="#i-gauge" /></svg
                 ></span>
                 <span
-                  ><strong>17 pedidos em regiões isoladas</strong><small>sugestão: agendar separadamente</small></span
+                  ><strong>6 pedidos em regiões isoladas</strong
+                  ><small>sugestão: agendar separadamente</small></span
                 >
               </div>
             </div>
@@ -1314,6 +1325,58 @@
         </div>
       </section>
 
+      <!-- TESTE GRÁTIS -->
+      <section class="section section--dark trial" id="teste-gratis" aria-labelledby="trial-title">
+        <div class="container trial__grid">
+          <div class="trial__copy reveal">
+            <p class="eyebrow">Teste grátis</p>
+            <h2 id="trial-title">
+              Use o ROTAV3 por <span class="grad">5 dias grátis</span>, com a sua operação de
+              verdade.
+            </h2>
+            <p class="lead">
+              A gente configura o sistema com os seus pedidos e veículos, te ensina a usar e
+              acompanha você de perto. Se não fizer sentido para a sua operação, é só não continuar:
+              você não paga nada.
+            </p>
+            <ul class="trial__checks">
+              <li>
+                <svg class="ico"><use href="#i-check" /></svg>Sem compromisso
+              </li>
+              <li>
+                <svg class="ico"><use href="#i-check" /></svg>Treinamento incluído
+              </li>
+              <li>
+                <svg class="ico"><use href="#i-check" /></svg>Suporte direto pelo WhatsApp
+              </li>
+            </ul>
+            <div class="trial__actions">
+              <button class="btn btn--gold btn--lg" type="button" data-open-demo="teste">
+                <svg class="ico"><use href="#i-calendar" /></svg>Quero testar 5 dias grátis
+              </button>
+              <p class="trial__note">Começa com uma conversa rápida pelo WhatsApp.</p>
+            </div>
+          </div>
+          <ol class="trial__steps">
+            <li class="reveal">
+              <span class="trial__day">Dia 1</span>
+              <h3>Configuramos com você</h3>
+              <p>Cadastramos seus veículos e importamos seus pedidos pelas notas fiscais.</p>
+            </li>
+            <li class="reveal">
+              <span class="trial__day">Dias 1 a 5</span>
+              <h3>Você usa no dia a dia</h3>
+              <p>Monte as rotas da sua operação real, com a gente do lado para tirar dúvidas.</p>
+            </li>
+            <li class="reveal">
+              <span class="trial__day">Dia 5</span>
+              <h3>Você decide</h3>
+              <p>Gostou, seguimos com a proposta. Não gostou, encerra o teste e não paga nada.</p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
       <!-- 10. PREÇO -->
       <section class="section section--light price" id="preco" aria-labelledby="price-title">
         <div class="container price__grid">
@@ -1323,6 +1386,13 @@
             <p class="lead">
               O valor é sob consulta e depende do tamanho da sua operação. Na demonstração
               entendemos o seu cenário e montamos a proposta.
+            </p>
+            <p class="price__trial">
+              <svg class="ico"><use href="#i-check" /></svg
+              ><span
+                >Antes de contratar, use <strong>5 dias grátis</strong>.
+                <a href="#teste-gratis">Veja como funciona o teste.</a></span
+              >
             </p>
             <div class="addon" id="rastreamento">
               <p class="addon__tag">
@@ -1451,6 +1521,17 @@
             </details>
             <details class="reveal">
               <summary>
+                Tem teste grátis?<svg class="ico"><use href="#i-plus" /></svg>
+              </summary>
+              <p>
+                Sim. Você usa o ROTAV3 por 5 dias sem pagar nada. No primeiro dia configuramos o
+                sistema com os seus pedidos e veículos e mostramos como usar. Nos dias seguintes
+                você monta as rotas da sua operação com o nosso suporte pelo WhatsApp. Se não
+                gostar, é só não continuar. <a href="#teste-gratis">Veja como funciona.</a>
+              </p>
+            </details>
+            <details class="reveal">
+              <summary>
                 Como ficam os dados da minha operação?<svg class="ico">
                   <use href="#i-plus" />
                 </svg>
@@ -1477,15 +1558,15 @@
             loading="lazy"
           />
           <div class="cta__copy">
-            <h2 id="cta-title">Veja o ROTAV3 com os seus pedidos.</h2>
+            <h2 id="cta-title">Teste o ROTAV3 com os seus pedidos: 5 dias grátis.</h2>
             <p>
-              Agende uma demonstração pelo WhatsApp e tire suas dúvidas direto com quem desenvolve o
-              sistema.
+              Te ensinamos a usar e, se não gostar, não paga nada. Comece pelo WhatsApp, direto com
+              quem desenvolve o sistema.
             </p>
           </div>
           <div class="cta__actions">
-            <button class="btn btn--gold" type="button" data-open-demo>
-              <svg class="ico"><use href="#i-calendar" /></svg>Agendar demonstração
+            <button class="btn btn--gold" type="button" data-open-demo="teste">
+              <svg class="ico"><use href="#i-calendar" /></svg>Quero testar 5 dias grátis
             </button>
             <a class="btn btn--ghost" href="#" data-whatsapp hidden
               ><svg class="ico"><use href="#i-chat" /></svg>Falar no WhatsApp</a

@@ -221,3 +221,8 @@ Inspirada em elevatelp.com.br (estrutura lida com o Firecrawl): brilhos colorido
 - O topo mostra o Dashboard no layout enviado pelo Henrique (mesmas seções e números: 65 pedidos, 1 rota, 2h49, pedidos por região, agendados, IA Assistente, alertas), recriado em código e exportado a 2×.
 - Mapa no estilo do Google Maps (paleta e tipos de via), com uma bolinha verde para cada pedido e o centro de distribuição em dourado. O traçado é desenhado à mão sobre as posições reais dos bairros; não é mapa de ruas real (o servidor do OpenStreetMap não foi acessível daqui).
 - Sem quilometragem e sem a etiqueta "dados demonstrativos" dentro da imagem; o texto alternativo diz que os números são de exemplo.
+
+## Versão 4.5 (22/10/2026) — painel com outra operação e teste grátis de 5 dias
+- O painel do topo mostra uma operação diferente do resto da página (região de Barueri, Osasco, Carapicuíba, Alphaville, Santana de Parnaíba, Cotia, Jandira, Itapevi): 48 pedidos, 3 rotas, 6h15, 31 pendentes, 2 pedidos agendados, 6 em regiões isoladas. Mapa estilo Google com um ponto por pedido.
+- No celular o topo mostra a interface do sistema em versão de celular (`img/dashboard-celular.webp` e `-3x.webp`), não só o mapa.
+- Oferta "5 dias de teste grátis": botões do cabeçalho, do topo e da chamada final abrem o formulário em modo teste (`data-open-demo="teste"`), com título próprio e a mensagem "Quero começar o teste grátis de 5 dias do ROTAV3." no WhatsApp. Nova seção `#teste-gratis` (Dia 1, Dias 1 a 5, Dia 5), aviso na seção de preço e pergunta frequente "Tem teste grátis?".
