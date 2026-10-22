@@ -4583,3 +4583,87 @@ body {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* =====================================================================
+   VERSÃO 4.6 — entrada reescrita: linha da oferta e faixa de confiança
+   ===================================================================== */
+.hero h1 {
+  max-width: 13em;
+}
+.hero__offer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 18px;
+  margin-top: 18px;
+}
+.hero__offer li {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #e9eef5;
+}
+.hero__offer .ico {
+  width: 17px;
+  height: 17px;
+  color: #3ddc84;
+}
+.hero__features {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 12px;
+}
+.hero__features li {
+  font-size: 14px;
+  color: rgb(255 255 255 / 0.82);
+}
+@media (min-width: 1181px) {
+  .hero__features {
+    grid-template-columns: repeat(3, minmax(0, max-content));
+    gap: 12px 22px;
+  }
+  .hero__features li {
+    max-width: 15em;
+    align-items: flex-start;
+    font-size: 13px;
+    line-height: 1.4;
+  }
+}
+.hero__actions {
+  align-items: center;
+}
+.hero__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 4px;
+  font-weight: 600;
+  font-size: 15.5px;
+  color: #fff;
+  text-decoration: none;
+  border-bottom: 1px solid rgb(255 255 255 / 0.25);
+  transition:
+    border-color 0.2s,
+    gap 0.2s;
+}
+.hero__link:hover {
+  gap: 12px;
+  border-color: var(--gold-300);
+}
+.hero__link .ico {
+  width: 18px;
+  height: 18px;
+  color: var(--gold-300);
+}
+@media (min-width: 1181px) {
+  .hero__features li {
+    max-width: 13em;
+  }
+}
+@media (max-width: 640px) {
+  .hero__link {
+    justify-content: center;
+    width: 100%;
+    border-bottom: 0;
+  }
+}

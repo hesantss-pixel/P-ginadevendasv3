@@ -226,3 +226,11 @@ Inspirada em elevatelp.com.br (estrutura lida com o Firecrawl): brilhos colorido
 - O painel do topo mostra uma operação diferente do resto da página (região de Barueri, Osasco, Carapicuíba, Alphaville, Santana de Parnaíba, Cotia, Jandira, Itapevi): 48 pedidos, 3 rotas, 6h15, 31 pendentes, 2 pedidos agendados, 6 em regiões isoladas. Mapa estilo Google com um ponto por pedido.
 - No celular o topo mostra a interface do sistema em versão de celular (`img/dashboard-celular.webp` e `-3x.webp`), não só o mapa.
 - Oferta "5 dias de teste grátis": botões do cabeçalho, do topo e da chamada final abrem o formulário em modo teste (`data-open-demo="teste"`), com título próprio e a mensagem "Quero começar o teste grátis de 5 dias do ROTAV3." no WhatsApp. Nova seção `#teste-gratis` (Dia 1, Dias 1 a 5, Dia 5), aviso na seção de preço e pergunta frequente "Tem teste grátis?".
+
+## Versão 4.6 (22/10/2026) — entrada reescrita a partir de pesquisa de conversão
+- Título: "Rotas do dia prontas em minutos, sem planilha." (resultado, não regra técnica). Selo: "Roteirização para transportadoras".
+- Subtítulo diz como funciona (notas fiscais → mapa → rotas por peso e capacidade → painel com a marca).
+- Um botão principal em primeira pessoa ("Quero testar 5 dias grátis") e um link secundário ("Ver o sistema funcionando").
+- Linha da oferta: 5 dias grátis · Implantação e treinamento inclusos · Sem compromisso.
+- Faixa de confiança verificável no lugar da lista que repetia o subtítulo: formatos aceitos, navegador, atendimento com quem desenvolve.
+- Seção do teste, pergunta frequente, chamada final e descrições para Google/WhatsApp no mesmo tom.
