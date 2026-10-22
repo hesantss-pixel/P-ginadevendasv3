@@ -66,12 +66,10 @@ if (reduceMotion || !("IntersectionObserver" in window)) {
           io.unobserve(en.target);
         }
     },
-    { rootMargin: "0px 0px -8% 0px" },
+    // começa um pouco antes de o bloco entrar na tela, para ele já chegar pronto
+    { rootMargin: "0px 0px 15% 0px" },
   );
-  reveals.forEach((el, i) => {
-    el.style.transitionDelay = `${(i % 3) * 70}ms`;
-    io.observe(el);
-  });
+  reveals.forEach((el) => io.observe(el));
 }
 
 /* ---------- Luz que segue o mouse nos cartões ---------- */

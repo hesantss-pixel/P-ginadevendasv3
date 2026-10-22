@@ -3922,15 +3922,13 @@ body {
 }
 
 /* entradas mais suaves */
+/* entrada rápida e sempre nítida: só um leve deslize, sem desfoque */
 .js .reveal {
-  filter: blur(6px);
-  transition:
-    opacity 0.8s cubic-bezier(0.2, 0.8, 0.2, 1),
-    transform 0.8s cubic-bezier(0.2, 0.8, 0.2, 1),
-    filter 0.8s;
+  transform: translateY(10px);
+  transition: transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 .js .reveal.is-in {
-  filter: none;
+  transform: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

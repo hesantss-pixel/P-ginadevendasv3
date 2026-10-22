@@ -239,3 +239,6 @@ Inspirada em elevatelp.com.br (estrutura lida com o Firecrawl): brilhos colorido
 - A seção "Antes do ROTAV3" abre com a ilustração enviada pelo Henrique (cidade à noite com rotas iluminadas, depósito em Guarulhos, entregas, coletas e atrasos), ampliada 2× com super-resolução: `img/cidade-rotas.webp` e `img/cidade-rotas-2x.webp`.
 - Animações só em CSS: aproximação lenta da "câmera", anéis pulsando nos alfinetes e um brilho que atravessa a imagem. Desligam com "reduzir movimento". No celular, recorte que mantém o depósito, a legenda e as rotas.
 - A cena 3D (three.js) e os arquivos dela foram removidos (`js/city3d.js`, `vendor/three*`, `img/city-3d.webp`), o que deixa a página mais leve. O cartão "Alertas do planejamento" saiu desta seção, porque a ilustração já tem a própria legenda.
+
+## Versão 4.8 (22/10/2026) — conteúdo aparece rápido e nítido ao rolar
+- Removido o desfoque da animação de entrada; a entrada virou um deslize curto (0,35 s), sem atraso entre blocos, e começa antes de o bloco entrar na tela (`rootMargin` 15%). Teste: rolando o celular em passos de 600 px, 100 ms depois de cada passo nenhum bloco visível estava pendente ou desfocado.
