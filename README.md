@@ -234,3 +234,8 @@ Inspirada em elevatelp.com.br (estrutura lida com o Firecrawl): brilhos colorido
 - Linha da oferta: 5 dias grátis · Implantação e treinamento inclusos · Sem compromisso.
 - Faixa de confiança verificável no lugar da lista que repetia o subtítulo: formatos aceitos, navegador, atendimento com quem desenvolve.
 - Seção do teste, pergunta frequente, chamada final e descrições para Google/WhatsApp no mesmo tom.
+
+## Versão 4.7 (22/10/2026) — cidade iluminada no lugar da cena 3D
+- A seção "Antes do ROTAV3" abre com a ilustração enviada pelo Henrique (cidade à noite com rotas iluminadas, depósito em Guarulhos, entregas, coletas e atrasos), ampliada 2× com super-resolução: `img/cidade-rotas.webp` e `img/cidade-rotas-2x.webp`.
+- Animações só em CSS: aproximação lenta da "câmera", anéis pulsando nos alfinetes e um brilho que atravessa a imagem. Desligam com "reduzir movimento". No celular, recorte que mantém o depósito, a legenda e as rotas.
+- A cena 3D (three.js) e os arquivos dela foram removidos (`js/city3d.js`, `vendor/three*`, `img/city-3d.webp`), o que deixa a página mais leve. O cartão "Alertas do planejamento" saiu desta seção, porque a ilustração já tem a própria legenda.

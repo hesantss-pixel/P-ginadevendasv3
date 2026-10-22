@@ -621,64 +621,55 @@
       <!-- 4. DORES → SOLUÇÃO (escuro, mapa 3D e calculadora) -->
       <section class="section section--dark benefits" id="beneficios" aria-labelledby="ben-title">
         <div class="container benefits__grid">
-          <div
-            class="city"
-            role="img"
-            aria-label="Mapa 3D ilustrativo com rotas, paradas e veículos em movimento"
-          >
-            <canvas class="city__canvas" id="city3d" aria-hidden="true"></canvas>
-            <img
-              class="city__fallback"
-              data-src="img/city-3d.webp"
-              alt=""
-              width="774"
-              height="633"
-              decoding="async"
-            />
-            <noscript
-              ><img
-                class="city__fallback"
-                src="img/city-3d.webp"
-                alt=""
-                width="774"
-                height="633"
-                loading="lazy"
-                style="opacity: 1"
-            /></noscript>
-            <div class="alerts" aria-hidden="true">
-              <p class="alerts__title">Alertas do planejamento</p>
-              <ul>
-                <li>
-                  <i class="dot dot--amber"></i
-                  ><span
-                    ><strong>2 pedidos mais distantes</strong
-                    ><small>Arujá e Itaquaquecetuba</small></span
-                  >
-                </li>
-                <li>
-                  <i class="dot dot--blue"></i
-                  ><span
-                    ><strong>Entregas com 70% da capacidade</strong
-                    ><small>455 de 650 kg · Fiorino 1</small></span
-                  >
-                </li>
-                <li>
-                  <i class="dot dot--gold"></i
-                  ><span
-                    ><strong>Pedido #1022 com horário marcado</strong
-                    ><small>Entrega até 14h · previsão 10:53</small></span
-                  >
-                </li>
-                <li>
-                  <i class="dot dot--green"></i
-                  ><span
-                    ><strong>Rota de entregas gerada</strong><small>8 paradas · 455 kg</small></span
-                  >
-                </li>
-              </ul>
-              <p class="alerts__note">Dados demonstrativos</p>
+          <figure class="cityart reveal">
+            <div class="cityart__view">
+              <div class="cityart__stage">
+                <img
+                  src="img/cidade-rotas.webp"
+                  srcset="img/cidade-rotas.webp 1144w, img/cidade-rotas-2x.webp 2288w"
+                  sizes="(max-width: 640px) 165vw, (max-width: 1200px) 100vw, 1200px"
+                  width="1144"
+                  height="402"
+                  alt="Ilustração: cidade à noite com rotas iluminadas saindo do depósito em Guarulhos, com paradas de entrega, coleta e atraso e os veículos em rota"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <span
+                  class="cityart__pulse"
+                  style="--x: 39.9%; --y: 15.4%; --c: #22c55e; --d: 0s"
+                ></span>
+                <span
+                  class="cityart__pulse"
+                  style="--x: 66.2%; --y: 13.7%; --c: #22c55e; --d: 0.45s"
+                ></span>
+                <span
+                  class="cityart__pulse"
+                  style="--x: 21.9%; --y: 58.7%; --c: #22c55e; --d: 0.9s"
+                ></span>
+                <span
+                  class="cityart__pulse"
+                  style="--x: 62.9%; --y: 77.6%; --c: #22c55e; --d: 1.35s"
+                ></span>
+                <span
+                  class="cityart__pulse"
+                  style="--x: 51.4%; --y: 36.3%; --c: #3b82f6; --d: 1.8s"
+                ></span>
+                <span
+                  class="cityart__pulse"
+                  style="--x: 77.2%; --y: 27.9%; --c: #ef4444; --d: 2.25s"
+                ></span>
+                <span
+                  class="cityart__pulse"
+                  style="--x: 70.1%; --y: 47.3%; --c: #f59e0b; --d: 2.7s"
+                ></span>
+                <span
+                  class="cityart__pulse"
+                  style="--x: 81.7%; --y: 79.1%; --c: #f59e0b; --d: 3.15s"
+                ></span>
+                <span class="cityart__sweep" aria-hidden="true"></span>
+              </div>
             </div>
-          </div>
+          </figure>
           <div class="benefits__copy reveal">
             <p class="badge">
               <svg class="ico"><use href="#i-alert" /></svg>Antes do ROTAV3
