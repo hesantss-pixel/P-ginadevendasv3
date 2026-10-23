@@ -5026,3 +5026,92 @@ body {
     hyphens: auto;
   }
 }
+
+/* ============================================================
+   VERSÃO 5.4 — entrada com cara de software B2B
+   Dois botões do mesmo tamanho, uma linha de condições e uma faixa
+   de recursos; sem preço no topo.
+   ============================================================ */
+.hero__actions {
+  gap: 12px;
+}
+.hero__actions .btn--ghost {
+  border-color: rgb(255 255 255 / 0.28);
+  background: rgb(255 255 255 / 0.04);
+}
+.hero__actions .btn--ghost:hover {
+  border-color: var(--gold-400);
+  color: #fff;
+  background: rgb(255 255 255 / 0.07);
+}
+.hero__micro {
+  margin-top: 16px;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: rgb(255 255 255 / 0.62);
+}
+.hero__features {
+  margin-top: 26px;
+  padding-top: 20px;
+}
+.hero__features li {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgb(255 255 255 / 0.8);
+}
+.hero__features .ico {
+  width: 18px;
+  height: 18px;
+  flex: none;
+}
+@media (min-width: 641px) {
+  .hero__features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 24px;
+  }
+  .hero__features li {
+    max-width: none;
+    align-items: center;
+    font-size: 13.5px;
+  }
+}
+@media (max-width: 640px) {
+  .hero__actions .btn {
+    flex: 1 1 100%;
+  }
+  .hero__micro {
+    text-align: center;
+  }
+  .hero__features {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+}
+
+/* planos: lista curta no lugar da linha de implantação */
+.tier__list {
+  margin: 0 0 18px;
+  padding: 0 0 14px;
+  list-style: none;
+  border-bottom: 1px solid var(--glass-line);
+  display: grid;
+  gap: 6px;
+  font-size: 14px;
+  color: var(--muted);
+}
+.tier__list li {
+  position: relative;
+  padding-left: 18px;
+}
+.tier__list li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 0.45em;
+  width: 8px;
+  height: 5px;
+  border-left: 2px solid var(--gold-500, #c9962e);
+  border-bottom: 2px solid var(--gold-500, #c9962e);
+  transform: rotate(-45deg);
+}

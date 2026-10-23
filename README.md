@@ -274,3 +274,10 @@ Inspirada em elevatelp.com.br (estrutura lida com o Firecrawl): brilhos colorido
 - Preço publicado (seção `#preco`, classes `.tier*`): Essencial (até 5 veículos) R$ 390/mês, Operação (6 a 15) R$ 590/mês, Frota (acima de 15) R$ 890/mês; implantação paga uma vez, R$ 990 / R$ 990 / R$ 1.900. Também: o que todos os planos incluem, o plano fundador e o rastreamento como módulo opcional com orçamento separado.
 - Perguntas frequentes: "Quanto custa?" com os valores, "Dá para ver funcionando antes de pagar?" e "Tem fidelidade?". Descrições para Google/WhatsApp e dados estruturados (`AggregateOffer` de R$ 390 a R$ 890) atualizados.
 - Para mudar preços: seção `#preco` e a pergunta "Quanto custa?" no `index.html`, a descrição no `<head>` e o `AggregateOffer` no JSON-LD.
+
+
+## Versão 5.4 — oferta nova e entrada profissional (23/10/2026)
+- Início: selo "Software de roteirização para transportadoras", título "Entregas e coletas roteirizadas em minutos.", botões "Solicitar demonstração" e "Ver o sistema", linha "Demonstração gratuita com os dados da sua operação · Sem fidelidade". Preço saiu do topo.
+- Planos: Essencial (até 5 veículos) R$ 197/mês · Operação (6 a 15) R$ 397/mês · Frota (acima de 15) R$ 697/mês. Implantação e treinamento inclusos, sem taxa de entrada, mensal e sem fidelidade.
+- Sincronização com rastreamento: inclusa no Operação e no Frota; no Essencial, +R$ 97/mês. Texto deixa claro que depende de o fornecedor do rastreador liberar o acesso aos dados e que a compatibilidade é confirmada na demonstração (o sistema ainda não tem essa integração pronta).
+- Versão 5.2: abrir pelo link sempre começa no topo. Versão 5.3: a página cabe em celulares com letra/zoom ampliado (até ~200 px de largura).

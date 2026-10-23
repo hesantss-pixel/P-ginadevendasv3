@@ -138,13 +138,13 @@ const eyebrowDefault = formEyebrow ? formEyebrow.textContent : "";
 function openModal(interest = "") {
   form.elements.interesse.value = interest;
   const trial = interest === "demo";
-  formTitle.textContent = trial ? "Veja as suas rotas prontas" : titleDefault;
-  if (formEyebrow) formEyebrow.textContent = trial ? "Demonstração grátis" : eyebrowDefault;
+  formTitle.textContent = trial ? "Solicitar demonstração" : titleDefault;
+  if (formEyebrow) formEyebrow.textContent = trial ? "Demonstração gratuita" : eyebrowDefault;
   intro.textContent =
     interest === "rastreamento"
-      ? "Conte sobre a sua frota: a conversa abre no WhatsApp com o pedido de orçamento do rastreamento já escrito."
+      ? "Conte sobre a sua frota: a conversa abre no WhatsApp para verificarmos se o seu rastreador pode ser sincronizado."
       : trial
-        ? "Três informações e pronto: a conversa abre no WhatsApp para combinarmos o envio das notas e a chamada."
+        ? "Preencha três campos. A conversa abre no WhatsApp para agendarmos a demonstração com os dados da sua operação."
         : introDefault;
   if (typeof modal.showModal !== "function") {
     modal.setAttribute("open", "");
@@ -247,10 +247,10 @@ form.addEventListener("submit", async (e) => {
       `Olá! Sou ${data.nome.trim()}, da ${data.empresa.trim()}.`,
       frota ? `Temos ${frota} veículos.` : "",
       data.interesse === "demo"
-        ? "Quero ver as rotas de um dia da nossa operação montadas no ROTAV3. Posso mandar as notas."
-        : "Quero ver o ROTAV3 com os nossos pedidos.",
+        ? "Gostaria de agendar uma demonstração do ROTAV3 com os dados da nossa operação."
+        : "Gostaria de conhecer o ROTAV3 com os nossos pedidos.",
       data.interesse === "rastreamento"
-        ? "Também quero um orçamento do módulo de rastreamento."
+        ? "Também quero verificar a sincronização com o nosso rastreador."
         : "",
     ]
       .filter(Boolean)
