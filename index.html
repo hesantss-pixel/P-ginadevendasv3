@@ -3,6 +3,23 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script>
+      // Abrir pelo link sempre começa no topo. O navegador só devolve a posição anterior
+      // quando a pessoa usa "voltar" (ex.: volta do WhatsApp) ou quando o link tem âncora (#secao).
+      (function () {
+        try {
+          if (!("scrollRestoration" in history)) return;
+          var nav = performance.getEntriesByType && performance.getEntriesByType("navigation")[0];
+          var voltar = nav && nav.type === "back_forward";
+          history.scrollRestoration = voltar ? "auto" : "manual";
+          if (voltar || location.hash) return;
+          var topo = function () {
+            window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+          };
+          document.addEventListener("DOMContentLoaded", topo, { once: true });
+        } catch (e) {}
+      })();
+    </script>
     <title>ROTAV3 Systems — Roteirização de entregas e coletas para transportadoras</title>
     <meta
       name="description"
