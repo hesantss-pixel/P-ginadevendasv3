@@ -281,3 +281,9 @@ Inspirada em elevatelp.com.br (estrutura lida com o Firecrawl): brilhos colorido
 - Planos: Essencial (até 5 veículos) R$ 197/mês · Operação (6 a 15) R$ 397/mês · Frota (acima de 15) R$ 697/mês. Implantação e treinamento inclusos, sem taxa de entrada, mensal e sem fidelidade.
 - Sincronização com rastreamento: inclusa no Operação e no Frota; no Essencial, +R$ 97/mês. Texto deixa claro que depende de o fornecedor do rastreador liberar o acesso aos dados e que a compatibilidade é confirmada na demonstração (o sistema ainda não tem essa integração pronta).
 - Versão 5.2: abrir pelo link sempre começa no topo. Versão 5.3: a página cabe em celulares com letra/zoom ampliado (até ~200 px de largura).
+
+## Versão 5.6 — escala de computador (23/10/2026)
+- A partir de 1100 px de largura: título do início 55–62 px (antes 39–43), títulos de seção 42–50 px (antes 29–33), textos de apoio 18,5 px (antes 16), 98–128 px entre seções (antes 57–62).
+- Funcionalidades: mapa grande ocupando 3 colunas, sem a sobra cinza; "Próximas paradas" ao lado de "Visão operacional" e "Marca".
+- "Para quem é" com coluna de texto mais larga; chamada final centralizada.
+- Notebook 1366×768: o início cabe na primeira tela. Celular e tablet (até 1099 px) não mudaram.

@@ -5115,3 +5115,282 @@ body {
   border-bottom: 2px solid var(--gold-500, #c9962e);
   transform: rotate(-45deg);
 }
+
+/* =====================================================================
+   VERSÃO 5.6 — escala de computador
+   Até aqui os tamanhos eram os do celular esticados (título 41 px, seções
+   com 30 px, texto 14–16 px, 60 px entre seções). A partir de 1100 px de
+   largura a página ganha escala própria de tela grande. Celular não muda.
+   ===================================================================== */
+@media (min-width: 1100px) {
+  /* ritmo entre seções */
+  .section {
+    padding: clamp(88px, 7.2vw, 128px) 0;
+  }
+  .section-head,
+  .models__head,
+  .omap__head {
+    margin-bottom: clamp(44px, 4vw, 64px);
+  }
+  .eyebrow {
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    margin-bottom: 18px;
+  }
+
+  /* títulos e textos */
+  .section h2 {
+    font-size: clamp(2.5rem, 3.1vw, 3.1rem);
+    line-height: 1.08;
+    letter-spacing: -0.032em;
+  }
+  .section .lead,
+  .lead {
+    font-size: 18.5px;
+    line-height: 1.6;
+  }
+  .section .lead {
+    margin-top: 22px;
+  }
+
+  /* início */
+  .hero {
+    padding: 84px 0 72px;
+  }
+  .hero__grid {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.06fr);
+    gap: 56px;
+  }
+  .hero h1 {
+    font-size: clamp(3.1rem, 4.05vw, 3.9rem);
+    line-height: 1.04;
+    letter-spacing: -0.038em;
+    max-width: 11.5em;
+  }
+  .hero__lead {
+    margin-top: 26px;
+    font-size: 19px;
+    line-height: 1.6;
+    max-width: 31em;
+  }
+  .hero__actions {
+    margin-top: 36px;
+  }
+  .hero .btn--lg {
+    min-height: 58px;
+    padding: 0 34px;
+    font-size: 17px;
+  }
+  .hero__micro {
+    margin-top: 18px;
+    font-size: 14.5px;
+  }
+  .hero__features {
+    margin-top: 32px;
+    padding-top: 24px;
+  }
+  .hero__features li {
+    font-size: 15px;
+  }
+
+  /* 3 passos */
+  .step {
+    padding: 32px 30px 30px;
+  }
+  .step h3 {
+    font-size: 21px;
+  }
+  .step p {
+    font-size: 16px;
+  }
+
+  /* funcionalidades: mapa grande à esquerda, sem sobra cinza */
+  .bento {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-areas:
+      "map map map cap"
+      "map map map nf"
+      "stops stops vis vis"
+      "stops stops brand brand";
+    gap: 18px;
+  }
+  .bento > .tile:nth-child(1) {
+    grid-area: map;
+  }
+  .bento > .tile:nth-child(2) {
+    grid-area: cap;
+  }
+  .bento > .tile:nth-child(3) {
+    grid-area: nf;
+  }
+  .bento > .tile:nth-child(4) {
+    grid-area: stops;
+  }
+  .bento > .tile:nth-child(5) {
+    grid-area: vis;
+  }
+  .bento > .tile:nth-child(6) {
+    grid-area: brand;
+  }
+  .bento > .tile {
+    grid-column: auto;
+    grid-row: auto;
+    padding: 26px;
+  }
+  .tile h3 {
+    font-size: 19.5px;
+  }
+  .tile p {
+    font-size: 15.5px;
+  }
+  .tile--map h3 {
+    font-size: 26px;
+  }
+  .tile--map p {
+    font-size: 16.5px;
+  }
+  .tile--map .tile__shot {
+    flex: none;
+    height: auto;
+    aspect-ratio: 1200 / 793;
+    object-fit: cover;
+  }
+
+  /* para quem, transparência, como começar */
+  .trust__card {
+    padding: 30px;
+  }
+  .trust__card h3 {
+    font-size: 19.5px;
+  }
+  .trust__list li {
+    font-size: 15.5px;
+  }
+  .trial__steps h3 {
+    font-size: 20px;
+  }
+  .trial__steps p {
+    font-size: 15.5px;
+  }
+
+  /* preço */
+  .tier {
+    padding: 32px;
+  }
+  .tier__name {
+    font-size: 24px;
+  }
+  .tier__for {
+    font-size: 16px;
+  }
+  .tier__price strong {
+    font-size: 60px;
+  }
+  .tier__list {
+    font-size: 15px;
+  }
+  .price__box,
+  .addon {
+    padding: 30px;
+  }
+  .addon h3,
+  .price__box h3 {
+    font-size: 20px;
+  }
+  .addon p:not(.addon__tag),
+  .price__box p,
+  .price__incl li {
+    font-size: 15.5px;
+  }
+
+  /* perguntas */
+  .faq summary {
+    padding: 20px 26px;
+    font-size: 17px;
+  }
+  .faq details p {
+    padding: 0 26px 22px;
+    font-size: 16px;
+  }
+
+  /* para quem é: coluna do texto mais larga, título em 3 linhas */
+  .audience__grid {
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr) minmax(0, 0.9fr);
+  }
+  .audience__copy h2 {
+    max-width: 13em;
+  }
+  .segments li {
+    padding: 18px 8px;
+    font-size: 15px;
+  }
+  .ico--seg {
+    width: 34px;
+    height: 34px;
+  }
+
+  /* antes do ROTAV3 e como começar */
+  .pains li {
+    font-size: 16.5px;
+  }
+  .trial__checks li {
+    padding: 10px 16px;
+    font-size: 15px;
+  }
+  .trial__note {
+    font-size: 14.5px;
+  }
+
+  /* chamada final: bloco centralizado, com respiro */
+  .cta {
+    padding: 96px 0;
+  }
+  .cta__grid {
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    text-align: center;
+    gap: 28px;
+  }
+  .cta__logo {
+    width: 200px;
+  }
+  .cta h2 {
+    font-size: clamp(2.3rem, 2.9vw, 2.9rem);
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    max-width: 18em;
+  }
+  .cta p {
+    margin: 16px auto 0;
+    font-size: 18px;
+    max-width: 36em;
+  }
+  .cta__actions {
+    justify-content: center;
+  }
+  .cta__actions .btn {
+    min-height: 54px;
+    padding: 0 28px;
+    font-size: 16.5px;
+  }
+}
+@media (min-width: 1100px) and (max-height: 820px) {
+  /* notebooks 1366×768: o início cabe na primeira tela */
+  .hero {
+    padding: 56px 0 52px;
+  }
+  .hero h1 {
+    font-size: clamp(2.9rem, 3.8vw, 3.5rem);
+  }
+  .hero__lead {
+    margin-top: 20px;
+    font-size: 18px;
+  }
+  .hero__actions {
+    margin-top: 28px;
+  }
+  .hero__features {
+    margin-top: 24px;
+    padding-top: 18px;
+  }
+}
