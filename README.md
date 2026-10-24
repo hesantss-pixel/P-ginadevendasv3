@@ -299,3 +299,9 @@ Inspirada em elevatelp.com.br (estrutura lida com o Firecrawl): brilhos colorido
 - Menu sem quebra de linha entre 981 e 1180 px ("Como funciona" quebrava em 1024).
 - Funcionalidades entre 981 e 1099 px em 2 colunas: mapa na largura toda (sem sobra cinza) e cartões em pares.
 - Observação: no celular com "Versão para computador" ligada, o Chrome desenha a página com 980 px e encolhe para a tela; fica pequeno em qualquer site. Para ver a versão de celular, desligar essa opção.
+
+## Domínio www.rotav3.com.br (comprado em 23/10/2026, válido até 23/10/2027)
+- Registrado no Registro.br no CNPJ da ROTAV3; DNS do próprio Registro.br (modo avançado).
+- Zona: 4 registros A no domínio sem www (185.199.108.153, 185.199.109.153, 185.199.110.153, 185.199.111.153) e CNAME `www` → `hesantss-pixel.github.io`.
+- Arquivo `CNAME` (www.rotav3.com.br), endereço canônico, links do Google/WhatsApp, `robots.txt` e `sitemap.xml` apontam para o domínio.
+- Depois que o DNS responder: Settings → Pages → "DNS check successful" → marcar Enforce HTTPS.
