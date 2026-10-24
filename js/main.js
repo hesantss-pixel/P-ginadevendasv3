@@ -252,6 +252,31 @@ document.querySelectorAll("form[data-form]").forEach((form) => {
   });
 });
 
+/* ---------- imagens que ampliam (modelos de painel) ---------- */
+const zoom = document.getElementById("zoom");
+const zoomImg = zoom.querySelector("[data-zoom-img]");
+let zoomGatilho = null;
+document.querySelectorAll("[data-ampliar]").forEach((b) =>
+  b.addEventListener("click", () => {
+    zoomGatilho = b;
+    const img = b.querySelector("img");
+    zoomImg.src = b.dataset.ampliar;
+    zoomImg.alt = img ? img.alt : "";
+    if (typeof zoom.showModal === "function") zoom.showModal();
+    else zoom.setAttribute("open", "");
+    doc.classList.add("modal-aberto");
+  }),
+);
+zoom.querySelector("[data-fechar-zoom]").addEventListener("click", () => zoom.close());
+zoom.addEventListener("click", (e) => {
+  if (e.target === zoom) zoom.close();
+});
+zoom.addEventListener("close", () => {
+  doc.classList.remove("modal-aberto");
+  zoomImg.removeAttribute("src");
+  if (zoomGatilho) zoomGatilho.focus();
+});
+
 /* ---------- filme do topo ---------- */
 iniciarFilme({ reduzir });
 
@@ -262,7 +287,6 @@ const sob_demanda = [
   ["#mapa", () => import("./mapa3d.js").then((m) => m.iniciarMapa3d({ reduzir }))],
   ["#ao-vivo", () => import("./aovivo.js").then((m) => m.iniciarAoVivo({ reduzir }))],
   ["#ia", () => import("./ia.js").then((m) => m.iniciarIA({ reduzir }))],
-  ["#sua-marca", () => import("./marca.js").then((m) => m.iniciarMarca())],
 ];
 const carregador = new IntersectionObserver(
   (entradas) => {

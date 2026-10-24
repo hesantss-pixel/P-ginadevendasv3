@@ -733,50 +733,48 @@
 
       <!-- ================= SUA MARCA ================= -->
       <section class="secao secao--escura marca" id="sua-marca" aria-labelledby="marca-titulo">
-        <div class="cont marca__grade">
-          <div class="marca__texto">
-            <h2 id="marca-titulo">O painel com a cara da sua transportadora.</h2>
+        <div class="cont">
+          <header class="cab cab--larga">
+            <h2 id="marca-titulo">O painel com a cara da sua empresa.</h2>
             <p class="cab__texto">
-              Na implantação, ajustamos cores e logo para a sua equipe trabalhar num sistema com a
-              identidade da empresa. Partes do fluxo também podem ser adaptadas à sua operação: o
-              escopo é combinado depois de conhecermos a rotina.
+              Na implantação, ajustamos cores e logo do sistema para a identidade da sua empresa, e
+              partes do fluxo podem ser adaptadas à sua operação. Veja exemplos de painéis feitos com a
+              identidade de outras empresas.
             </p>
-            <div class="marca__opcoes" role="group" aria-label="Ver o painel com outra marca" data-marcas>
-              <button type="button" aria-pressed="true" data-marca="rotav3"><i style="--c: #f3b62b"></i>ROTAV3</button>
-              <button type="button" aria-pressed="false" data-marca="aurora"><i style="--c: #0f9f8f"></i>Transportes Aurora</button>
-              <button type="button" aria-pressed="false" data-marca="rubi"><i style="--c: #d23a5c"></i>Expresso Rubi</button>
-              <button type="button" aria-pressed="false" data-marca="atlas"><i style="--c: #3d6fe0"></i>Atlas Cargas</button>
-            </div>
-            <p class="marca__nota">Marcas fictícias, só para mostrar a troca de cores e logo.</p>
-          </div>
-          <div class="pm" data-marca-painel data-tema="rotav3">
-            <aside class="pm__lado">
-              <div class="pm__logo"><span class="pm__simb" aria-hidden="true"></span><b data-marca-nome>ROTAV3</b></div>
-              <span class="pm__item on"><svg><use href="#i-grade" /></svg>Dashboard</span>
-              <span class="pm__item"><svg><use href="#i-caixa" /></svg>Pedidos</span>
-              <span class="pm__item"><svg><use href="#i-rota" /></svg>Roteirização</span>
-              <span class="pm__item"><svg><use href="#i-pulso" /></svg>Rotas</span>
-              <span class="pm__item"><svg><use href="#i-mapa" /></svg>Mapa</span>
-            </aside>
-            <div class="pm__main">
-              <div class="pm__cab"><div><b>Dashboard</b><small>Visão geral das operações</small></div><span class="pm__bot">✨ IA Assistente</span></div>
-              <div class="pm__kpis">
-                <div><small>Pedidos</small><b>86</b><span>66 entregas · 20 coletas</span></div>
-                <div><small>Rotas</small><b>5</b><span>3 em andamento</span></div>
-                <div><small>Baixas</small><b>41</b><span>2 não realizadas</span></div>
-              </div>
-              <div class="pm__baixo">
-                <div class="pm__regioes">
-                  <b>Pedidos por região</b>
-                  <div><span>Guarulhos</span><i style="--p: 100%"></i><em>24</em></div>
-                  <div><span>São Paulo</span><i style="--p: 79%"></i><em>19</em></div>
-                  <div><span>Itaquaquecetuba</span><i style="--p: 21%"></i><em>5</em></div>
-                  <div><span>Mogi das Cruzes</span><i style="--p: 21%"></i><em>5</em></div>
-                </div>
-                <div class="pm__acao"><span class="pm__btn">Gerar rota</span><span class="pm__btn pm__btn--sec">Importar notas</span></div>
-              </div>
-            </div>
-          </div>
+          </header>
+          <ul class="modelos">
+            <li class="modelo modelo--vv">
+              <button class="modelo__abrir" type="button" data-ampliar="img/modelo-viaverde.webp" aria-label="Ampliar o painel com a identidade da Via Verde Transportes">
+                <img
+                  src="img/modelo-viaverde.webp"
+                  alt="Painel de roteirização com a identidade visual da Via Verde Transportes, em verde e branco: pedidos, rotas, tempo estimado, pedidos por região, mapa de distribuição e assistente"
+                  width="1536"
+                  height="1441"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <span class="modelo__lupa" aria-hidden="true"><svg class="ico"><use href="#i-busca" /></svg>Ampliar</span>
+              </button>
+              <p class="modelo__nome">Via Verde Transportes</p>
+            </li>
+            <li class="modelo modelo--2sl">
+              <button class="modelo__abrir" type="button" data-ampliar="img/modelo-2sl-log-2x.webp" aria-label="Ampliar o painel com a identidade da 2SL Log">
+                <img
+                  src="img/modelo-2sl-log.webp"
+                  srcset="img/modelo-2sl-log.webp 1077w, img/modelo-2sl-log-2x.webp 2154w"
+                  sizes="(max-width: 760px) 100vw, 520px"
+                  alt="Painel de roteirização com a identidade visual da 2SL Log, em azul-escuro: pedidos, rotas, tempo estimado, pedidos por região, mapa de distribuição e assistente"
+                  width="1077"
+                  height="1346"
+                  loading="lazy"
+                  decoding="async"
+                />
+                <span class="modelo__lupa" aria-hidden="true"><svg class="ico"><use href="#i-busca" /></svg>Ampliar</span>
+              </button>
+              <p class="modelo__nome">2SL Log</p>
+            </li>
+          </ul>
+          <p class="nota-demo">Telas ilustrativas, com dados demonstrativos.</p>
         </div>
       </section>
 
@@ -1155,6 +1153,11 @@
         <p class="form__legal">Usamos seus dados só para responder a este contato. <a href="privacidade.html" target="_blank" rel="noopener">Política de privacidade</a>.</p>
         <p class="form__status" role="status" aria-live="polite"></p>
       </form>
+    </dialog>
+
+    <dialog class="zoom" id="zoom" aria-label="Imagem ampliada">
+      <button class="modal__fechar zoom__fechar" type="button" data-fechar-zoom aria-label="Fechar imagem ampliada"><svg class="ico ico--g"><use href="#i-fechar" /></svg></button>
+      <div class="zoom__rolagem"><img alt="" data-zoom-img /></div>
     </dialog>
 
     <script type="module" src="js/main.js"></script>

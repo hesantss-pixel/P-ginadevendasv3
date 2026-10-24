@@ -16,7 +16,7 @@ pedidos, criação de rota, link do motorista, baixas em tempo real e assistente
 | Mapa 3D | Maquete da Grande São Paulo com os limites reais dos municípios (IBGE), relevo pela quantidade de pedidos, 86 pinos com filtro (todos, entregas, coletas, com horário) e lista por cidade. | `js/mapa3d.js`, `js/dados-regiao.js` |
 | Ao vivo | A **tela do motorista real do sistema** (modo demonstração) dentro de um celular. Cada baixa marcada nele atualiza o painel do escritório ao lado (progresso, mapa, motivo, foto). | `js/aovivo.js` |
 | IA | Conversa de exemplo com as três perguntas do sistema; respostas calculadas com os 86 pedidos fictícios do mapa. | `js/ia.js` |
-| Sua marca | Painel trocando de cores e logo (marcas fictícias). | `js/marca.js` |
+| Sua marca | Modelos do painel com a identidade da Via Verde Transportes e da 2SL Log (telas ilustrativas, com dados demonstrativos); tocar amplia. | `index.html`, `img/modelo-*.webp` |
 | Funções, Como começar, Preços, Perguntas, Contato | Texto e formulários (abrem o WhatsApp com a mensagem pronta). | `js/main.js` |
 
 Todos os dados das demonstrações são **fictícios** e a página avisa isso em cada lugar. Nada do que
@@ -107,7 +107,7 @@ publicadas no Firebase para a página Acessos gravar.
 Chromium (Playwright) a 1440, 390, 360 e 320 px de largura e com "reduzir movimento": filme e
 capítulos, pausa, planejador (gerar, trocar veículo e tipo, próxima viagem, fora da janela,
 recomeçar), filtros e dicas do mapa 3D, tela do motorista real dentro do celular mandando as baixas
-para o painel (sem rolar a página de fora), conversa da IA, troca de marca, os dois formulários
+para o painel (sem rolar a página de fora), conversa da IA, modelos ampliando, os dois formulários
 (validação e mensagem do WhatsApp), menu do celular, sem rolagem lateral e sem erros no console.
 
 Não foi possível testar daqui: os mapas de ruas reais (o ambiente de teste bloqueia os servidores de
@@ -127,4 +127,4 @@ mapa) e o Safari do iPhone.
   ilustrativas, planejador, mapas de pedidos, oferta e preços, domínio próprio.
 - **v6 (24/10/2026):** página refeita a partir do sistema real; "Ver o sistema" no topo; filme do
   produto; dia de operação; planejador com as regras do sistema; mapa 3D da Grande SP; tela do
-  motorista real sincronizando com o painel; IA; troca de marca; fontes no próprio site.
+  motorista real sincronizando com o painel; IA; modelos com a identidade de outras empresas; fontes no próprio site.
