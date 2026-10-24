@@ -5122,7 +5122,7 @@ body {
    com 30 px, texto 14–16 px, 60 px entre seções). A partir de 1100 px de
    largura a página ganha escala própria de tela grande. Celular não muda.
    ===================================================================== */
-@media (min-width: 1100px) {
+@media (min-width: 981px) {
   /* ritmo entre seções */
   .section {
     padding: clamp(88px, 7.2vw, 128px) 0;
@@ -5162,7 +5162,7 @@ body {
     gap: 56px;
   }
   .hero h1 {
-    font-size: clamp(3.1rem, 4.05vw, 3.9rem);
+    font-size: clamp(2.6rem, 4.05vw, 3.9rem);
     line-height: 1.04;
     letter-spacing: -0.038em;
     max-width: 11.5em;
@@ -5203,7 +5203,8 @@ body {
   .step p {
     font-size: 16px;
   }
-
+}
+@media (min-width: 1100px) {
   /* funcionalidades: mapa grande à esquerda, sem sobra cinza */
   .bento {
     grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -5255,7 +5256,8 @@ body {
     aspect-ratio: 1200 / 793;
     object-fit: cover;
   }
-
+}
+@media (min-width: 981px) {
   /* para quem, transparência, como começar */
   .trust__card {
     padding: 30px;
@@ -5374,7 +5376,7 @@ body {
     font-size: 16.5px;
   }
 }
-@media (min-width: 1100px) and (max-height: 820px) {
+@media (min-width: 981px) and (max-height: 820px) {
   /* notebooks 1366×768: o início cabe na primeira tela */
   .hero {
     padding: 56px 0 52px;
@@ -5619,5 +5621,72 @@ body {
   }
   .segcard {
     padding: 16px;
+  }
+}
+
+/* =====================================================================
+   VERSÃO 5.8 — notebooks pequenos e tablets deitados (981–1180 px)
+   O menu quebrava "Como funciona" em duas linhas em 1024 px.
+   ===================================================================== */
+.nav a {
+  white-space: nowrap;
+}
+@media (min-width: 981px) and (max-width: 1180px) {
+  .header__inner {
+    gap: 14px;
+  }
+  .brand img {
+    width: 148px;
+  }
+  .nav a {
+    padding-inline: 9px;
+    font-size: 14px;
+  }
+  .header__cta .ico {
+    display: none;
+  }
+  .hero__grid {
+    gap: 36px;
+  }
+}
+@media (min-width: 981px) and (max-width: 1099px) {
+  /* funcionalidades em 2 colunas: mapa na largura toda, cartões em pares */
+  .bento {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-areas:
+      "map map"
+      "cap nf"
+      "stops stops"
+      "vis vis"
+      "brand brand";
+    gap: 16px;
+  }
+  .bento > .tile:nth-child(1) {
+    grid-area: map;
+  }
+  .bento > .tile:nth-child(2) {
+    grid-area: cap;
+  }
+  .bento > .tile:nth-child(3) {
+    grid-area: nf;
+  }
+  .bento > .tile:nth-child(4) {
+    grid-area: stops;
+  }
+  .bento > .tile:nth-child(5) {
+    grid-area: vis;
+  }
+  .bento > .tile:nth-child(6) {
+    grid-area: brand;
+  }
+  .bento > .tile {
+    grid-column: auto;
+    grid-row: auto;
+  }
+  .tile--map .tile__shot {
+    flex: none;
+    height: auto;
+    aspect-ratio: 1200 / 793;
+    object-fit: cover;
   }
 }

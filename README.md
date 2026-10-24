@@ -293,3 +293,9 @@ Inspirada em elevatelp.com.br (estrutura lida com o Firecrawl): brilhos colorido
 - Entrou uma cena 3D na mesma linguagem da maquete: centro de distribuição no meio, rota laranja de coletas (indústria, distribuidora) e rota azul de entregas (loja, cliente final) — as mesmas cores dos mapas do site. Nomes em HTML por cima da imagem (nítidos; no celular viram "CD", "Indústria" etc.).
 - Os 6 tipos de cliente viraram cartões com uma linha do que o sistema resolve para cada um (só o que o sistema faz).
 - Gerador: `ferramentas/maquete-3d/operacao.html` (`?view=desk&w=2800&h=2100` e `?view=mob&w=2160&h=2160&d=43.5&tx=-0.45`); recorte usado: computador x 140–2560, y 220–1990; celular y 200–2080. As posições das etiquetas saem no console.
+
+## Versão 5.8 — notebooks pequenos e tablets deitados (23/10/2026)
+- A escala de computador (5.6) passa a valer a partir de 981 px (antes 1100). Em 1024 px: título do início 42 px, títulos de seção 40 px, texto de apoio 19 px.
+- Menu sem quebra de linha entre 981 e 1180 px ("Como funciona" quebrava em 1024).
+- Funcionalidades entre 981 e 1099 px em 2 colunas: mapa na largura toda (sem sobra cinza) e cartões em pares.
+- Observação: no celular com "Versão para computador" ligada, o Chrome desenha a página com 980 px e encolhe para a tela; fica pequeno em qualquer site. Para ver a versão de celular, desligar essa opção.
