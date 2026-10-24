@@ -287,3 +287,9 @@ Inspirada em elevatelp.com.br (estrutura lida com o Firecrawl): brilhos colorido
 - Funcionalidades: mapa grande ocupando 3 colunas, sem a sobra cinza; "Próximas paradas" ao lado de "Visão operacional" e "Marca".
 - "Para quem é" com coluna de texto mais larga; chamada final centralizada.
 - Notebook 1366×768: o início cabe na primeira tela. Celular e tablet (até 1099 px) não mudaram.
+
+## Versão 5.7 — "Para quem é" com cena 3D da operação (23/10/2026)
+- Saiu o desenho de rota solto ("Mais organização. Menos retrabalho. Mais controle."), que não se ligava ao texto.
+- Entrou uma cena 3D na mesma linguagem da maquete: centro de distribuição no meio, rota laranja de coletas (indústria, distribuidora) e rota azul de entregas (loja, cliente final) — as mesmas cores dos mapas do site. Nomes em HTML por cima da imagem (nítidos; no celular viram "CD", "Indústria" etc.).
+- Os 6 tipos de cliente viraram cartões com uma linha do que o sistema resolve para cada um (só o que o sistema faz).
+- Gerador: `ferramentas/maquete-3d/operacao.html` (`?view=desk&w=2800&h=2100` e `?view=mob&w=2160&h=2160&d=43.5&tx=-0.45`); recorte usado: computador x 140–2560, y 220–1990; celular y 200–2080. As posições das etiquetas saem no console.

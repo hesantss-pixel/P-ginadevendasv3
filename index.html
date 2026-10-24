@@ -1090,168 +1090,124 @@
 
       <!-- 8. PARA QUEM É -->
       <section class="section section--soft audience" id="para-quem" aria-labelledby="aud-title">
-        <div class="container audience__grid">
-          <div class="audience__copy reveal">
-            <p class="eyebrow">Para quem é o ROTAV3</p>
-            <h2 id="aud-title">Feito para quem entrega e coleta todos os dias.</h2>
-            <p class="lead">
-              O ROTAV3 Systems é voltado para <strong>transportadoras</strong>, distribuidoras,
-              e-commerces, indústrias e empresas que trabalham com entregas e coletas.
-            </p>
-            <button class="btn btn--outline btn--sm" type="button" data-open-demo>
-              Agendar demonstração
-            </button>
+        <div class="container">
+          <div class="audience__top">
+            <div class="audience__copy reveal">
+              <p class="eyebrow">Para quem é o ROTAV3</p>
+              <h2 id="aud-title">Feito para quem entrega e coleta todos os dias.</h2>
+              <p class="lead">
+                Coleta na indústria ou na distribuidora, entrega na loja ou no cliente final: o
+                ROTAV3 planeja tudo no mesmo mapa, saindo do seu centro de distribuição.
+              </p>
+              <ul class="netmap__key" aria-label="Legenda da ilustração">
+                <li><span class="netmap__dot netmap__dot--entrega"></span>Rota de entregas</li>
+                <li><span class="netmap__dot netmap__dot--coleta"></span>Rota de coletas</li>
+              </ul>
+              <button class="btn btn--outline btn--sm" type="button" data-open-demo>
+                Agendar demonstração
+              </button>
+            </div>
+            <figure class="netmap reveal">
+              <picture>
+                <source
+                  media="(max-width: 640px)"
+                  srcset="
+                    img/rede-operacao-celular.webp     720w,
+                    img/rede-operacao-celular-2x.webp 1080w
+                  "
+                  sizes="100vw"
+                  width="1080"
+                  height="940"
+                />
+                <img
+                  class="netmap__img"
+                  src="img/rede-operacao.webp"
+                  srcset="img/rede-operacao.webp 700w, img/rede-operacao-2x.webp 1400w"
+                  sizes="(max-width: 1099px) 100vw, 680px"
+                  alt="Ilustração 3D de uma operação: o centro de distribuição no meio, uma rota laranja de coletas que passa pela indústria e pela distribuidora e uma rota azul de entregas que passa pela loja e pelas casas dos clientes finais."
+                  width="1400"
+                  height="1024"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </picture>
+              <span
+                class="netmap__label netmap__label--cd"
+                style="--x: 48.6%; --y: 36.3%; --mx: 48.8%; --my: 36%"
+                aria-hidden="true"
+                ><b>Centro de distribuição</b><b class="netmap__short">CD</b></span
+              >
+              <span
+                class="netmap__label netmap__label--coleta"
+                style="--x: 20.8%; --y: 29.2%; --mx: 18.8%; --my: 29.2%"
+                aria-hidden="true"
+                ><i></i><b>Indústria</b><em> · coleta</em></span
+              >
+              <span
+                class="netmap__label netmap__label--coleta"
+                style="--x: 53.3%; --y: 11.5%; --mx: 53.6%; --my: 10.3%"
+                aria-hidden="true"
+                ><i></i><b>Distribuidora</b><em> · coleta</em></span
+              >
+              <span
+                class="netmap__label netmap__label--entrega"
+                style="--x: 42.2%; --y: 63.6%; --mx: 42.1%; --my: 63.7%"
+                aria-hidden="true"
+                ><i></i><b>Loja</b><em> · entrega</em></span
+              >
+              <span
+                class="netmap__label netmap__label--entrega"
+                style="--x: 77.2%; --y: 43%; --mx: 79.3%; --my: 42.4%"
+                aria-hidden="true"
+                ><i></i><b>Cliente final</b><em> · entrega</em></span
+              >
+              <span class="netmap__tag" aria-hidden="true">Ilustração</span>
+            </figure>
           </div>
-          <ul class="segments">
-            <li class="reveal">
-              <svg class="ico ico--seg"><use href="#i-truck" /></svg>Transportadoras
+          <ul class="segcards" aria-label="Para quem é">
+            <li class="segcard reveal">
+              <svg class="ico segcard__ico"><use href="#i-truck" /></svg>
+              <div>
+                <h3>Transportadoras</h3>
+                <p>Coletas e entregas de vários clientes no mesmo planejamento.</p>
+              </div>
             </li>
-            <li class="reveal">
-              <svg class="ico ico--seg"><use href="#i-warehouse" /></svg>Distribuidoras
+            <li class="segcard reveal">
+              <svg class="ico segcard__ico"><use href="#i-warehouse" /></svg>
+              <div>
+                <h3>Distribuidoras</h3>
+                <p>Rotas para lojas e clientes saindo do seu centro de distribuição.</p>
+              </div>
             </li>
-            <li class="reveal">
-              <svg class="ico ico--seg"><use href="#i-cart" /></svg>E-commerces
+            <li class="segcard reveal">
+              <svg class="ico segcard__ico"><use href="#i-cart" /></svg>
+              <div>
+                <h3>E-commerces</h3>
+                <p>Os pedidos do dia viram rotas a partir das notas fiscais.</p>
+              </div>
             </li>
-            <li class="reveal">
-              <svg class="ico ico--seg"><use href="#i-factory" /></svg>Indústrias
+            <li class="segcard reveal">
+              <svg class="ico segcard__ico"><use href="#i-factory" /></svg>
+              <div>
+                <h3>Indústrias</h3>
+                <p>Entrega de produtos e coleta de insumos no mesmo mapa.</p>
+              </div>
             </li>
-            <li class="reveal">
-              <svg class="ico ico--seg"><use href="#i-store" /></svg>Pequenas e médias empresas
+            <li class="segcard reveal">
+              <svg class="ico segcard__ico"><use href="#i-store" /></svg>
+              <div>
+                <h3>Pequenas e médias empresas</h3>
+                <p>Rota pronta sem planilha, mesmo com poucos veículos.</p>
+              </div>
             </li>
-            <li class="reveal">
-              <svg class="ico ico--seg"><use href="#i-cycle" /></svg>Operações próprias
+            <li class="segcard reveal">
+              <svg class="ico segcard__ico"><use href="#i-cycle" /></svg>
+              <div>
+                <h3>Operações próprias</h3>
+                <p>Frota própria planejada no painel com a marca da empresa.</p>
+              </div>
             </li>
           </ul>
-          <figure class="route-art reveal">
-            <svg
-              class="route-art__svg"
-              viewBox="0 0 440 300"
-              role="img"
-              aria-labelledby="route-art-t"
-            >
-              <title id="route-art-t">
-                Ilustração: rota saindo do centro de distribuição e passando por entregas e coletas
-              </title>
-              <defs>
-                <linearGradient id="ra-bg" x1="0" y1="0" x2="1" y2="1">
-                  <stop offset="0" stop-color="#0c1a2e" />
-                  <stop offset="1" stop-color="#050a12" />
-                </linearGradient>
-                <linearGradient id="ra-gold" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0" stop-color="#f3d27a" />
-                  <stop offset="1" stop-color="#c9952f" />
-                </linearGradient>
-                <filter id="ra-glow" x="-20%" y="-20%" width="140%" height="140%">
-                  <feGaussianBlur stdDeviation="4" />
-                </filter>
-              </defs>
-              <rect width="440" height="300" fill="url(#ra-bg)" />
-              <path
-                d="M-10 250 C 90 210, 150 270, 250 230 S 400 200, 450 215"
-                fill="none"
-                stroke="#2f6fe4"
-                stroke-opacity=".16"
-                stroke-width="16"
-              />
-              <g stroke="#fff" stroke-opacity=".055" stroke-width="1">
-                <path d="M0 40H440M0 85H440M0 130H440M0 175H440M0 220H440M0 265H440" />
-                <path
-                  d="M40 0V300M95 0V300M150 0V300M205 0V300M260 0V300M315 0V300M370 0V300M425 0V300"
-                />
-              </g>
-              <g
-                fill="none"
-                stroke="#fff"
-                stroke-opacity=".12"
-                stroke-width="5"
-                stroke-linecap="round"
-              >
-                <path d="M0 150 C 120 140, 200 110, 440 60" />
-                <path d="M180 0 C 170 120, 230 200, 210 300" />
-              </g>
-              <path
-                class="route-art__glow"
-                d="M70 228 C 95 180, 110 160, 128 148 S 190 186, 212 176 S 250 96, 276 92 S 340 126, 350 124 S 384 196, 362 214 S 140 250, 70 228"
-                fill="none"
-                stroke="#e2b552"
-                stroke-width="7"
-                stroke-opacity=".35"
-                filter="url(#ra-glow)"
-              />
-              <path
-                d="M70 228 C 95 180, 110 160, 128 148 S 190 186, 212 176 S 250 96, 276 92 S 340 126, 350 124 S 384 196, 362 214 S 140 250, 70 228"
-                fill="none"
-                stroke="url(#ra-gold)"
-                stroke-width="3"
-                stroke-linecap="round"
-              />
-              <path
-                class="route-art__flow"
-                d="M70 228 C 95 180, 110 160, 128 148 S 190 186, 212 176 S 250 96, 276 92 S 340 126, 350 124 S 384 196, 362 214 S 140 250, 70 228"
-                fill="none"
-                stroke="#fff"
-                stroke-width="3"
-                stroke-linecap="round"
-                stroke-dasharray="2 22"
-              />
-              <g
-                font-family="Inter, sans-serif"
-                font-size="11"
-                font-weight="700"
-                text-anchor="middle"
-              >
-                <g transform="translate(128 148)">
-                  <circle r="11" fill="#2f6fe4" stroke="#fff" stroke-width="2" />
-                  <text y="4" fill="#fff">1</text>
-                </g>
-                <g transform="translate(212 176)">
-                  <circle r="11" fill="#c98410" stroke="#fff" stroke-width="2" />
-                  <text y="4" fill="#fff">2</text>
-                </g>
-                <g transform="translate(276 92)">
-                  <circle r="11" fill="#2f6fe4" stroke="#fff" stroke-width="2" />
-                  <text y="4" fill="#fff">3</text>
-                </g>
-                <g transform="translate(350 124)">
-                  <circle r="11" fill="#2f6fe4" stroke="#fff" stroke-width="2" />
-                  <text y="4" fill="#fff">4</text>
-                </g>
-                <g transform="translate(362 214)">
-                  <circle r="11" fill="#c98410" stroke="#fff" stroke-width="2" />
-                  <text y="4" fill="#fff">5</text>
-                </g>
-              </g>
-              <g transform="translate(70 228)">
-                <rect
-                  x="-13"
-                  y="-13"
-                  width="26"
-                  height="26"
-                  rx="7"
-                  fill="url(#ra-gold)"
-                  stroke="#fff"
-                  stroke-width="2"
-                />
-                <path
-                  d="M-6 1 0 -4 6 1V7H-6z"
-                  fill="none"
-                  stroke="#0a1626"
-                  stroke-width="2"
-                  stroke-linejoin="round"
-                />
-              </g>
-              <g font-family="Inter, sans-serif" font-size="10.5" fill="#c8d2df">
-                <circle cx="296" cy="22" r="5" fill="#2f6fe4" />
-                <text x="306" y="26">Entrega</text>
-                <circle cx="364" cy="22" r="5" fill="#c98410" />
-                <text x="374" y="26">Coleta</text>
-              </g>
-            </svg>
-            <figcaption>
-              <span class="photo-card__line" aria-hidden="true"></span>Mais organização.<br />Menos
-              retrabalho.<br />Mais controle.
-            </figcaption>
-          </figure>
         </div>
       </section>
 

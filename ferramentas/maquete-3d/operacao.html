@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>Rede da operação ROTAV3 (gerador da imagem)</title><style>html,body{margin:0;background:transparent}canvas{display:block}</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}</script>
+</head><body>
+<script type="module">
+import * as THREE from 'three';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+
+const q = new URLSearchParams(location.search);
+const VIEW = q.get('view') || 'desk';
+const W = +q.get('w') || 2400, H = +q.get('h') || 1800;
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(1); renderer.setSize(W, H, false); renderer.setClearColor(0x000000, 0);
+renderer.toneMapping = THREE.NeutralToneMapping; renderer.toneMappingExposure = 1.0;
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.VSMShadowMap;
+document.body.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+scene.environmentIntensity = 0.55;
+
+const C = {
+  slabTop: 0x16294a, slabSide: 0x0d1a31, block: 0x203d68, grass: 0x2f6458,
+  b1: 0xeef2f8, b2: 0xdde5f0, b3: 0xc9d5e6, navy: 0x0e1f3a, steel: 0x8fa3bf,
+  gold: 0xf2bf4b, goldDeep: 0xd99a1e,
+  entrega: 0x3b7bea, coleta: 0xf08c1a, tree: 0x3d7a68, trunk: 0x6b5a48, box: 0xc89f6a, glass: 0x2b4a78,
+};
+const mat = (color, o = {}) => new THREE.MeshStandardMaterial({ color, roughness: 0.82, metalness: 0, ...o });
+
+// grade 3 x 3
+const N = 3, B = 2.5, ST = 0.78, P = B + ST, WD = N * P + ST;
+const sx = (i) => -WD / 2 + ST / 2 + i * P, sz = sx;
+const bc = (c, r) => [sx(c) + P / 2, sz(r) + P / 2];
+
+const root = new THREE.Group(); scene.add(root);
+const add = (m, cast = true, recv = true, parent = root) => { m.castShadow = cast; m.receiveShadow = recv; parent.add(m); return m; };
+const shadowAll = (g) => g.traverse((o) => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
+
+// base
+const slab = add(new THREE.Mesh(new RoundedBoxGeometry(WD + 0.5, 0.7, WD + 0.5, 6, 0.28), [mat(C.slabSide), mat(C.slabSide), mat(C.slabTop), mat(C.slabSide), mat(C.slabSide), mat(C.slabSide)]));
+slab.position.y = -0.35;
+const laneMat = mat(0x2a4570, { roughness: 0.9 });
+for (let i = 0; i <= N; i++) for (let j = 0; j < N; j++) {
+  add(new THREE.Mesh(new THREE.BoxGeometry(0.035, 0.004, P * 0.3), laneMat), false).position.set(sx(i), 0.002, sz(j) + P / 2);
+  add(new THREE.Mesh(new THREE.BoxGeometry(P * 0.3, 0.004, 0.035), laneMat), false).position.set(sx(j) + P / 2, 0.002, sz(i));
+}
+const blockGeo = new RoundedBoxGeometry(B, 0.14, B, 4, 0.06);
+const lots = {};
+for (let c = 0; c < N; c++) for (let r = 0; r < N; r++) {
+  const [x, z] = bc(c, r);
+  add(new THREE.Mesh(blockGeo, mat(C.block)), false).position.set(x, 0.07, z);
+  const g = new THREE.Group(); g.position.set(x, 0.14, z); root.add(g); lots[`${c},${r}`] = g;
+}
+
+// ---------- peças ----------
+function tree(g, x, z, s = 1) {
+  add(new THREE.Mesh(new THREE.CylinderGeometry(0.035 * s, 0.045 * s, 0.22 * s, 10), mat(C.trunk)), true, true, g).position.set(x, 0.11 * s, z);
+  add(new THREE.Mesh(new THREE.SphereGeometry(0.2 * s, 24, 16), mat(C.tree, { roughness: 0.75 })), true, true, g).position.set(x, 0.36 * s, z);
+}
+function prism(w, h, d, color, o) { // seção triangular no plano x-y, extrudada em z
+  const s = new THREE.Shape(); s.moveTo(-w / 2, 0); s.lineTo(w / 2, 0); s.lineTo(-w / 2, h); s.closePath();
+  const geo = new THREE.ExtrudeGeometry(s, { depth: d, bevelEnabled: false }); geo.translate(0, 0, -d / 2);
+  return new THREE.Mesh(geo, mat(color, o));
+}
+function gable(w, h, d, color) {
+  const s = new THREE.Shape(); s.moveTo(-w / 2, 0); s.lineTo(w / 2, 0); s.lineTo(0, h); s.closePath();
+  const geo = new THREE.ExtrudeGeometry(s, { depth: d, bevelEnabled: false }); geo.translate(0, 0, -d / 2);
+  return new THREE.Mesh(geo, mat(color, { roughness: 0.7 }));
+}
+function box(g, w, h, d, color, x, y, z, o = {}, r = 0.05) {
+  const m = add(new THREE.Mesh(new RoundedBoxGeometry(w, h, d, 3, Math.min(r, w / 4, h / 4, d / 4)), mat(color, o)), true, true, g);
+  m.position.set(x, y, z); return m;
+}
+function windowsRow(g, x0, x1, y, z, n, h = 0.12, color = C.glass) {
+  const step = (x1 - x0) / n;
+  for (let i = 0; i < n; i++) box(g, step * 0.62, h, 0.02, color, x0 + step * (i + 0.5), y, z, { roughness: 0.3, metalness: 0.1 }, 0.01);
+}
+
+// centro de distribuição (centro)
+{
+  const g = lots['1,1'];
+  box(g, 2.05, 0.7, 1.35, C.b1, 0, 0.35, -0.12);
+  box(g, 2.13, 0.08, 1.43, C.navy, 0, 0.73, -0.12, { roughness: 0.55 });
+  box(g, 2.07, 0.07, 0.02, C.gold, 0, 0.6, 0.56, { roughness: 0.45, emissive: C.gold, emissiveIntensity: 0.1 }, 0.01);
+  for (let i = -1; i <= 1; i++) box(g, 0.4, 0.34, 0.02, 0x23324a, i * 0.6, 0.19, 0.56, { roughness: 0.5 }, 0.01);
+  box(g, 2.1, 0.02, 0.62, 0x2a4a78, 0, 0.012, 0.9, {}, 0.01); // pátio
+  // portas laterais e janelas na lateral visível (-x)
+  for (let i = 0; i < 3; i++) box(g, 0.02, 0.1, 0.22, C.glass, -1.03, 0.5, -0.55 + i * 0.4, { roughness: 0.3 }, 0.005);
+}
+// indústria (fundo esquerda): galpão com telhado dente-de-serra, chaminé e silo
+{
+  const g = lots['0,0'];
+  box(g, 1.8, 0.55, 1.25, C.b2, -0.1, 0.275, -0.05);
+  for (let i = 0; i < 3; i++) {
+    const t = prism(0.6, 0.32, 1.25, C.b1, { roughness: 0.7 }); t.position.set(-0.7 + i * 0.6, 0.55, -0.05); add(t, true, true, g);
+    const gl = box(g, 0.02, 0.27, 1.2, C.glass, -0.4 + i * 0.6 - 0.29, 0.69, -0.05, { roughness: 0.25 }, 0.005); gl.rotation.z = 0;
+  }
+  windowsRow(g, -0.95, 0.75, 0.32, 0.585, 5);
+  const ch = add(new THREE.Mesh(new THREE.CylinderGeometry(0.08, 0.1, 1.5, 24), mat(C.b3)), true, true, g); ch.position.set(0.95, 0.75, -0.6);
+  add(new THREE.Mesh(new THREE.CylinderGeometry(0.085, 0.085, 0.08, 24), mat(C.gold, { roughness: 0.45 })), true, true, g).position.set(0.95, 1.38, -0.6);
+  const si = add(new THREE.Mesh(new THREE.CylinderGeometry(0.26, 0.26, 0.8, 32), mat(C.steel, { roughness: 0.45, metalness: 0.35 })), true, true, g); si.position.set(0.95, 0.4, 0.45);
+  add(new THREE.Mesh(new THREE.SphereGeometry(0.26, 32, 16, 0, Math.PI * 2, 0, Math.PI / 2), mat(C.steel, { roughness: 0.45, metalness: 0.35 })), true, true, g).position.set(0.95, 0.8, 0.45);
+}
+// distribuidora (fundo direita): armazém alto + paletes com caixas
+{
+  const g = lots['2,0'];
+  box(g, 1.75, 0.95, 1.2, C.b1, 0.05, 0.475, -0.3);
+  box(g, 1.83, 0.07, 1.28, 0x2a3d5c, 0.05, 0.98, -0.3, { roughness: 0.55 });
+  for (let i = 0; i < 2; i++) box(g, 0.48, 0.42, 0.02, 0x23324a, -0.38 + i * 0.85, 0.21, 0.31, { roughness: 0.5 }, 0.01);
+  box(g, 1.77, 0.06, 0.02, C.gold, 0.05, 0.78, 0.31, { roughness: 0.45, emissive: C.gold, emissiveIntensity: 0.08 }, 0.01);
+  // paletes
+  for (const [px, pz] of [[-0.62, 0.72], [-0.2, 0.75], [0.6, 0.72]]) {
+    box(g, 0.34, 0.04, 0.3, 0x8a6a45, px, 0.02, pz, {}, 0.01);
+    box(g, 0.15, 0.13, 0.13, C.box, px - 0.08, 0.105, pz - 0.07, {}, 0.015);
+    box(g, 0.15, 0.13, 0.13, C.box, px + 0.08, 0.105, pz - 0.07, {}, 0.015);
+    box(g, 0.15, 0.13, 0.13, 0xb98f5c, px - 0.08, 0.105, pz + 0.07, {}, 0.015);
+    box(g, 0.15, 0.13, 0.13, C.box, px + 0.08, 0.105, pz + 0.07, {}, 0.015);
+    box(g, 0.15, 0.13, 0.13, 0xb98f5c, px, 0.235, pz, {}, 0.015);
+  }
+}
+// loja (frente esquerda): fachada de vidro voltada para a câmera, toldo dourado
+{
+  const g = lots['0,2'];
+  box(g, 1.55, 0.6, 1.05, C.b1, -0.05, 0.3, -0.25);
+  box(g, 1.6, 0.06, 1.1, 0xe4ebf4, -0.05, 0.63, -0.25);
+  box(g, 1.25, 0.32, 0.02, C.glass, -0.05, 0.19, 0.27, { roughness: 0.2, metalness: 0.15 }, 0.01);
+  box(g, 1.55, 0.1, 0.03, C.navy, -0.05, 0.5, 0.285, { roughness: 0.5 }, 0.01); // faixa do letreiro
+  const aw = box(g, 1.3, 0.03, 0.2, C.gold, -0.05, 0.4, 0.37, { roughness: 0.5 }, 0.01); aw.rotation.x = 0.38;
+  tree(g, 0.85, 0.75, 1.05); tree(g, -0.95, 0.75, 0.9);
+}
+// clientes finais (frente direita): casas com telhado de duas águas
+{
+  const g = lots['2,2'];
+  const houses = [[-0.6, -0.45, 0.7, 0.42, 0.6, 0xe7edf5], [0.4, -0.55, 0.62, 0.38, 0.55, 0xd8e2ee], [-0.45, 0.5, 0.62, 0.38, 0.55, 0xd8e2ee], [0.55, 0.45, 0.7, 0.42, 0.6, 0xe7edf5]];
+  houses.forEach(([x, z, w, h, d, col]) => {
+    box(g, w, h, d, col, x, h / 2, z, {}, 0.03);
+    const rf = gable(w + 0.1, 0.26, d + 0.08, 0x2a3d5c); rf.position.set(x, h, z); add(rf, true, true, g);
+    box(g, 0.14, 0.2, 0.02, 0x23324a, x, 0.1, z + d / 2 + 0.005, {}, 0.01);
+  });
+  tree(g, 0.0, 0.0, 0.85);
+}
+// quarteirões do meio: contexto discreto, prédios com janelas como na maquete
+function winTex(base, win) {
+  const cv = document.createElement('canvas'); cv.width = cv.height = 64;
+  const x = cv.getContext('2d'); x.fillStyle = base; x.fillRect(0, 0, 64, 64);
+  x.fillStyle = win; x.beginPath(); x.roundRect(16, 18, 32, 28, 5); x.fill();
+  const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; t.wrapS = t.wrapT = THREE.RepeatWrapping; t.anisotropy = 8; return t;
+}
+const PAL = [['#eef2f8', '#9fb3d1'], ['#dde5f0', '#93a8c8'], ['#c9d5e6', '#8399bb']];
+const TEX = PAL.map(([b, w]) => winTex(b, w));
+function building(g, x, z, w, d, h, k) {
+  const geo = new RoundedBoxGeometry(w, h, d, 4, Math.min(0.08, w * 0.1));
+  const floors = Math.max(2, Math.round(h / 0.3));
+  const side = (span) => { const t = TEX[k].clone(); t.needsUpdate = true; t.repeat.set(Math.max(2, Math.round(span / 0.3)), floors); return mat(0xffffff, { map: t }); };
+  const a = side(d), b = side(w), top = mat(k === 0 ? 0xf4f7fb : 0xe4ebf4);
+  const m = add(new THREE.Mesh(geo, [a, a, top, top, b, b]), true, true, g); m.position.set(x, h / 2, z); return m;
+}
+{
+  const back = lots['1,0']; building(back, -0.45, -0.35, 0.9, 0.9, 1.25, 1); building(back, 0.5, 0.35, 0.8, 0.8, 0.75, 2); tree(back, 0.55, -0.6); tree(back, -0.55, 0.62, 0.9);
+  const left = lots['0,1']; building(left, -0.4, -0.3, 0.9, 0.9, 0.6, 0); building(left, 0.45, 0.4, 0.6, 0.6, 0.9, 2); tree(left, 0.55, -0.5); tree(left, -0.55, 0.6, 0.9);
+  const right = lots['2,1']; building(right, 0.4, -0.35, 0.85, 0.9, 0.95, 1); building(right, -0.45, 0.45, 0.6, 0.6, 0.5, 0); tree(right, -0.55, -0.55, 0.9); tree(right, 0.6, 0.6);
+  const front = lots['1,2'];
+  add(new THREE.Mesh(new RoundedBoxGeometry(B * 0.84, 0.05, B * 0.84, 3, 0.025), mat(C.grass, { roughness: 0.95 })), false, true, front).position.set(0, 0.02, 0);
+  [[-0.55, -0.5, 1.3], [0.5, -0.45, 1.1], [-0.45, 0.5, 1.15], [0.55, 0.52, 1.35]].forEach(([a, b, s]) => tree(front, a, b, s));
+}
+
+// ---------- rotas ----------
+function routeTube(pts, color, deep) {
+  const Y = 0.05, Rc = 0.45; const path = new THREE.CurvePath();
+  let prev = new THREE.Vector3(pts[0][0], Y, pts[0][1]);
+  for (let i = 1; i < pts.length; i++) {
+    const a = new THREE.Vector3(pts[i - 1][0], Y, pts[i - 1][1]), b = new THREE.Vector3(pts[i][0], Y, pts[i][1]);
+    if (i < pts.length - 1) {
+      const c = new THREE.Vector3(pts[i + 1][0], Y, pts[i + 1][1]);
+      const d1 = b.clone().sub(a).normalize(), d2 = c.clone().sub(b).normalize();
+      const p1 = b.clone().addScaledVector(d1, -Rc), p2 = b.clone().addScaledVector(d2, Rc);
+      path.add(new THREE.LineCurve3(prev, p1)); path.add(new THREE.QuadraticBezierCurve3(p1, b, p2)); prev = p2;
+    } else path.add(new THREE.LineCurve3(prev, b));
+  }
+  const m = mat(color, { roughness: 0.38, metalness: 0.12, emissive: deep, emissiveIntensity: 0.14 });
+  add(new THREE.Mesh(new THREE.TubeGeometry(path, 500, 0.07, 16, false), m), true, false);
+  for (const p of [path.getPoint(0), path.getPoint(1)]) add(new THREE.Mesh(new THREE.SphereGeometry(0.07, 16, 12), m)).position.copy(p);
+  return path;
+}
+const cx = sx(1) + P / 2;
+// entregas (frente): CD -> loja -> clientes finais -> CD
+const off = 0.09; // as duas rotas nunca ficam no mesmo trilho
+routeTube([[cx - 0.35, sz(2) + off], [sx(0) + off, sz(2) + off], [sx(0) + off, sz(3)], [sx(3) - off, sz(3)], [sx(3) - off, sz(2) + off], [cx + 0.35, sz(2) + off]], C.entrega, 0x1d4fb5);
+// coletas (fundo): CD -> distribuidora -> indústria -> CD
+routeTube([[cx + 0.35, sz(1) - off], [sx(3) - off, sz(1) - off], [sx(3) - off, sz(0)], [sx(0) + off, sz(0)], [sx(0) + off, sz(1) - off], [cx - 0.35, sz(1) - off]], C.coleta, 0xb85d00);
+
+// alfinetes
+function pin(x, z, color, h = 0.74) {
+  const g = new THREE.Group(); g.position.set(x, 0, z);
+  const m = mat(color, { roughness: 0.35, metalness: 0.05 });
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.26, 40, 28), m); head.position.y = h;
+  const cone = new THREE.Mesh(new THREE.ConeGeometry(0.2, 0.5, 40, 1, true), m); cone.rotation.x = Math.PI; cone.position.y = h - 0.3;
+  const dot = new THREE.Mesh(new THREE.SphereGeometry(0.105, 24, 16), mat(0xffffff, { roughness: 0.3 })); dot.position.set(0, h, 0);
+  dot.userData.pinDot = true; dot.scale.set(1, 1, 0.35);
+  const ring = new THREE.Mesh(new THREE.RingGeometry(0.16, 0.26, 40), new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.85, toneMapped: false }));
+  ring.rotation.x = -Math.PI / 2; ring.position.y = 0.012;
+  const base = new THREE.Mesh(new THREE.CircleGeometry(0.42, 40), new THREE.MeshBasicMaterial({ color, transparent: true, opacity: 0.18, toneMapped: false }));
+  base.rotation.x = -Math.PI / 2; base.position.y = 0.01;
+  [head, cone, dot].forEach((o) => { o.castShadow = true; });
+  g.add(head, cone, dot, ring, base); root.add(g); return g;
+}
+const PINS = {
+  loja: [sx(0) + P / 2, sz(3), C.entrega],
+  clientes: [sx(2) + P / 2, sz(3), C.entrega],
+  distribuidora: [sx(2) + P / 2, sz(1) - off, C.coleta],
+  industria: [sx(0) + P / 2, sz(1) - off, C.coleta],
+};
+for (const [x, z, c] of Object.values(PINS)) pin(x, z, c).scale.setScalar(1.25);
+
+// caminhões
+function truck() {
+  const g = new THREE.Group();
+  const bx = new THREE.Mesh(new RoundedBoxGeometry(0.62, 0.36, 0.34, 4, 0.05), mat(C.b1)); bx.position.set(-0.09, 0.27, 0);
+  const stripe = new THREE.Mesh(new THREE.BoxGeometry(0.6, 0.05, 0.345), mat(C.gold, { roughness: 0.45 })); stripe.position.set(-0.09, 0.2, 0);
+  const cab = new THREE.Mesh(new RoundedBoxGeometry(0.24, 0.28, 0.32, 4, 0.05), mat(C.navy, { roughness: 0.5 })); cab.position.set(0.3, 0.23, 0);
+  const glass = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.1, 0.26), mat(0x9fc3ff, { roughness: 0.15, metalness: 0.2 })); glass.position.set(0.42, 0.29, 0);
+  g.add(bx, stripe, cab, glass);
+  const wg = new THREE.CylinderGeometry(0.065, 0.065, 0.06, 18); wg.rotateX(Math.PI / 2);
+  for (const [a, b] of [[-0.24, 0.16], [0.28, 0.16], [-0.24, -0.16], [0.28, -0.16]]) { const w = new THREE.Mesh(wg, mat(0x141a24, { roughness: 0.7 })); w.position.set(a, 0.07, b); g.add(w); }
+  shadowAll(g); return g;
+}
+const T = (x, z, ry, s = 1.35) => { const t = truck(); t.scale.setScalar(s); t.position.set(x, 0, z); t.rotation.y = ry; root.add(t); };
+T(sx(1) + 0.9, sz(3) - 0.02, 0);                 // entrega indo da loja para os clientes
+T(sx(3) - off - 0.02, sz(1) - 1.15, Math.PI / 2); // coleta subindo para a distribuidora... (sentido -z)
+T(cx - 0.55, sz(2) - 0.25 + 0.0, Math.PI / 2, 1.15); // parado na doca
+T(cx + 0.15, sz(2) - 0.25, Math.PI / 2, 1.15);
+
+// ---------- luz ----------
+scene.add(new THREE.HemisphereLight(0xdfe9ff, 0x0b1630, 0.55));
+const key = new THREE.DirectionalLight(0xfff4e6, 2.4);
+key.position.set(-7, 13, 8); key.castShadow = true;
+key.shadow.mapSize.set(4096, 4096); key.shadow.radius = 7; key.shadow.blurSamples = 20; key.shadow.bias = -0.0004;
+Object.assign(key.shadow.camera, { left: -10, right: 10, top: 10, bottom: -10, near: 1, far: 40 });
+scene.add(key);
+const rim = new THREE.DirectionalLight(0x9ec0ff, 0.6); rim.position.set(9, 6, -8); scene.add(rim);
+const floor = new THREE.Mesh(new THREE.PlaneGeometry(60, 60), new THREE.ShadowMaterial({ opacity: 0.45 }));
+floor.rotation.x = -Math.PI / 2; floor.position.y = -0.72; floor.receiveShadow = true; scene.add(floor);
+
+// ---------- câmera ----------
+const isMob = VIEW === 'mob';
+const cam = new THREE.PerspectiveCamera(+q.get('fov') || (isMob ? 20 : 18), W / H, 1, 200);
+const az = THREE.MathUtils.degToRad(+q.get('az') || -34), el = THREE.MathUtils.degToRad(+q.get('el') || (isMob ? 50 : 42));
+const dist = +q.get('d') || (isMob ? 46 : 45);
+const tgt = new THREE.Vector3(+q.get('tx') || 0, +q.get('ty') || 0.3, +q.get('tz') || 0.9);
+cam.position.set(tgt.x + dist * Math.cos(el) * Math.sin(az), dist * Math.sin(el), tgt.z + dist * Math.cos(el) * Math.cos(az));
+cam.lookAt(tgt);
+scene.updateMatrixWorld(true);
+root.traverse((o) => {
+  if (!o.userData.pinDot) return;
+  const head = o.parent.localToWorld(new THREE.Vector3(0, o.position.y, 0));
+  const dir = cam.position.clone().sub(head).normalize();
+  const local = o.parent.worldToLocal(head.clone().addScaledVector(dir, 0.235 * o.parent.scale.x));
+  o.position.copy(local); o.lookAt(cam.position);
+});
+renderer.render(scene, cam);
+// posições das etiquetas em % da imagem
+const LBL = {
+  cd: [cx, 1.25, sz(1) + P / 2 - 0.1],
+  industria: [sx(0) + P / 2 - 0.1, 1.75, sz(0) + P / 2],
+  distribuidora: [sx(2) + P / 2, 1.45, sz(0) + P / 2 - 0.3],
+  loja: [sx(0) + P / 2, 1.05, sz(2) + P / 2 - 0.2],
+  clientes: [sx(2) + P / 2, 1.05, sz(2) + P / 2],
+};
+const out = {};
+for (const [k, [x, y, z]] of Object.entries(LBL)) { const v = new THREE.Vector3(x, y, z).project(cam); out[k] = [+((v.x + 1) * 50).toFixed(1), +((1 - v.y) * 50).toFixed(1)]; }
+window.__labels = out;
+window.__done = true;
+const a = document.createElement('a'); a.textContent = 'Baixar PNG'; a.download = `rede-operacao-${VIEW}.png`; a.href = renderer.domElement.toDataURL('image/png');
+a.style.cssText = 'position:fixed;left:12px;top:12px;padding:8px 12px;background:#f2bf4b;color:#111;font:600 14px system-ui;border-radius:8px;text-decoration:none';
+document.body.appendChild(a); console.log(JSON.stringify(out));
+</script></body></html>
