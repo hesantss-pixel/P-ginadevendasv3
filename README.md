@@ -1,307 +1,130 @@
-# ROTAV3 Systems — landing page (site estático)
+# ROTAV3 Systems — página de vendas (site estático)
 
-Página de vendas do ROTAV3 Systems. Versão 3 (19/10/2026), reorganizada a partir da pesquisa de conversão: topo com o mecanismo do produto e o painel em perspectiva 3D, "Como funciona" em 3 passos, planejador interativo logo em seguida, seção escura de dores com mapa 3D e calculadora, mapas de pedidos, funcionalidades em bento com telas reais, modelos de personalização, "Para quem é", transparência (o que faz e o que ainda não faz), preço, perguntas, chamada final, formulário de 3 campos que abre o WhatsApp e política de privacidade.
+Página de vendas do ROTAV3 em **www.rotav3.com.br**. Versão 6 (24/10/2026): refeita a partir do
+sistema real, para mostrar o que ele faz de verdade — importação das notas, mapa com todos os
+pedidos, criação de rota, link do motorista, baixas em tempo real e assistente de IA.
 
-É um site estático (HTML, CSS e JavaScript), sem etapa de build: os arquivos desta pasta são o site. Isso permite publicar direto no GitHub Pages.
+É um site estático (HTML, CSS e JavaScript), sem etapa de build: os arquivos desta pasta são o site.
+
+## O que tem na página
+
+| Seção | O que mostra | Arquivo |
+| --- | --- | --- |
+| Topo | Título, "Ver o sistema por dentro" (pede e-mail e senha de demonstração pelo WhatsApp), "Agendar demonstração" e um filme em 5 cenas feito com as telas do sistema (importar notas → mapa → gerar rota → enviar ao motorista → acompanhar ao vivo). Fundo com a maquete 3D. | `js/filme.js` |
+| Um dia de operação | Linha do tempo das 07:00 às 17:30 com telas pequenas do sistema; a linha dourada enche com a rolagem. | `js/dia.js` |
+| Criar rota | Planejador interativo no mapa de ruas (OpenFreeMap): veículo, entregas/coletas/as duas, saída, capacidade e limite de paradas; "Montar a próxima viagem" com os pedidos que sobraram. Gera a primeira rota sozinho quando aparece. | `js/planejador.js`, `js/roteiro.js` |
+| Mapa 3D | Maquete da Grande São Paulo com os limites reais dos municípios (IBGE), relevo pela quantidade de pedidos, 86 pinos com filtro (todos, entregas, coletas, com horário) e lista por cidade. | `js/mapa3d.js`, `js/dados-regiao.js` |
+| Ao vivo | A **tela do motorista real do sistema** (modo demonstração) dentro de um celular. Cada baixa marcada nele atualiza o painel do escritório ao lado (progresso, mapa, motivo, foto). | `js/aovivo.js` |
+| IA | Conversa de exemplo com as três perguntas do sistema; respostas calculadas com os 86 pedidos fictícios do mapa. | `js/ia.js` |
+| Sua marca | Painel trocando de cores e logo (marcas fictícias). | `js/marca.js` |
+| Funções, Como começar, Preços, Perguntas, Contato | Texto e formulários (abrem o WhatsApp com a mensagem pronta). | `js/main.js` |
+
+Todos os dados das demonstrações são **fictícios** e a página avisa isso em cada lugar. Nada do que
+o visitante faz nas demonstrações sai do navegador dele.
 
 ## Ver no seu computador
 
-Os scripts usam módulos JavaScript, que o navegador **não** carrega abrindo o `index.html` com duplo clique. Use um servidor local, por exemplo:
+Os scripts usam módulos JavaScript, que não carregam abrindo o `index.html` com duplo clique. Use um
+servidor local:
 
-- **VS Code:** instale a extensão "Live Server", clique com o botão direito no `index.html` e escolha "Open with Live Server".
-- **Python:** dentro desta pasta, rode `python -m http.server 8080` e abra `http://localhost:8080`.
-- **Node:** `npx serve .`
+- **Python:** dentro desta pasta, `python -m http.server 8080` e abra `http://localhost:8080`.
+- **VS Code:** extensão "Live Server" → botão direito no `index.html` → "Open with Live Server".
 
-## Publicar no GitHub Pages (repositório `P-ginadevendasv3`)
+A seção "Ao vivo" carrega a tela do motorista publicada no endereço do sistema
+(`motoristaDemoUrl` em `js/config.js`) e aceita mensagens dela também em `localhost`.
 
-Hoje o `index.html` desse repositório é, na verdade, o ZIP do Lovable renomeado. Ele não abre como site.
+## Publicar (repositório `P-ginadevendasv3`, GitHub Pages)
 
-1. No GitHub, abra o repositório `P-ginadevendasv3` e apague o `index.html` atual.
-2. Clique em **Add file → Upload files** e arraste o **conteúdo** desta pasta (`index.html` e as pastas `css`, `js`, `vendor` e `img`), não a pasta inteira. Clique em **Commit changes**. O `README.md` é opcional: se subir, ele também fica público.
-3. Vá em **Settings → Pages**. Em **Source**, escolha **Deploy from a branch**, branch **main**, pasta **/ (root)** e clique em **Save**.
-4. Em 1 ou 2 minutos o site fica em `https://hesantss-pixel.github.io/P-ginadevendasv3/`.
+O site é publicado pelo GitHub Pages a partir da branch `main`, pasta raiz, com o domínio no arquivo
+`CNAME`. Para atualizar: envie os arquivos desta pasta para o repositório (pelo `git push` ou em
+**Add file → Upload files**) e aguarde 1 a 2 minutos.
 
-O repositório é público, então o site e o código ficam públicos. Nunca coloque senhas ou tokens nestes arquivos.
-
-## WhatsApp, formulário e CNPJ
-
-Tudo fica em `js/config.js`:
-
-- `whatsappNumber`: `5511955914618` — (11) 95591-4618. Liga os botões "Falar no WhatsApp" e o link do rodapé. Para trocar, use só dígitos com DDI e DDD.
-- `formEndpoint`: vazio por enquanto. Enquanto estiver vazio, o formulário pede só **nome, empresa e quantidade de veículos** e **abre o WhatsApp** com a mensagem pronta ("Olá! Sou …, da …. Temos … veículos. Quero ver o ROTAV3 com os nossos pedidos."). O próprio WhatsApp já identifica o número de quem escreve. Se o navegador bloquear a janela, aparece o link "Não abriu? Toque aqui."
-- Quando `formEndpoint` for preenchido, o formulário passa a pedir também e-mail e WhatsApp e envia os dados para esse endereço (e deixa de abrir o WhatsApp).
-
-O CNPJ (68.080.201/0001-80) está escrito no rodapé e na seção Transparência, no `index.html`, e nos dados estruturados (JSON-LD). O número do WhatsApp também está escrito em `privacidade.html`; se mudar, troque lá também.
-
-No modo com endereço, o formulário envia um POST comum (`application/x-www-form-urlencoded`) com os campos `nome`, `empresa`, `frota`, `email`, `telefone`, `interesse` (vazio ou `rastreamento`), `origem` e `enviadoEm`. O destino precisa responder com status 2xx.
-
-Exemplo com **n8n**: crie um nó _Webhook_ (método POST), copie a _Production URL_ para `formEndpoint`, ative o workflow e, nas opções do Webhook, libere o domínio do site em _Allowed Origins (CORS)_. Depois ligue o nó seguinte (planilha, e-mail, CRM). Também funciona com Formspree, Make ou Google Apps Script.
-
-A política de privacidade fica em `privacidade.html` (link no rodapé, no formulário, na Transparência e no FAQ). Ela descreve o que o site faz hoje (sem cookies de publicidade, sem análise de visitantes, formulário que só abre o WhatsApp). Se o site passar a guardar dados (por exemplo, com `formEndpoint`) ou ganhar uma ferramenta de análise, atualize o texto. Vale uma revisão por um advogado.
-
-## Endereço do site, imagem de compartilhamento e SEO
-
-- `og:url`, `og:image` e os dados estruturados (JSON-LD `Organization` + `SoftwareApplication`) usam o endereço atual `https://hesantss-pixel.github.io/P-ginadevendasv3/`. Quando o domínio próprio (rotav3.com.br) estiver ligado, troque esse endereço no `<head>` do `index.html`.
-- Não há avaliações (`aggregateRating`) nos dados estruturados, porque não existem avaliações reais.
+O repositório é público. Nunca coloque senhas ou tokens nestes arquivos.
 
 ## Onde alterar cada coisa
 
-| O quê                                                        | Arquivo                                                                    |
-| ------------------------------------------------------------ | -------------------------------------------------------------------------- |
-| Textos das seções, menu, FAQ, preço, transparência, rodapé   | `index.html`                                                               |
-| Política de privacidade                                      | `privacidade.html`                                                         |
-| Calculadora "Quanto custa montar rotas à mão?"               | `index.html` (valores iniciais) + `js/main.js`                             |
-| Telas do sistema nas funcionalidades (bento)                 | `img/ui-*.webp` (recortes de `img/painel-rotav3.webp`)                     |
-| Cores, tamanhos, espaçamentos, celular                       | `css/style.css` (variáveis no começo do arquivo)                           |
-| Pedidos, pesos e rotas do painel interativo (demonstrativos) | `js/data.js`                                                               |
-| Imagem do painel no topo                                     | `img/painel-rotav3.webp`                                                   |
-| Modelos de empresas (seção "Personalização")                 | `index.html` + `img/modelo-*.webp`                                         |
-| Mapa do painel de planejamento (paradas numeradas)           | `js/planmap.js`                                                            |
-| Mapas de ruas (pedidos, coletas e entregas)                  | `js/ordersmap.js` (pontos em `js/data.js`, mapa de ruas em `js/config.js`) |
-| Maquete 3D da seção escura (imagem)                          | `img/cidade-maquete*.webp`, gerada por `ferramentas/maquete-3d/cena.html`  |
-| Formulário, menu, animações, inclinação 3D do painel do topo | `js/main.js`                                                               |
-| WhatsApp e destino do formulário                             | `js/config.js`                                                             |
-| Logo                                                         | `img/logo-rotav3.png` (original, fundo transparente)                       |
+- **WhatsApp, envio dos formulários, endereço do motorista de exemplo, mapa de ruas:** `js/config.js`.
+  - `whatsappNumber`: `5511955914618`.
+  - `formEndpoint`: vazio = os formulários abrem o WhatsApp com a mensagem pronta. Preenchido (webhook
+    do n8n, Formspree, Make, Apps Script), os formulários pedem também e-mail e WhatsApp e enviam um
+    POST comum (`application/x-www-form-urlencoded`) com `tipo` (`acesso` ou `agendar`), `nome`,
+    `empresa`, `frota`, `email`, `telefone`, `interesse`, `origem` e `enviadoEm`. O destino precisa
+    responder 2xx e liberar o domínio do site em CORS.
+- **Mensagens do WhatsApp:** função `mensagem()` em `js/main.js`.
+  - Ver o sistema: "Olá! Quero ver o sistema ROTAV3 por dentro. Pode me enviar um acesso de
+    demonstração (e-mail e senha)? Sou …, da …. E-mail para o acesso: …"
+  - Agendar: "Olá! Sou …, da …. Temos … veículos. Gostaria de agendar uma demonstração do ROTAV3 com
+    os dados da nossa operação."
+- **Textos, preços e perguntas:** `index.html`.
+- **Pedidos do planejador, rota do topo, veículos:** `js/dados.js`.
+- **Cores, tamanhos e espaçamentos:** variáveis no começo de `css/style.css`.
+- **CNPJ:** rodapé do `index.html`, dados estruturados (JSON-LD) e `privacidade.html`.
 
-## Imagens do topo e dos modelos
+## Como responder um pedido de "Ver o sistema"
 
-- O topo mostra a imagem do painel (`img/painel-rotav3.webp`), enviada em 18/10/2026. O notebook e o celular em 3D foram retirados a pedido, e com eles saíram `js/hero3d.js`, `js/screens.js` e `img/hero-devices.webp` (continuam no histórico do Git).
-- A seção "Modelos de empresas parceiras" usa duas capturas de tela enviadas em 19/10/2026:
-  - `img/modelo-viaverde.webp`: painel com a identidade da Via Verde Transportes, editado para não repetir os dados do painel do topo: 87 pedidos, 6 rotas, 7h18, data 16/10/2026, regiões da Grande São Paulo (São Paulo, Santo André, São Bernardo, Osasco, Mauá, São Caetano, Diadema), 14 alertas; usuário trocado de "Henrique Santos" para "Equipe Operacional"; os textos "dados em tempo real (Firebase)" e "última roteirização (OR-Tools)" viraram "pendentes para hoje" e "planejadas para hoje".
-  - `img/modelo-2sl-log.webp`: painel escuro da 2SL Log, editado: 42 pedidos, 3 rotas, 4h12, regiões do Alto Tietê (Guarulhos, Suzano, Mogi das Cruzes, Arujá, Poá, Santa Isabel, Salesópolis, Guararema), 12 alertas, "aguardando roteirização" e "geradas hoje às 07:40". O mapa original mostrava o aviso "API KEY REQUIRED" do Google Maps; no lugar entrou um trecho escurecido de outro mapa (região de Guarulhos), sem os marcadores antigos, com pontos e linhas redesenhados.
-  - O painel do topo (`img/painel-rotav3.webp`): 65 pedidos, 5 rotas, 02/10/2026. Em 19/10/2026 foram tirados o "↑ 12%" e o texto "dados em tempo real (Firebase)" do indicador de pedidos (agora "pedidos do dia"), para não mostrar um número de crescimento sem fonte.
-- Se houver capturas novas, é só substituir os arquivos com os mesmos nomes. Os cartões mostram a imagem na proporção 16 : 15, a partir do topo (o corte é feito pelo CSS, `object-fit: cover`).
+1. A mensagem chega no WhatsApp com nome, empresa e e-mail.
+2. No sistema, entre como administrador → **Acessos** → "Criar acesso de demonstração" com o nome e o
+   e-mail. O sistema gera a senha e o botão do WhatsApp manda link, e-mail, senha e validade (7 dias).
+3. A conta de demonstração entra com 86 pedidos fictícios, não vê nem altera os dados reais e pode
+   gerar rotas, abrir a tela do motorista e conversar com a IA (com limite por hora no servidor).
 
-## Versão 3 — o que mudou e por quê (19/10/2026)
+As regras do banco (`firebase/database.rules.json` no repositório do sistema) precisam estar
+publicadas no Firebase para a página Acessos gravar.
 
-Baseada na pesquisa "como levar a landing page de boa a 100%" (conversão B2B, design, 3D e SEO):
+## Mapas e 3D
 
-- **Topo:** título pelo que o sistema faz ("Rotas que respeitam o peso de cada pedido e a capacidade de cada veículo."), botão principal "Agendar demonstração" (abre o formulário → WhatsApp), botão "Testar o planejador" e uma linha de expectativa ("Pelo WhatsApp, direto com quem desenvolve o sistema. Sem compromisso."). O painel aparece em perspectiva 3D com brilho atrás; no computador ele acompanha levemente o mouse. No celular fica reto.
-- **Ordem:** o planejador interativo subiu para logo depois de "Como funciona", para o visitante testar antes de falar com alguém.
-- **Seção escura:** virou "dores → solução" (montar rotas de cabeça/planilha, veículo com espaço sobrando, listas separadas) com o mapa 3D e uma calculadora que multiplica só os números do visitante (horas por dia × dias × custo da hora). Não é promessa de economia. O cartão de alertas mostra só alertas de planejamento (região isolada, capacidade, horário marcado, rota gerada).
-- **Funcionalidades:** grade "bento" com recortes reais do painel do sistema.
-- **Personalização:** título "Modelos com a identidade de cada empresa" e a nota "Telas ilustrativas, com dados demonstrativos", para não sugerir que essas empresas já são clientes. Para voltar ao título anterior, troque o `<h2 id="models-title">` no `index.html`.
-- **Transparência:** o que o sistema faz hoje, o que fica fora do plano padrão (rastreamento como módulo opcional, relatórios prontos) e quem está por trás (CNPJ, atendimento direto, política de privacidade).
-- **Preço:** sob consulta, com o que define o valor (veículos, volume de pedidos, personalização). Confirme se esses critérios são os que você usa.
-- **FAQ:** novas perguntas de objeção (trocar de sistema, rastreamento, coletas, dados).
-- **Visual:** dourado metálico (#f3d27a → #d4a93c → #b8862b) com texto escuro nos botões, títulos em Sora e texto em Inter. Contraste conferido pela fórmula do WCAG: todos os textos ≥ 4,5 : 1.
+- **Mapa 3D:** imagem pré-renderizada (three.js r169) com os limites dos municípios do IBGE e rodovias
+  e rios do Natural Earth; os pinos, rótulos e o CD são HTML por cima da imagem, nas posições
+  calculadas na renderização. Nada de WebGL no celular do visitante. Como refazer:
+  `ferramentas/mapa-3d/README.md`.
+- **Fundo dos mapas do filme e do painel ao vivo:** `img/mapa-guarulhos.svg`, ilustrativo (limites
+  reais, quadras só como textura).
+- **Planejador:** mapa de ruas do OpenFreeMap (gratuito, sem chave, uso comercial permitido), com o
+  OpenStreetMap como reserva se o mapa vetorial não carregar.
+- **Rota do planejador:** calculada no navegador (`js/roteiro.js`) com as mesmas regras do sistema
+  (capacidade, limite de paradas, janela de horário, entregas antes das coletas, 15 min por parada,
+  jornada de 8 h), mas com distância em linha reta × 1,3. A página diz isso logo abaixo do mapa.
 
-## Imagens nítidas (19/10/2026)
+## Animações e acessibilidade
 
-- **Painel do topo:** feito a partir da imagem original (1536 × 1024), ampliada 2× com super-resolução (modelo EDSR, rodado aqui no ambiente, com OpenCV) e com um leve realce. O "↑ 12%" e o "dados em tempo real (Firebase)" continuam fora. Arquivos:
-  - `img/painel-rotav3.webp` (1536 px), para telas comuns;
-  - `img/painel-rotav3-2x.webp` (2560 px), para telas de alta densidade e para a imagem ampliada;
-  - `img/painel-mapa.webp`, o recorte do "Mapa de distribuição" mostrado no celular, onde o painel inteiro ficaria pequeno demais para ler.
-- **Inclinação 3D mais leve:** −6° em vez de −9°, e o painel fica reto quando o mouse está em cima, para ser lido com nitidez. O brilho atrás deixou de usar filtro de desfoque, que pesa no celular.
-- **Ampliar ao tocar:** o painel do topo, as telas das funcionalidades e os dois modelos abrem em tela cheia ao clicar ou tocar. No celular a imagem abre maior que a tela, para arrastar e ler os detalhes. O código está em `js/main.js` (trecho "Imagens que ampliam ao toque").
-- **Telas das funcionalidades** (`img/ui-*.webp`): recortadas de novo da versão ampliada, agora com o dobro da resolução de antes.
-- **Modelo 2SL Log:** ampliado 2× (`img/modelo-2sl-log-2x.webp`). A foto do caminhão foi retirada na versão 4. É usada automaticamente em telas de alta densidade.
-- **Mapas:**
-  - o planejador ocupa agora a largura toda da página, com o mapa em 480 px de altura no computador;
-  - os mapas de "Pedidos no mapa" passaram para 420 px;
-  - o mapa de reserva (OpenStreetMap) pede blocos de alta resolução em telas de alta densidade;
-  - o mapa 3D renderiza até 2× a densidade da tela.
-- A super-resolução deixa as bordas e o texto mais limpos, mas não inventa detalhe que não existe na imagem original. Para ficar perfeito, o ideal é uma captura de tela nova do sistema, feita numa tela grande, com zoom de 150–200% no navegador.
+- O filme do topo avança sozinho só quando está na tela, tem botão de pausa e capítulos clicáveis.
+- Com "reduzir movimento" ligado no aparelho, nada anda sozinho: cada cena aparece pronta.
+- A linha do "dia de operação" e o endireitar do filme usam animação ligada à rolagem
+  (`animation-timeline`) só nos navegadores que suportam; nos outros, ficam no estado final.
+- Formulários com rótulos, mensagens de erro ligadas aos campos e foco visível.
 
-## Rastreamento — módulo opcional, com orçamento separado (19/10/2026)
+## Fontes e licenças
 
-O sistema ainda não rastreia veículos. A página oferece o rastreamento como **módulo opcional, contratado à parte e com orçamento separado**, sem apresentá-lo como algo que já vem no plano padrão:
+- Fontes servidas pelo próprio site (`fonts/`, recorte latino em WOFF2): Inter, Sora e JetBrains
+  Mono, licença SIL Open Font License (arquivos `OFL-*.txt`).
+- Ícones 3D: Fluent Emoji (Microsoft, licença MIT — `img/ic/LICENSE-fluent-emoji.txt`).
+- Leaflet (BSD-2), MapLibre GL JS (BSD-3) e o plugin maplibre-gl-leaflet (ISC) em `vendor/`.
+- Mapas: © colaboradores do OpenStreetMap, OpenMapTiles, OpenFreeMap. Limites: IBGE. Natural Earth:
+  domínio público. Os créditos aparecem no rodapé e nos mapas.
 
-- **Planejador:** um veículo percorre a ordem das paradas no mapa, para em cada uma e volta ao centro de distribuição. Um cartão mostra "Fiorino · em rota", a próxima parada e a etiqueta "Simulação do módulo opcional". O botão "Rastreamento (opcional)" liga e desliga. A animação pausa fora da tela e, com "reduzir movimento", o veículo fica parado a caminho da 3ª parada. Nenhuma localização real é usada; o veículo anda em linha reta entre as paradas. O código fica em `js/planmap.js` (trecho "rastreamento (SIMULAÇÃO do módulo opcional)").
-- **Preço:** bloco "Rastreamento no mapa — Módulo opcional · orçamento separado", com o botão "Pedir orçamento do rastreamento". Esse botão abre o formulário, e a mensagem do WhatsApp termina com "Também quero um orçamento do módulo de rastreamento." (campo `interesse` = `rastreamento`).
-- **Transparência:** o cartão "Fora do plano padrão" lista o rastreamento como módulo opcional com orçamento separado, e os relatórios prontos como em construção.
-- **FAQ:** "Dá para rastrear os veículos no mapa?" — sim, com o módulo opcional. A forma de enviar a localização (celular do motorista ou rastreador já instalado) é combinada no orçamento.
+## O que foi testado (24/10/2026)
 
-## Painel de planejamento
+Chromium (Playwright) a 1440, 390, 360 e 320 px de largura e com "reduzir movimento": filme e
+capítulos, pausa, planejador (gerar, trocar veículo e tipo, próxima viagem, fora da janela,
+recomeçar), filtros e dicas do mapa 3D, tela do motorista real dentro do celular mandando as baixas
+para o painel (sem rolar a página de fora), conversa da IA, troca de marca, os dois formulários
+(validação e mensagem do WhatsApp), menu do celular, sem rolagem lateral e sem erros no console.
 
-- O mapa do painel também é um mapa de ruas, no lugar do mapa ilustrativo desenhado em código.
-- As paradas aparecem numeradas na ordem da rota, e a linha pontilhada liga as paradas nessa ordem (saindo e voltando ao centro de distribuição). Ela **não** é o trajeto pelas ruas — o site não tem serviço de rotas. Os pontos da outra aba aparecem pequenos e apagados, só para dar contexto.
-- Clicar em um pedido da lista abre o balão no mapa; clicar no número no mapa marca o pedido na lista.
-- Distância e tempo do resumo são demonstrativos: soma das distâncias em linha reta × 1,3 e 30 km/h de média + 8 min por parada.
-
-## Visual dos mapas de ruas
-
-- Os três mapas (painel e "Pedidos no mapa") usam o estilo claro "Liberty" do OpenFreeMap, desenhado com MapLibre GL dentro do Leaflet, com ajustes para lembrar os aplicativos de mapa: fundo cinza-claro, ruas brancas, rodovias azul-acinzentadas, água azul, sem ícones de comércio e sem prédios em 3D (`STYLE_TWEAKS` em `js/leafletmap.js`).
-- O OpenFreeMap é gratuito, não usa chave, permite uso comercial e não tem limite de acessos; o crédito (OpenFreeMap, OpenMapTiles, OpenStreetMap) aparece no canto do mapa.
-- Sem WebGL, ou se o estilo não carregar em 8 segundos, o mapa troca sozinho para o mapa comum do OpenStreetMap, com cores suavizadas.
-- Não é o Google Maps nem o Waze: o Google exige chave de API com cobrança, e o Waze não libera o mapa para sites. Se um dia quiser o mapa do Google, dá para trocar com uma chave restrita ao domínio do site.
-- Os pedidos de demonstração ficam concentrados em Guarulhos, perto do centro de distribuição, com alguns mais longe (Arujá, Itaquaquecetuba, Tatuapé e Penha).
-
-## Mapas de ruas (seção "Pedidos no mapa")
-
-- Dois mapas com ruas de verdade, feitos com Leaflet 1.9.4 e MapLibre GL 4.7.1 (arquivos em `vendor/`, carregados só quando a seção se aproxima da tela).
-- Mapa 1, "Todos os pedidos": uma bolinha verde por pedido. Mapa 2, "Coletas e entregas": entrega em azul com seta para baixo, coleta em dourado com seta para cima, e os botões Todas / Entregas / Coletas. Os dois mostram o centro de distribuição (quadrado azul-marinho). Tocar em um ponto abre o pedido.
-- Os pedidos são fictícios e ficam no centro aproximado do bairro citado (`lat`/`lng` em `js/data.js`). Não são endereços de clientes.
-- As cores de entrega (azul) e coleta (dourado) são as mesmas do painel de planejamento.
-- O mapa de ruas vem do OpenStreetMap (gratuito, sem chave). As regras deles pedem o crédito visível no mapa (já está) e não garantem disponibilidade; se o site tiver muito acesso, troque por um provedor pago em `mapTiles`, no `js/config.js`. Se o mapa de ruas não carregar, os pontos continuam e aparece um aviso.
-- No celular, um dedo rola a página e dois dedos dão zoom (os botões + e − também funcionam). No computador, a roda do mouse só dá zoom depois de clicar no mapa.
-- Não há linha de rota nesses mapas: desenhar o caminho pelas ruas exige um serviço de rotas, que o site não tem.
-
-## Como a maquete 3D é feita
-
-- A imagem da seção escura é uma maquete modelada em código com three.js (prédios, depósito, rota, alfinetes e caminhões). Nenhum modelo 3D foi baixado de terceiros.
-- No site ela é só uma imagem (`img/cidade-maquete.webp` e `-2x` para computador; `img/cidade-maquete-celular.webp` e `-2x` para celular). Nada de 3D roda no navegador do visitante, o que deixa a página leve.
-- Para mudar a maquete: abra `ferramentas/maquete-3d/cena.html` num servidor local (ex.: `python3 -m http.server`) e acesse `.../ferramentas/maquete-3d/cena.html` (computador) ou `...?view=mob` (celular). Clique em "Baixar PNG", converta para WebP e troque os arquivos em `img/`. O arquivo usa three.js r169 pelo jsDelivr.
-
-## O que foi testado (Chromium sem interface, WebGL por software)
-
-- Painel: abas Entregas/Coletas, paradas numeradas 1–8 e 1–6 na mesma ordem da lista, lista → balão e marcador → lista, zoom e botão de centralizar, troca de aba pelo teclado.
-- No celular, o cartão "Alertas do dia" fica abaixo do mapa 3D, sem cobrir a cena.
-- Resumo da rota e capacidade usada recalculados a partir dos pedidos (455 kg = 70% e 312 kg = 48% de 650 kg).
-- Formulário (versão 3): 3 campos, 3 avisos com tudo vazio, nada abre; preenchido, abre o WhatsApp com "Olá! Sou …, da …. Temos … veículos. Quero ver o ROTAV3 com os nossos pedidos." (conferido o texto), em 1440 e 390 px. Com `formEndpoint` simulado: e-mail e WhatsApp aparecem, 5 avisos com tudo vazio, POST conferido. A abertura no app do WhatsApp em um celular real não foi testada.
-- Calculadora (aceita vírgula, campo vazio vira zero), inclinação 3D só no computador, ordem das seções, menu apontando para seções existentes, imagem do topo com prioridade alta e sem carregamento tardio, política de privacidade no celular, sem rolagem lateral em 360, 390, 768, 1024 e 1440 px, sem erros no console.
-- Menu do celular, item ativo do menu, FAQ, tecla Esc no formulário.
-- Sem rolagem lateral em 360, 390, 768, 1024, 1280 e 1920 px.
-- Movimento reduzido e navegador sem WebGL (imagens estáticas aparecem), sem erros no console.
-
-- Mapas de ruas: 14 bolinhas verdes, 8 entregas e 6 coletas, contadores, balão do pedido, filtros, marcadores com nome para leitor de tela e foco pelo teclado, cabeçalho por cima dos controles, aviso quando o mapa de ruas falha, em 1440 e 390 px. Nos testes o mapa de ruas foi trocado por uma imagem local (o ambiente não acessa o OpenStreetMap).
-
-## O que não foi testado
-
-- Celulares e placas de vídeo reais, Safari e Firefox. O desempenho do 3D em aparelhos fracos não foi medido.
-- Envio para um destino real (só simulado).
-- O visual final dos mapas com as ruas reais (OpenFreeMap e OpenStreetMap são bloqueados no ambiente de teste). Testado: o mapa vetorial carrega, os ajustes de cor são aplicados (com um estilo de teste) e a troca para o mapa de reserva funciona. Confira no site publicado.
-- As fontes Inter e Sora carregando do Google Fonts (bloqueado no ambiente de teste; usadas cópias instaladas localmente).
-
-## Diferenças em relação à imagem de referência
-
-Os textos foram ajustados ao que o sistema já faz:
-
-- "Mapas em tempo real" virou "Pedidos no mapa"; "EM TEMPO REAL" virou "Painel operacional". O sistema não rastreia veículos em tempo real.
-- "Relatórios e histórico" virou "Pedidos a partir de notas fiscais". A página de relatórios do sistema ainda está em construção.
-- "Cases" no menu virou "Para quem é". Não há estudos de caso publicados.
-- "Menos custos. Mais resultados." virou "Menos retrabalho. Mais controle.", para não prometer resultado sem número que o comprove.
-- "Ver todas as funcionalidades" abre o pedido de demonstração, porque não existe página separada de funcionalidades.
-- "Termos de uso" segue fora do rodapé até existir o texto. A política de privacidade foi criada em 19/10/2026.
-- Foi acrescentada a seção de Perguntas (o menu "Perguntas" precisava de destino) e o formulário de demonstração.
-
-Na seção de personalização, os modelos levam os nomes Via Verde Transportes e 2SL Log. Desde a versão 3 o título não fala mais em "empresas parceiras" e há a nota "Telas ilustrativas". Se alguma delas for cliente de fato, dá para voltar a dizer isso.
-
-Imagens:
-
-- No topo, a imagem do painel é a enviada pelo Henrique (dados demonstrativos). A estrada ao fundo é desenhada em CSS.
-- A foto do caminhão em "Para quem é" é ilustrativa (gerada para o projeto do Lovable) e recebeu um filtro de entardecer.
-- A logo (`img/logo-rotav3.png`) e os ícones (`favicon.png`, `apple-touch-icon.png`) vêm da logo original enviada em 18/10/2026; o fundo azul foi retirado para a logo ficar transparente.
-
-A página ficou mais alta que a imagem porque os textos foram mantidos em tamanho legível.
-
-## Licenças
-
-- MapLibre GL JS 4.7.1 — BSD 3-Clause (`vendor/maplibre/LICENSE.txt`); @maplibre/maplibre-gl-leaflet 0.1.4 — ISC (`vendor/maplibre-gl-leaflet/LICENSE.txt`), adaptado para carregar sem build. Mapa: OpenFreeMap, © OpenMapTiles, © colaboradores do OpenStreetMap.
-- Leaflet 1.9.4 — BSD 2-Clause (`vendor/leaflet/LICENSE.txt`). Dados do mapa © colaboradores do OpenStreetMap (ODbL), com crédito no canto de cada mapa.
-- three.js r169 (só no gerador `ferramentas/maquete-3d/cena.html`, carregado do jsDelivr) — MIT.
-- Fontes Inter e Sora, via Google Fonts — SIL Open Font License 1.1.
-- Ícones e modelos 3D — feitos para este projeto.
-
-## Versão 4 (20/10/2026) — visual escuro premium
-
-- Página inteira em preto-azulado, com cartões de vidro e dourado só nos botões e destaques (referências de design lidas com o Firecrawl: Linear e Onfleet).
-- Telas do sistema, mapas e janelas continuam claros, como uma tela real em destaque.
-- A foto do caminhão saiu. No lugar há uma ilustração em SVG de uma rota (centro de distribuição, entregas e coletas), feita no próprio código.
-- Planejador: paradas em formato de alfinete numerado, linha da rota com contorno branco e brilho correndo no sentido da rota (desliga com "reduzir movimento"). Centro de distribuição em dourado.
-- Ajustes de tema ficam no fim de `css/style.css` (bloco "VERSÃO 4").
-
-## Versão 4.1 (20/10/2026) — cores vivas e animações
-
-Inspirada em elevatelp.com.br (estrutura lida com o Firecrawl): brilhos coloridos que se movem devagar no topo, notificações do planejamento (dados demonstrativos) aparecendo sobre o painel, faixa que corre com o que o sistema faz, dourado do título brilhando, botão dourado com reflexo, luz que segue o mouse nos cartões e entradas com desfoque. Tudo desliga com "reduzir movimento". Bloco "VERSÃO 4.1" no fim de `css/style.css`.
-
-## Versão 4.2 (21/10/2026) — telas e mapa desenhados em código
-
-- As imagens recortadas da captura antiga (painel do topo, mapa, próximas paradas, veículos, pedidos por região) saíram. Eram borradas e tinham dados que não batiam com o resto da página.
-- No lugar: telas em HTML e um mapa em SVG (`img/mapa-rotas.svg`), nítidos em qualquer tela, com os mesmos pedidos demonstrativos de `js/data.js`: entregas em azul (8 paradas, 455 kg, Fiorino 1) e coletas em laranja (6 paradas, 312 kg, Fiorino 2), saindo do centro de distribuição em Guarulhos.
-- O mapa usa as coordenadas reais dos bairros e mostra Via Dutra (BR-116), Ayrton Senna (SP-070), Fernão Dias (BR-381), Rio Tietê, Aeroporto de Guarulhos e as cidades. É um mapa ilustrativo, com o aviso "dados demonstrativos".
-- Os scripts que geram o mapa e as telas ficaram fora do site (gerados uma vez). Para mudar os pedidos, altere `js/data.js` e peça para regenerar.
-- A cor das coletas passou para #e08a00 (laranja mais vivo) no site inteiro.
-
-## Versão 4.3 (21/10/2026) — Dashboard recriado em alta resolução
-
-- O topo mostra o Dashboard do ROTAV3 recriado no layout do sistema (barra lateral, indicadores, mapa de distribuição, pedidos por região, próximas paradas, assistente, agendados e alertas), exportado a 2× (`img/dashboard-rotav3.webp`, `-2x.webp`; no celular `img/dashboard-mapa.webp`).
-- Ícones: Lucide (licença ISC). Emojis 3D: Microsoft Fluent Emoji (licença MIT). Fonte: Inter.
-- Números coerentes com o planejador: 14 pedidos (8 entregas, 6 coletas), 2 rotas, 155 km, 7h05, 767 kg em 2 Fiorinos.
-- Nomes de fornecedores que apareciam na tela (Gemini, Firebase, QR-Tools) foram trocados por termos genéricos ("Assistente IA").
-
-## Versão 4.4 (21/10/2026) — Dashboard igual ao do sistema, mais nítido
-
-- O topo mostra o Dashboard no layout enviado pelo Henrique (mesmas seções e números: 65 pedidos, 1 rota, 2h49, pedidos por região, agendados, IA Assistente, alertas), recriado em código e exportado a 2×.
-- Mapa no estilo do Google Maps (paleta e tipos de via), com uma bolinha verde para cada pedido e o centro de distribuição em dourado. O traçado é desenhado à mão sobre as posições reais dos bairros; não é mapa de ruas real (o servidor do OpenStreetMap não foi acessível daqui).
-- Sem quilometragem e sem a etiqueta "dados demonstrativos" dentro da imagem; o texto alternativo diz que os números são de exemplo.
-
-## Versão 4.5 (22/10/2026) — painel com outra operação e teste grátis de 5 dias
-
-- O painel do topo mostra uma operação diferente do resto da página (região de Barueri, Osasco, Carapicuíba, Alphaville, Santana de Parnaíba, Cotia, Jandira, Itapevi): 48 pedidos, 3 rotas, 6h15, 31 pendentes, 2 pedidos agendados, 6 em regiões isoladas. Mapa estilo Google com um ponto por pedido.
-- No celular o topo mostra a interface do sistema em versão de celular (`img/dashboard-celular.webp` e `-3x.webp`), não só o mapa.
-- Oferta "5 dias de teste grátis": botões do cabeçalho, do topo e da chamada final abrem o formulário em modo teste (`data-open-demo="teste"`), com título próprio e a mensagem "Quero começar o teste grátis de 5 dias do ROTAV3." no WhatsApp. Nova seção `#teste-gratis` (Dia 1, Dias 1 a 5, Dia 5), aviso na seção de preço e pergunta frequente "Tem teste grátis?".
-
-## Versão 4.6 (22/10/2026) — entrada reescrita a partir de pesquisa de conversão
-
-- Título: "Rotas do dia prontas em minutos, sem planilha." (resultado, não regra técnica). Selo: "Roteirização para transportadoras".
-- Subtítulo diz como funciona (notas fiscais → mapa → rotas por peso e capacidade → painel com a marca).
-- Um botão principal em primeira pessoa ("Quero testar 5 dias grátis") e um link secundário ("Ver o sistema funcionando").
-- Linha da oferta: 5 dias grátis · Implantação e treinamento inclusos · Sem compromisso.
-- Faixa de confiança verificável no lugar da lista que repetia o subtítulo: formatos aceitos, navegador, atendimento com quem desenvolve.
-- Seção do teste, pergunta frequente, chamada final e descrições para Google/WhatsApp no mesmo tom.
-
-## Versão 4.7 (22/10/2026) — cidade iluminada no lugar da cena 3D
-
-- A seção "Antes do ROTAV3" abre com a ilustração enviada pelo Henrique (cidade à noite com rotas iluminadas, depósito em Guarulhos, entregas, coletas e atrasos), ampliada 2× com super-resolução: `img/cidade-rotas.webp` e `img/cidade-rotas-2x.webp`.
-- Animações só em CSS: aproximação lenta da "câmera", anéis pulsando nos alfinetes e um brilho que atravessa a imagem. Desligam com "reduzir movimento". No celular, recorte que mantém o depósito, a legenda e as rotas.
-- A cena 3D (three.js) e os arquivos dela foram removidos (`js/city3d.js`, `vendor/three*`, `img/city-3d.webp`), o que deixa a página mais leve. O cartão "Alertas do planejamento" saiu desta seção, porque a ilustração já tem a própria legenda.
-
-## Versão 4.8 (22/10/2026) — conteúdo aparece rápido e nítido ao rolar
-
-- Removido o desfoque da animação de entrada; a entrada virou um deslize curto (0,35 s), sem atraso entre blocos, e começa antes de o bloco entrar na tela (`rootMargin` 15%). Teste: rolando o celular em passos de 600 px, 100 ms depois de cada passo nenhum bloco visível estava pendente ou desfocado.
-
-## Versão 4.9 (22/10/2026) — cidade 3D noturna no estilo da ilustração
-
-- `js/city3d.js` (three.js r169): cidade à noite com prédios baixos de janelas acesas (uma malha só, leve), ruas com faixas e postes, árvores, depósito iluminado com caminhões na doca, 5 rotas neon com fluxo animado (entrega verde, coleta azul, rota do veículo amarela, atraso vermelho), 7 alfinetes 3D com ícone e anel pulsando, 5 veículos percorrendo as ruas e brilho (bloom) só nos elementos de neon.
-- Cartões "Depósito · Guarulhos" e "Veículos em rota", legenda e selo "Ilustração" em HTML, por cima da cena (texto nítido).
-- Carrega só quando a seção se aproxima da tela; pausa fora da tela e com a aba em segundo plano; com "reduzir movimento" mostra um quadro parado. Sem WebGL, mostra `img/cidade-3d.webp` (render da própria cena).
-- Brilho: `vendor/three-post/` (EffectComposer, RenderPass, UnrealBloomPass, OutputPass e shaders do three.js r169, licença MIT, `vendor/LICENSE-three.txt`). A ilustração estática da versão 4.7 saiu.
-
-## Versão 5.0 (22/10/2026) — maquete 3D simples no lugar da cidade neon
-
-- A seção "Antes do ROTAV3" abre com uma maquete 3D limpa: um bairro sobre uma base azul-marinho, prédios claros, o depósito, uma rota dourada saindo dele e alfinetes de entrega (verde), coleta (azul) e urgente (vermelho), com dois caminhões. Versões próprias para computador e celular (`<picture>`), com fundo transparente.
-- Saíram a cena animada (`js/city3d.js`), o three.js e os efeitos de brilho de `vendor/`, a imagem `img/cidade-3d.webp` e o cartão "Veículos em rota". Ficaram o cartão do depósito, a legenda e o selo "Ilustração".
-- O gerador da imagem fica em `ferramentas/maquete-3d/cena.html` (ver "Como a maquete 3D é feita").
-
-## Versão 5.1 (22/10/2026) — oferta do playbook: demonstração grátis e plano fundador
-
-- Saiu o "teste de 5 dias grátis". A oferta agora segue o playbook de venda:
-  - **Grátis:** o cliente manda as notas fiscais de um dia; montamos as rotas desse dia no ROTAV3 e mostramos numa chamada de 20 minutos.
-  - **Plano fundador:** os 3 primeiros meses são pagos; se em 3 meses não estiver valendo, o cliente para e não deve mais nada.
-- Botões: "Demonstração grátis" (cabeçalho) e "Quero ver minhas rotas prontas" (topo, "Como começar" e chamada final). O formulário abre o WhatsApp com "Quero ver as rotas de um dia da nossa operação montadas no ROTAV3. Posso mandar as notas." (`data-open-demo="demo"`).
-- A seção "Teste grátis" virou "Como começar" (`#como-comecar`), em 3 passos.
-- Preço publicado (seção `#preco`, classes `.tier*`): Essencial (até 5 veículos) R$ 390/mês, Operação (6 a 15) R$ 590/mês, Frota (acima de 15) R$ 890/mês; implantação paga uma vez, R$ 990 / R$ 990 / R$ 1.900. Também: o que todos os planos incluem, o plano fundador e o rastreamento como módulo opcional com orçamento separado.
-- Perguntas frequentes: "Quanto custa?" com os valores, "Dá para ver funcionando antes de pagar?" e "Tem fidelidade?". Descrições para Google/WhatsApp e dados estruturados (`AggregateOffer` de R$ 390 a R$ 890) atualizados.
-- Para mudar preços: seção `#preco` e a pergunta "Quanto custa?" no `index.html`, a descrição no `<head>` e o `AggregateOffer` no JSON-LD.
-
-
-## Versão 5.4 — oferta nova e entrada profissional (23/10/2026)
-- Início: selo "Software de roteirização para transportadoras", título "Entregas e coletas roteirizadas em minutos.", botões "Solicitar demonstração" e "Ver o sistema", linha "Demonstração gratuita com os dados da sua operação · Sem fidelidade". Preço saiu do topo.
-- Planos: Essencial (até 5 veículos) R$ 197/mês · Operação (6 a 15) R$ 397/mês · Frota (acima de 15) R$ 697/mês. Implantação e treinamento inclusos, sem taxa de entrada, mensal e sem fidelidade.
-- Sincronização com rastreamento: inclusa no Operação e no Frota; no Essencial, +R$ 97/mês. Texto deixa claro que depende de o fornecedor do rastreador liberar o acesso aos dados e que a compatibilidade é confirmada na demonstração (o sistema ainda não tem essa integração pronta).
-- Versão 5.2: abrir pelo link sempre começa no topo. Versão 5.3: a página cabe em celulares com letra/zoom ampliado (até ~200 px de largura).
-
-## Versão 5.6 — escala de computador (23/10/2026)
-- A partir de 1100 px de largura: título do início 55–62 px (antes 39–43), títulos de seção 42–50 px (antes 29–33), textos de apoio 18,5 px (antes 16), 98–128 px entre seções (antes 57–62).
-- Funcionalidades: mapa grande ocupando 3 colunas, sem a sobra cinza; "Próximas paradas" ao lado de "Visão operacional" e "Marca".
-- "Para quem é" com coluna de texto mais larga; chamada final centralizada.
-- Notebook 1366×768: o início cabe na primeira tela. Celular e tablet (até 1099 px) não mudaram.
-
-## Versão 5.7 — "Para quem é" com cena 3D da operação (23/10/2026)
-- Saiu o desenho de rota solto ("Mais organização. Menos retrabalho. Mais controle."), que não se ligava ao texto.
-- Entrou uma cena 3D na mesma linguagem da maquete: centro de distribuição no meio, rota laranja de coletas (indústria, distribuidora) e rota azul de entregas (loja, cliente final) — as mesmas cores dos mapas do site. Nomes em HTML por cima da imagem (nítidos; no celular viram "CD", "Indústria" etc.).
-- Os 6 tipos de cliente viraram cartões com uma linha do que o sistema resolve para cada um (só o que o sistema faz).
-- Gerador: `ferramentas/maquete-3d/operacao.html` (`?view=desk&w=2800&h=2100` e `?view=mob&w=2160&h=2160&d=43.5&tx=-0.45`); recorte usado: computador x 140–2560, y 220–1990; celular y 200–2080. As posições das etiquetas saem no console.
-
-## Versão 5.8 — notebooks pequenos e tablets deitados (23/10/2026)
-- A escala de computador (5.6) passa a valer a partir de 981 px (antes 1100). Em 1024 px: título do início 42 px, títulos de seção 40 px, texto de apoio 19 px.
-- Menu sem quebra de linha entre 981 e 1180 px ("Como funciona" quebrava em 1024).
-- Funcionalidades entre 981 e 1099 px em 2 colunas: mapa na largura toda (sem sobra cinza) e cartões em pares.
-- Observação: no celular com "Versão para computador" ligada, o Chrome desenha a página com 980 px e encolhe para a tela; fica pequeno em qualquer site. Para ver a versão de celular, desligar essa opção.
+Não foi possível testar daqui: os mapas de ruas reais (o ambiente de teste bloqueia os servidores de
+mapa) e o Safari do iPhone.
 
 ## Domínio www.rotav3.com.br (comprado em 23/10/2026, válido até 23/10/2027)
-- Registrado no Registro.br no CNPJ da ROTAV3; DNS do próprio Registro.br (modo avançado).
-- Zona: 4 registros A no domínio sem www (185.199.108.153, 185.199.109.153, 185.199.110.153, 185.199.111.153) e CNAME `www` → `hesantss-pixel.github.io`.
-- Arquivo `CNAME` (www.rotav3.com.br), endereço canônico, links do Google/WhatsApp, `robots.txt` e `sitemap.xml` apontam para o domínio.
-- Depois que o DNS responder: Settings → Pages → "DNS check successful" → marcar Enforce HTTPS.
+
+- Registrado no Registro.br no CNPJ da ROTAV3; DNS do próprio Registro.br.
+- 4 registros A no domínio sem www (185.199.108.153, .109.153, .110.153, .111.153) e CNAME `www` →
+  `hesantss-pixel.github.io`.
+- `CNAME`, endereço canônico, `robots.txt` e `sitemap.xml` apontam para o domínio.
+- Em Settings → Pages, marque **Enforce HTTPS** quando a opção estiver disponível.
+
+## Histórico
+
+- v1 a v5.8 (18 a 23/10/2026): primeira página, versões com painel em perspectiva, maquetes 3D
+  ilustrativas, planejador, mapas de pedidos, oferta e preços, domínio próprio.
+- **v6 (24/10/2026):** página refeita a partir do sistema real; "Ver o sistema" no topo; filme do
+  produto; dia de operação; planejador com as regras do sistema; mapa 3D da Grande SP; tela do
+  motorista real sincronizando com o painel; IA; troca de marca; fontes no próprio site.

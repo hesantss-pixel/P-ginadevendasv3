@@ -7,33 +7,28 @@
     <link rel="canonical" href="https://www.rotav3.com.br/privacidade.html" />
     <meta
       name="description"
-      content="Como o site da ROTAV3 Systems trata os dados de quem pede uma demonstração ou entra em contato."
+      content="Como o site da ROTAV3 Systems trata os dados de quem pede uma demonstração, um acesso de demonstração ou entra em contato."
     />
-    <meta name="theme-color" content="#0a0d14" />
+    <meta name="theme-color" content="#0a1220" />
     <link rel="icon" href="img/favicon.png" type="image/png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700&display=swap"
-    />
+    <link rel="preload" href="fonts/inter-400-700.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="fonts/sora-600-700.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body class="legal-page">
-    <header class="site-header">
-      <div class="container header__inner">
-        <a class="brand" href="./" aria-label="ROTAV3 Systems — voltar ao início">
-          <img src="img/logo-rotav3.png" alt="ROTAV3 Systems" width="177" height="43" />
+    <header class="cabecalho rolou">
+      <div class="cabecalho__in">
+        <a class="cabecalho__marca" href="./" aria-label="ROTAV3 Systems — voltar ao início">
+          <img src="img/logo-rotav3.png" alt="ROTAV3 Systems" width="148" height="36" />
         </a>
-        <a class="btn btn--ghost btn--sm legal__back" href="./">Voltar ao site</a>
+        <a class="btn btn--linha btn--p legal__voltar" href="./">Voltar ao site</a>
       </div>
     </header>
 
-    <main class="section section--light legal" id="conteudo">
-      <article class="container legal__body">
-        <p class="eyebrow">LGPD</p>
+    <main class="secao secao--clara legal" id="conteudo">
+      <article class="cont legal__body">
         <h1>Política de privacidade</h1>
-        <p class="legal__date">Atualizada em 19 de outubro de 2026.</p>
+        <p class="legal__date">Atualizada em 24 de outubro de 2026.</p>
 
         <h2>Quem somos</h2>
         <p>
@@ -44,15 +39,28 @@
         <h2>Quais dados recebemos e para quê</h2>
         <ul>
           <li>
-            <strong>Pedido de demonstração:</strong> ao preencher o formulário, você informa nome,
-            empresa e quantidade de veículos. O site não guarda esses dados: ele apenas abre o
-            WhatsApp com uma mensagem pronta para a ROTAV3. Os dados só chegam até nós se você
-            enviar essa mensagem.
+            <strong>Pedido de demonstração:</strong> você informa nome, empresa e quantidade de
+            veículos. O site não guarda esses dados: ele apenas abre o WhatsApp com uma mensagem
+            pronta para a ROTAV3. Os dados só chegam até nós se você enviar essa mensagem.
+          </li>
+          <li>
+            <strong>Pedido de acesso de demonstração:</strong> você informa nome, empresa e o e-mail
+            que vai usar para entrar no sistema. Do mesmo jeito, o site só abre o WhatsApp com a
+            mensagem pronta. Se você enviar e liberarmos o acesso, o e-mail vira o seu login no
+            sistema (cadastrado no Firebase Authentication, do Google) e você recebe uma senha pelo
+            WhatsApp. O acesso de demonstração usa só dados fictícios e vale por 7 dias; você pode
+            pedir a exclusão do cadastro a qualquer momento.
           </li>
           <li>
             <strong>Conversa no WhatsApp:</strong> recebemos o seu número, o nome do seu perfil e o
-            que você escrever. Usamos essas informações só para responder ao seu contato, combinar a
-            demonstração e enviar a proposta que você pediu.
+            que você escrever. Usamos essas informações só para responder ao seu contato, liberar o
+            acesso, combinar a demonstração e enviar a proposta que você pediu.
+          </li>
+          <li>
+            <strong>Demonstrações da página:</strong> o planejador de rotas, o mapa, o assistente e a
+            tela do motorista de exemplo funcionam com dados fictícios, no seu navegador. As baixas e
+            fotos que você marcar na tela do motorista de exemplo ficam só no seu navegador e não são
+            enviadas para a ROTAV3.
           </li>
         </ul>
         <p>
@@ -66,27 +74,28 @@
           do seu navegador (como endereço IP e tipo de navegador), conforme as regras de cada um:
         </p>
         <ul>
-          <li><strong>GitHub Pages</strong> (hospedagem do site);</li>
-          <li><strong>Google Fonts</strong> (fontes do texto);</li>
-          <li>
-            <strong>OpenFreeMap</strong> e <strong>OpenStreetMap</strong> (imagens dos mapas de
-            demonstração);
-          </li>
+          <li><strong>GitHub Pages</strong> (hospedagem do site e da tela do motorista de exemplo);</li>
+          <li><strong>Google</strong> (bibliotecas do Firebase carregadas pela tela do motorista de exemplo);</li>
+          <li><strong>OpenFreeMap</strong> e <strong>OpenStreetMap</strong> (mapa de ruas do planejador);</li>
           <li><strong>WhatsApp</strong> (Meta), quando você escolhe falar com a gente por lá.</li>
         </ul>
-        <p>O site não usa cookies de publicidade nem ferramentas de análise de visitantes.</p>
+        <p>
+          As fontes do texto são servidas pelo próprio site. O site não usa cookies de publicidade nem
+          ferramentas de análise de visitantes.
+        </p>
 
         <h2>Por quanto tempo guardamos</h2>
         <p>
           As conversas ficam no WhatsApp enquanto forem necessárias para o atendimento e para uma
-          eventual contratação. Você pode pedir a exclusão a qualquer momento.
+          eventual contratação. O cadastro de um acesso de demonstração pode ser excluído quando você
+          pedir. Você pode pedir a exclusão de qualquer dado a qualquer momento.
         </p>
 
         <h2>Seus direitos</h2>
         <p>
           Você pode pedir confirmação de que tratamos seus dados, acesso, correção, exclusão,
-          informação sobre compartilhamento e revogação do consentimento, entre os demais direitos
-          do art. 18 da LGPD.
+          informação sobre compartilhamento e revogação do consentimento, entre os demais direitos do
+          art. 18 da LGPD.
         </p>
 
         <h2>Como falar com a gente</h2>
@@ -104,15 +113,18 @@
       </article>
     </main>
 
-    <footer class="site-footer">
-      <div class="container footer__inner">
-        <div class="footer__legal">
-          <p>ROTAV3 Systems © 2026. Todos os direitos reservados.</p>
-          <p>CNPJ 68.080.201/0001-80</p>
+    <footer class="rodape">
+      <div class="cont rodape__grade">
+        <div>
+          <img src="img/logo-rotav3.png" alt="ROTAV3 Systems" width="148" height="36" loading="lazy" />
+          <p>Roteirização de entregas e coletas para transportadoras.</p>
         </div>
-        <nav aria-label="Rodapé">
-          <a class="footer__link" href="./">Página inicial</a>
+        <nav aria-label="Rodapé" class="rodape__links">
+          <a href="./">Página inicial</a>
         </nav>
+        <div class="rodape__contato">
+          <p>ROTAV3 Systems © 2026 · CNPJ 68.080.201/0001-80</p>
+        </div>
       </div>
     </footer>
   </body>

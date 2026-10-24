@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><meta name="robots" content="noindex"><title>Mapa 3D da Grande São Paulo (gerador da imagem)</title>
+<style>html,body{margin:0;background:transparent}canvas{display:block}</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/"}}</script>
+</head><body>
+<script type="module">
+import * as THREE from 'three';
+import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
+import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
+import { Line2 } from 'three/addons/lines/Line2.js';
+import { LineMaterial } from 'three/addons/lines/LineMaterial.js';
+import { LineGeometry } from 'three/addons/lines/LineGeometry.js';
+
+const q = new URLSearchParams(location.search);
+const VIEW = q.get('view') || 'desk';
+const W = +q.get('w') || 2400, Hpx = +q.get('h') || 1400;
+const D = await (await fetch('regiao.json')).json();
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true });
+renderer.setPixelRatio(1); renderer.setSize(W, Hpx, false); renderer.setClearColor(0x000000, 0);
+renderer.toneMapping = THREE.NeutralToneMapping; renderer.toneMappingExposure = 1.0;
+renderer.shadowMap.enabled = true; renderer.shadowMap.type = THREE.VSMShadowMap;
+document.body.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+const pmrem = new THREE.PMREMGenerator(renderer);
+scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+scene.environmentIntensity = 0.5;
+
+const BASE = 1.4, TH = 2.6, TOP = BASE + TH;
+const mat = (color, o = {}) => new THREE.MeshStandardMaterial({ color, roughness: 0.78, metalness: 0, ...o });
+const P = (x, y, h = TOP) => new THREE.Vector3(x, h, -y);
+
+// ---------- ilha: municípios extrudados ----------
+const maxPed = Math.max(...D.municipios.map((m) => m.pedidos));
+const EXTRA = +q.get('extra') || 2.4;
+for (const m of D.municipios) m.top = TOP + (m.pedidos ? EXTRA * Math.sqrt(m.pedidos / maxPed) : 0);
+function inRing(x, y, r) {
+  let c = false;
+  for (let i = 0, j = r.length - 1; i < r.length; j = i++) {
+    const [xi, yi] = r[i], [xj, yj] = r[j];
+    if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi + 1e-12) + xi) c = !c;
+  }
+  return c;
+}
+function topAt(x, y) {
+  for (const m of D.municipios) for (const r of m.rings) if (inRing(x, y, r)) return m.top;
+  return TOP;
+}
+const sideMat = mat(+('0x' + (q.get('side') || '0e1f3d')), { roughness: 0.85 });
+const island = new THREE.Group(); scene.add(island);
+for (const m of D.municipios) {
+  const t = m.pedidos ? 0.35 + 0.65 * Math.sqrt(m.pedidos / maxPed) : 0;
+  const base = new THREE.Color(0x0f213f), hi = new THREE.Color(0x1b3963);
+  const c = base.clone().lerp(hi, t);
+  if (m.name === 'Guarulhos') c.set(0x22467c);
+  const topMat = mat(c, { roughness: 0.72 });
+  for (const ring of m.rings) {
+    const shape = new THREE.Shape(ring.map(([x, y]) => new THREE.Vector2(x, y)));
+    const geo = new THREE.ExtrudeGeometry(shape, { depth: m.top - BASE, bevelEnabled: false, curveSegments: 1 });
+    geo.rotateX(-Math.PI / 2);
+    const mesh = new THREE.Mesh(geo, [topMat, sideMat]);
+    mesh.position.y = BASE; mesh.castShadow = true; mesh.receiveShadow = true;
+    island.add(mesh);
+  }
+}
+
+// ---------- linhas: limites, rodovias, rio ----------
+const lineMats = [];
+function fatLine(pts, color, width, h, opacity = 1) {
+  const pos = [];
+  for (const [x, y] of pts) pos.push(x, typeof h === 'function' ? h(x, y) : h, -y);
+  const g = new LineGeometry(); g.setPositions(pos);
+  const m = new LineMaterial({ color, linewidth: width, transparent: opacity < 1, opacity, worldUnits: false });
+  m.resolution.set(W, Hpx); lineMats.push(m);
+  const l = new Line2(g, m); l.computeLineDistances(); scene.add(l); return l;
+}
+for (const m of D.municipios) for (const r of m.rings) fatLine([...r, r[0]], m.name === 'Guarulhos' ? 0xf2bf4b : 0x6f8fc4, m.name === 'Guarulhos' ? W / 700 : W / 1400, m.top + 0.05, m.name === 'Guarulhos' ? 0.95 : 0.55);
+for (const r of D.roads) fatLine(r, 0xc9d6ea, W / 1000, (x, y) => topAt(x, y) + 0.07, 0.38);
+for (const r of D.rivers) fatLine(r, 0x58a6ff, W / 650, (x, y) => topAt(x, y) + 0.06, 0.85);
+
+// ---------- centro de distribuição (maquete) ----------
+const C = { b1: 0xeef2f8, b2: 0xdde5f0, navy: 0x0e1f3a, gold: 0xf2bf4b, goldDeep: 0xd99a1e, glass: 0x2b4a78 };
+function warehouse() {
+  const g = new THREE.Group();
+  const s = 1.0;
+  const body = new THREE.Mesh(new RoundedBoxGeometry(4.6 * s, 1.9 * s, 3.0 * s, 3, 0.12), mat(C.b1));
+  body.position.y = 0.95 * s; g.add(body);
+  const roof = new THREE.Mesh(new RoundedBoxGeometry(4.8 * s, 0.32 * s, 3.2 * s, 3, 0.1), mat(C.navy, { roughness: 0.6 }));
+  roof.position.y = 2.0 * s; g.add(roof);
+  const stripe = new THREE.Mesh(new THREE.BoxGeometry(4.62 * s, 0.16 * s, 3.02 * s), mat(C.gold, { metalness: 0.35, roughness: 0.35 }));
+  stripe.position.y = 1.62 * s; g.add(stripe);
+  for (let i = -1; i <= 1; i++) {
+    const door = new THREE.Mesh(new THREE.BoxGeometry(0.95 * s, 1.05 * s, 0.05), mat(C.navy));
+    door.position.set(i * 1.35 * s, 0.6 * s, 1.52 * s); g.add(door);
+  }
+  g.traverse((o) => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
+  return g;
+}
+const cd = warehouse();
+const CDH = topAt(D.cd.x, D.cd.y);
+cd.position.copy(P(D.cd.x, D.cd.y, CDH));
+cd.rotation.y = -0.25;
+scene.add(cd);
+const ring = new THREE.Mesh(new THREE.RingGeometry(3.6, 4.3, 64), new THREE.MeshBasicMaterial({ color: C.gold, transparent: true, opacity: 0.9 }));
+ring.rotation.x = -Math.PI / 2; ring.position.copy(P(D.cd.x, D.cd.y, CDH + 0.08)); scene.add(ring);
+const halo = new THREE.Mesh(new THREE.CircleGeometry(3.6, 64), new THREE.MeshBasicMaterial({ color: C.gold, transparent: true, opacity: 0.16 }));
+halo.rotation.x = -Math.PI / 2; halo.position.copy(P(D.cd.x, D.cd.y, CDH + 0.07)); scene.add(halo);
+
+// ---------- luz e sombra ----------
+scene.add(new THREE.HemisphereLight(0xe6eeff, 0x0b1426, 0.75));
+const sun = new THREE.DirectionalLight(0xffffff, 2.4);
+sun.position.set(-70, 150, 95); sun.target.position.set(5, 0, 0);
+sun.castShadow = true; sun.shadow.mapSize.set(4096, 4096);
+Object.assign(sun.shadow.camera, { left: -120, right: 120, top: 120, bottom: -120, near: 10, far: 420 });
+sun.shadow.radius = 14; sun.shadow.blurSamples = 24; sun.shadow.bias = -0.0004;
+scene.add(sun, sun.target);
+const ground = new THREE.Mesh(new THREE.PlaneGeometry(900, 900), new THREE.ShadowMaterial({ color: 0x0a1630, opacity: 0.22 }));
+ground.rotation.x = -Math.PI / 2; ground.receiveShadow = true; scene.add(ground);
+
+// ---------- câmera ----------
+const V = {
+  desk: { tx: 9, tz: 6, az: -10, el: 52, dist: 330, fov: 17.5 },
+  mob: { tx: 2, tz: 2, az: -8, el: 56, dist: 250, fov: 22 },
+}[VIEW];
+for (const k of ['tx', 'tz', 'az', 'el', 'dist', 'fov']) if (q.get(k)) V[k] = +q.get(k);
+const cam = new THREE.PerspectiveCamera(V.fov, W / Hpx, 1, 3000);
+const tgt = new THREE.Vector3(V.tx, TOP, V.tz);
+const az = THREE.MathUtils.degToRad(V.az), el = THREE.MathUtils.degToRad(V.el);
+function place() {
+  cam.position.set(tgt.x + V.dist * Math.sin(az) * Math.cos(el), TOP + V.dist * Math.sin(el), tgt.z + V.dist * Math.cos(az) * Math.cos(el));
+  cam.lookAt(tgt); cam.updateMatrixWorld(); cam.updateProjectionMatrix();
+}
+place();
+// enquadra a ilha: centraliza e ajusta a distância para caber com margem (fit = largura/altura úteis em NDC)
+const FIT = { desk: [1.86, 1.80], mob: [1.80, 1.76] }[VIEW];
+const verts = [];
+for (const m of D.municipios) for (const r of m.rings) for (const [x, y] of r) verts.push(new THREE.Vector3(x, TOP, -y), new THREE.Vector3(x, BASE - 0.2, -y));
+const fitVerts = VIEW === 'mob' ? verts.filter((v) => v.x > (+q.get('xmin') || -40) && v.x < (+q.get('xmax') || 62) && -v.z > (+q.get('ymin') || -40)) : verts;
+for (let it = 0; it < 60 && q.get('nofit') === null; it++) {
+  let x0 = 9, x1 = -9, y0 = 9, y1 = -9;
+  for (const v of fitVerts) { const p = v.clone().project(cam); x0 = Math.min(x0, p.x); x1 = Math.max(x1, p.x); y0 = Math.min(y0, p.y); y1 = Math.max(y1, p.y); }
+  const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2 + (+q.get('dy') || 0);
+  const right = new THREE.Vector3().setFromMatrixColumn(cam.matrixWorld, 0).setY(0).normalize();
+  const fwd = new THREE.Vector3().setFromMatrixColumn(cam.matrixWorld, 1).setY(0).normalize();
+  tgt.addScaledVector(right, cx * V.dist * 0.18).addScaledVector(fwd, cy * V.dist * 0.22);
+  V.dist *= Math.max((x1 - x0) / FIT[0], (y1 - y0) / FIT[1]) ** 0.5;
+  place();
+}
+
+renderer.render(scene, cam);
+await new Promise((r) => setTimeout(r, 300));
+renderer.render(scene, cam);
+
+// ---------- posições na tela (para os pinos e rótulos em HTML/SVG) ----------
+const scr = (x, y, h = TOP) => {
+  const v = P(x, y, h).project(cam);
+  return [+((v.x + 1) * 50).toFixed(3), +((1 - v.y) * 50).toFixed(3)];
+};
+window.__labels = {
+  view: VIEW, w: W, h: Hpx,
+  cd: scr(D.cd.x, D.cd.y, CDH),
+  pins: D.pedidos.map((p) => [p.nf, ...scr(p.x, p.y, topAt(p.x, p.y))]),
+  cities: D.municipios.map((m) => [m.name, ...scr(m.c[0], m.c[1], m.top), m.pedidos]),
+};
+window.__done = true;
+</script>
+</body></html>

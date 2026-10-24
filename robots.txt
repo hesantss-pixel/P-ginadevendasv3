@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
+Disallow: /ferramentas/
 
 Sitemap: https://www.rotav3.com.br/sitemap.xml

@@ -4,58 +4,53 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script>
-      // Abrir pelo link sempre começa no topo. O navegador só devolve a posição anterior
-      // quando a pessoa usa "voltar" (ex.: volta do WhatsApp) ou quando o link tem âncora (#secao).
+      // Abrir pelo link sempre começa no topo; "voltar" (ex.: volta do WhatsApp) e links com #âncora
+      // mantêm a posição.
       (function () {
         try {
+          document.documentElement.classList.add("js");
           if (!("scrollRestoration" in history)) return;
           var nav = performance.getEntriesByType && performance.getEntriesByType("navigation")[0];
           var voltar = nav && nav.type === "back_forward";
           history.scrollRestoration = voltar ? "auto" : "manual";
           if (voltar || location.hash) return;
-          var topo = function () {
-            window.scrollTo({ top: 0, left: 0, behavior: "instant" });
-          };
-          document.addEventListener("DOMContentLoaded", topo, { once: true });
+          document.addEventListener(
+            "DOMContentLoaded",
+            function () {
+              window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+            },
+            { once: true },
+          );
         } catch (e) {}
       })();
     </script>
     <title>ROTAV3 Systems — Roteirização de entregas e coletas para transportadoras</title>
     <meta
       name="description"
-      content="Software de roteirização para transportadoras: importe as notas fiscais, veja entregas e coletas no mapa e gere rotas pelo peso e pela capacidade de cada veículo. Sincronização com rastreamento. Planos a partir de R$ 197 por mês, implantação inclusa e sem fidelidade."
+      content="Importe o XML das notas, veja entregas e coletas no mapa, gere a rota pelo peso, pela capacidade e pelo horário de cada cliente e envie ao motorista pelo WhatsApp. Baixas com foto e localização ao vivo. A partir de R$ 197 por mês."
     />
-    <meta name="theme-color" content="#0a0d14" />
+    <meta name="theme-color" content="#0a1220" />
+    <link rel="canonical" href="https://www.rotav3.com.br/" />
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="pt_BR" />
     <meta property="og:site_name" content="ROTAV3 Systems" />
-    <link rel="canonical" href="https://www.rotav3.com.br/" />
     <meta property="og:url" content="https://www.rotav3.com.br/" />
-    <meta
-      property="og:title"
-      content="ROTAV3 Systems — Roteirização de entregas e coletas para transportadoras"
-    />
+    <meta property="og:title" content="ROTAV3 — da nota fiscal à rota no celular do motorista" />
     <meta
       property="og:description"
-      content="Entregas e coletas roteirizadas em minutos, com notas fiscais, mapa, capacidade dos veículos e painel com a sua marca. Demonstração gratuita com os dados da sua operação."
+      content="Roteirização de entregas e coletas para transportadoras: notas no mapa, rota pela capacidade e pelo horário de cada cliente, link do motorista pelo WhatsApp e baixas na hora."
     />
-    <meta
-      property="og:image"
-      content="https://www.rotav3.com.br/img/og-rotav3.jpg"
-    />
+    <meta property="og:image" content="https://www.rotav3.com.br/img/og-rotav3.jpg" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="Página da ROTAV3 Systems com o painel de roteirização" />
+    <meta property="og:image:alt" content="Painel do ROTAV3 com a rota de um veículo no mapa e a tela do motorista no celular" />
     <meta name="twitter:card" content="summary_large_image" />
     <link rel="icon" href="img/favicon.png" type="image/png" />
     <link rel="apple-touch-icon" href="img/apple-touch-icon.png" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Sora:wght@600;700&display=swap"
-    />
+    <link rel="preload" href="fonts/inter-400-700.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="fonts/sora-600-700.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="css/style.css" />
+    <link rel="preload" as="image" href="img/mapa-guarulhos.svg" />
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",
@@ -81,7 +76,7 @@
             "applicationCategory": "BusinessApplication",
             "operatingSystem": "Web",
             "inLanguage": "pt-BR",
-            "description": "Sistema de roteirização de entregas e coletas: importa pedidos a partir de notas fiscais, mostra os pedidos no mapa e planeja rotas respeitando o peso dos pedidos e a capacidade de cada veículo.",
+            "description": "Sistema de roteirização de entregas e coletas: importa pedidos das notas fiscais, mostra os pedidos no mapa, monta a rota respeitando peso, capacidade do veículo e janela de horário, envia a rota ao motorista pelo WhatsApp e recebe as baixas com foto.",
             "offers": {
               "@type": "AggregateOffer",
               "priceCurrency": "BRL",
@@ -96,1472 +91,942 @@
     </script>
   </head>
   <body>
-    <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+    <a class="pular" href="#conteudo">Pular para o conteúdo</a>
 
-    <svg class="icon-sprite" aria-hidden="true" focusable="false">
-      <symbol id="i-calendar" viewBox="0 0 24 24">
+    <svg class="sprite" aria-hidden="true" focusable="false">
+      <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" /></symbol>
+      <symbol id="i-fechar" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" /></symbol>
+      <symbol id="i-mais" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" /></symbol>
+      <symbol id="i-ok" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" /></symbol>
+      <symbol id="i-x" viewBox="0 0 24 24"><path d="M7 7l10 10M17 7 7 17" /></symbol>
+      <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z" /></symbol>
+      <symbol id="i-pausa" viewBox="0 0 24 24"><path d="M8.5 5.5v13M15.5 5.5v13" /></symbol>
+      <symbol id="i-chat" viewBox="0 0 24 24">
+        <path d="M20 12a8 8 0 0 1-11.6 7.1L4 20l1-4.2A8 8 0 1 1 20 12z" />
+      </symbol>
+      <symbol id="i-olho" viewBox="0 0 24 24">
+        <path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z" />
+        <circle cx="12" cy="12" r="2.8" />
+      </symbol>
+      <symbol id="i-agenda" viewBox="0 0 24 24">
         <rect x="3.5" y="5" width="17" height="15.5" rx="2.5" />
         <path d="M3.5 10h17M8 3v4M16 3v4" />
       </symbol>
-      <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6" /></symbol>
-      <symbol id="i-map" viewBox="0 0 24 24">
-        <path d="M3 6.5 9 4l6 2.5L21 4v13.5L15 20l-6-2.5L3 20z" />
-        <path d="M9 4v13.5M15 6.5V20" />
-      </symbol>
-      <symbol id="i-route" viewBox="0 0 24 24">
-        <circle cx="6" cy="18.5" r="2.2" />
-        <circle cx="18" cy="5.5" r="2.2" />
-        <path d="M8.2 18.5H15a3.4 3.4 0 0 0 0-6.8H9a3.4 3.4 0 0 1 0-6.8h6.8" />
-      </symbol>
-      <symbol id="i-pin" viewBox="0 0 24 24">
-        <path d="M12 21.2s-6.6-5.7-6.6-11.1a6.6 6.6 0 0 1 13.2 0c0 5.4-6.6 11.1-6.6 11.1z" />
-        <circle cx="12" cy="10" r="2.4" />
-      </symbol>
-      <symbol id="i-package" viewBox="0 0 24 24">
-        <path d="M12 3 20 7.5v9L12 21l-8-4.5v-9z" />
-        <path d="m4 7.5 8 4.5 8-4.5M12 12v9M8 5.3l8 4.5" />
-      </symbol>
-      <symbol id="i-weight" viewBox="0 0 24 24">
-        <circle cx="12" cy="6" r="2.4" />
-        <path d="M7.2 9.5h9.6l2.6 10.5H4.6z" />
-        <path d="M10 14.5h4" />
-      </symbol>
-      <symbol id="i-truck" viewBox="0 0 24 24">
+      <symbol id="i-caminhao" viewBox="0 0 24 24">
         <path d="M2.5 6.5h11v10h-11zM13.5 9.8h4l3 3.6v3.1h-7z" />
         <circle cx="6.8" cy="17.6" r="1.8" />
         <circle cx="17" cy="17.6" r="1.8" />
       </symbol>
-      <symbol id="i-gauge" viewBox="0 0 24 24">
-        <path d="M4 17a8 8 0 1 1 16 0" />
-        <path d="m12 17 4.2-5.2" />
-        <path d="M4 17h2.2M17.8 17H20M12 9v1.8" />
+      <symbol id="i-pino" viewBox="0 0 24 24">
+        <path d="M12 21.2s-6.6-5.7-6.6-11.1a6.6 6.6 0 0 1 13.2 0c0 5.4-6.6 11.1-6.6 11.1z" />
+        <circle cx="12" cy="10" r="2.4" />
       </symbol>
-      <symbol id="i-monitor" viewBox="0 0 24 24">
-        <rect x="3" y="4" width="18" height="12.5" rx="2" />
-        <path d="M8.5 20h7M12 16.5V20" />
-      </symbol>
-      <symbol id="i-invoice" viewBox="0 0 24 24">
-        <path d="M6 3h8.5L19 7.5V21H6z" />
-        <path d="M14.5 3v4.5H19M9 12h6.5M9 15.5h6.5M9 8.5h2.5" />
-      </symbol>
-      <symbol id="i-sliders" viewBox="0 0 24 24">
-        <path d="M4 7h9.5M18.5 7H20M4 17h3.5M12.5 17H20" />
-        <circle cx="16" cy="7" r="2.4" />
-        <circle cx="10" cy="17" r="2.4" />
-      </symbol>
-      <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.5 4.5 4.5L19 7.5" /></symbol>
-      <symbol id="i-bell" viewBox="0 0 24 24">
-        <path d="M6 16.5V11a6 6 0 1 1 12 0v5.5l1.6 2H4.4z" />
-        <path d="M10 20.5a2 2 0 0 0 4 0" />
-      </symbol>
-      <symbol id="i-layers" viewBox="0 0 24 24">
-        <path d="M12 3.5 21 8.5l-9 5-9-5z" />
-        <path d="m3 13 9 5 9-5" />
-      </symbol>
-      <symbol id="i-devices" viewBox="0 0 24 24">
-        <rect x="2.5" y="4.5" width="13.5" height="10.5" rx="1.6" />
-        <rect x="16.8" y="8" width="4.8" height="11.5" rx="1.2" />
-        <path d="M6 19h7M9.2 15v4" />
-      </symbol>
-      <symbol id="i-warehouse" viewBox="0 0 24 24">
-        <path d="M3 20.5V9l9-5 9 5v11.5" />
-        <path d="M7 20.5v-7.5h10v7.5M7 17h10" />
-      </symbol>
-      <symbol id="i-cart" viewBox="0 0 24 24">
-        <path d="M3 4h2.4l2.3 11h10.6l2.1-7.6H6.6" />
-        <circle cx="9.2" cy="19" r="1.5" />
-        <circle cx="17" cy="19" r="1.5" />
-      </symbol>
-      <symbol id="i-factory" viewBox="0 0 24 24">
-        <path d="M3 20.5V10l5 3v-3l5 3V8l8 3.8v8.7z" />
-        <path d="M7 17h2M12 17h2M17 17h2" />
-      </symbol>
-      <symbol id="i-store" viewBox="0 0 24 24">
-        <path d="M4.5 10.5v10h15v-10" />
-        <path d="M3 10.5 5 4h14l2 6.5z" />
-        <path d="M10 20.5V16h4v4.5" />
-      </symbol>
-      <symbol id="i-cycle" viewBox="0 0 24 24">
-        <path d="M4 12a8 8 0 0 1 13.7-5.6L20 8.6" />
-        <path d="M20 4v4.6h-4.6" />
-        <path d="M20 12a8 8 0 0 1-13.7 5.6L4 15.4" />
-        <path d="M4 20v-4.6h4.6" />
-      </symbol>
-      <symbol id="i-chat" viewBox="0 0 24 24">
-        <path d="M4.2 19.8 5.5 15.6A8 8 0 1 1 8.7 18.6z" />
-        <path d="M9 10.5h6M9 13.5h4" />
-      </symbol>
-      <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16" /></symbol>
-      <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18" /></symbol>
-      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" /></symbol>
-      <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14" /></symbol>
-      <symbol id="i-clock" viewBox="0 0 24 24">
+      <symbol id="i-relogio" viewBox="0 0 24 24">
         <circle cx="12" cy="12" r="8.5" />
         <path d="M12 7.5V12l3 2" />
       </symbol>
-      <symbol id="i-ruler" viewBox="0 0 24 24">
-        <path d="M4 15.5 15.5 4 20 8.5 8.5 20z" />
-        <path d="m8 11.5 2 2M10.8 8.7l1.4 1.4M13.6 5.9l2 2" />
+      <symbol id="i-rota" viewBox="0 0 24 24">
+        <circle cx="6" cy="18.5" r="2.2" />
+        <circle cx="18" cy="5.5" r="2.2" />
+        <path d="M8.2 18.5H15a3.4 3.4 0 0 0 0-6.8H9a3.4 3.4 0 0 1 0-6.8h6.8" />
       </symbol>
-      <symbol id="i-search" viewBox="0 0 24 24">
-        <circle cx="11" cy="11" r="6.5" />
-        <path d="m16 16 4 4" />
+      <symbol id="i-caixa" viewBox="0 0 24 24">
+        <path d="M12 3 20 7.5v9L12 21l-8-4.5v-9z" />
+        <path d="m4 7.5 8 4.5 8-4.5M12 12v9" />
       </symbol>
-      <symbol id="i-locate" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="3" />
-        <circle cx="12" cy="12" r="7.5" />
-        <path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22" />
+      <symbol id="i-grade" viewBox="0 0 24 24">
+        <rect x="4" y="4" width="6.5" height="6.5" rx="1.5" />
+        <rect x="13.5" y="4" width="6.5" height="6.5" rx="1.5" />
+        <rect x="4" y="13.5" width="6.5" height="6.5" rx="1.5" />
+        <rect x="13.5" y="13.5" width="6.5" height="6.5" rx="1.5" />
       </symbol>
-      <symbol id="i-down" viewBox="0 0 24 24"><path d="M12 5v14M6 13l6 6 6-6" /></symbol>
-      <symbol id="i-upload" viewBox="0 0 24 24">
-        <path d="M12 15.5V4M7 9l5-5 5 5" />
-        <path d="M4.5 14.5v5h15v-5" />
+      <symbol id="i-pulso" viewBox="0 0 24 24"><path d="M3 12h4l2.5-6 5 12 2.5-6H21" /></symbol>
+      <symbol id="i-pessoa" viewBox="0 0 24 24">
+        <circle cx="12" cy="8.5" r="3.5" />
+        <path d="M5 20a7 7 0 0 1 14 0" />
       </symbol>
-      <symbol id="i-shield" viewBox="0 0 24 24">
-        <path d="M12 3 4.5 6v5.5c0 4.6 3.2 8 7.5 9.5 4.3-1.5 7.5-4.9 7.5-9.5V6z" />
-        <path d="m8.8 12 2.2 2.2 4.2-4.4" />
+      <symbol id="i-mapa" viewBox="0 0 24 24">
+        <path d="M3 6.5 9 4l6 2.5L21 4v13.5L15 20l-6-2.5L3 20z" />
+        <path d="M9 4v13.5M15 6.5V20" />
       </symbol>
-      <symbol id="i-alert" viewBox="0 0 24 24">
-        <path d="M12 4 21 19.5H3z" />
-        <path d="M12 10v4.5M12 17v.4" />
+      <symbol id="i-robo" viewBox="0 0 24 24">
+        <rect x="4.5" y="7.5" width="15" height="11" rx="3" />
+        <path d="M12 4v3.5M9 12.5v1M15 12.5v1M9.5 16h5" />
       </symbol>
-      <symbol id="i-calc" viewBox="0 0 24 24">
-        <rect x="5" y="3" width="14" height="18" rx="2.5" />
-        <path
-          d="M8.5 7h7M8.5 11.5h1M12 11.5h1M15.5 11.5h0M8.5 15h1M12 15h1M15.5 15v2.5M8.5 18h1M12 18h1"
-        />
+      <symbol id="i-busca" viewBox="0 0 24 24">
+        <circle cx="10.5" cy="10.5" r="6" />
+        <path d="m15 15 5 5" />
       </symbol>
-      <symbol id="i-tag" viewBox="0 0 24 24">
-        <path d="M3.5 12.6V4h8.6l8.4 8.4-8.6 8.6z" />
-        <circle cx="8" cy="8.5" r="1.5" />
+      <symbol id="i-sino" viewBox="0 0 24 24">
+        <path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 2h-15z" />
+        <path d="M10 20.5a2 2 0 0 0 4 0" />
+      </symbol>
+      <symbol id="i-enviar" viewBox="0 0 24 24"><path d="M3 20.5 21 12 3 3.5v6.8l12 1.7-12 1.7z" /></symbol>
+      <symbol id="i-recomecar" viewBox="0 0 24 24">
+        <path d="M4.5 12a7.5 7.5 0 1 0 2.2-5.3" />
+        <path d="M4.5 4.5v4h4" />
+      </symbol>
+      <symbol id="i-camera" viewBox="0 0 24 24">
+        <path d="M4 8.5h3.2L9 6h6l1.8 2.5H20v10.5H4z" />
+        <circle cx="12" cy="13.5" r="3.2" />
+      </symbol>
+      <symbol id="i-celular" viewBox="0 0 24 24">
+        <rect x="6.5" y="2.5" width="11" height="19" rx="2.5" />
+        <path d="M10.5 18.5h3" />
+      </symbol>
+      <symbol id="i-sinal" viewBox="0 0 24 24">
+        <circle cx="12" cy="12" r="2" />
+        <path d="M7.8 7.8a6 6 0 0 0 0 8.4M16.2 7.8a6 6 0 0 1 0 8.4M5 5a10 10 0 0 0 0 14M19 5a10 10 0 0 1 0 14" />
+      </symbol>
+      <symbol id="i-escudo" viewBox="0 0 24 24">
+        <path d="M12 3 19.5 6v5.5c0 4.5-3.2 8.2-7.5 9.5-4.3-1.3-7.5-5-7.5-9.5V6z" />
+        <path d="m9 12 2.2 2.2L15.5 10" />
       </symbol>
     </svg>
 
-    <header class="site-header" id="topo">
-      <div class="container header__inner">
-        <a class="brand" href="#inicio" aria-label="ROTAV3 Systems — início">
-          <img src="img/logo-rotav3.png" alt="ROTAV3 Systems" width="177" height="43" />
+    <header class="cabecalho" id="topo">
+      <div class="cabecalho__in">
+        <a class="cabecalho__marca" href="#inicio" aria-label="ROTAV3 Systems — início">
+          <img src="img/logo-rotav3.png" alt="ROTAV3 Systems" width="148" height="36" />
         </a>
-        <nav class="nav" id="menu-principal" aria-label="Menu principal">
-          <a href="#como-funciona" data-nav="como-funciona">Como funciona</a>
-          <a href="#planejamento" data-nav="planejamento">Planejador</a>
-          <a href="#funcionalidades" data-nav="funcionalidades">Funcionalidades</a>
-          <a href="#preco" data-nav="preco">Preço</a>
-          <a href="#perguntas" data-nav="perguntas">Perguntas</a>
-          <button class="btn btn--gold btn--sm nav__cta-mobile" type="button" data-open-demo="demo">
-            <svg class="ico"><use href="#i-calendar" /></svg>Solicitar demonstração
-          </button>
+        <nav class="menu" id="menu" aria-label="Menu principal">
+          <a href="#como-funciona" data-nav>Como funciona</a>
+          <a href="#criar-rota" data-nav>Criar rota</a>
+          <a href="#mapa" data-nav>Mapa</a>
+          <a href="#ao-vivo" data-nav>Ao vivo</a>
+          <a href="#ia" data-nav>IA</a>
+          <a href="#precos" data-nav>Preços</a>
+          <a href="#perguntas" data-nav>Perguntas</a>
+          <div class="menu__acoes">
+            <a class="btn btn--linha" href="https://wa.me/5511955914618" data-abrir="agendar">Agendar demonstração</a>
+            <a class="btn btn--ouro" href="https://wa.me/5511955914618" data-abrir="acesso">Ver o sistema</a>
+          </div>
         </nav>
-        <button class="btn btn--gold btn--sm header__cta" type="button" data-open-demo="demo">
-          <svg class="ico"><use href="#i-calendar" /></svg>Solicitar demonstração
-        </button>
-        <button
-          class="menu-toggle"
-          type="button"
-          aria-expanded="false"
-          aria-controls="menu-principal"
-          aria-label="Abrir menu"
-        >
-          <svg class="ico ico--lg" data-icon-open><use href="#i-menu" /></svg>
-          <svg class="ico ico--lg" data-icon-close hidden><use href="#i-close" /></svg>
+        <div class="cabecalho__acoes">
+          <a class="btn btn--linha btn--p cabecalho__agendar" href="https://wa.me/5511955914618" data-abrir="agendar">Agendar demonstração</a>
+          <a class="btn btn--ouro btn--p" href="https://wa.me/5511955914618" data-abrir="acesso">
+            <svg class="ico"><use href="#i-olho" /></svg>Ver o sistema
+          </a>
+        </div>
+        <button class="menu-botao" type="button" aria-expanded="false" aria-controls="menu" aria-label="Abrir menu">
+          <svg class="ico ico--g" data-abre><use href="#i-menu" /></svg>
+          <svg class="ico ico--g" data-fecha hidden><use href="#i-fechar" /></svg>
         </button>
       </div>
     </header>
 
     <main id="conteudo">
-      <!-- 1. HERO -->
-      <section class="hero" id="inicio" aria-labelledby="hero-title">
-        <div class="hero__sky" aria-hidden="true"></div>
-        <div class="aurora" aria-hidden="true">
-          <span class="aurora__orb aurora__orb--gold"></span
-          ><span class="aurora__orb aurora__orb--blue"></span
-          ><span class="aurora__orb aurora__orb--amber"></span>
+      <!-- ================= TOPO ================= -->
+      <section class="hero" id="inicio" aria-labelledby="hero-titulo">
+        <div class="hero__chao" aria-hidden="true">
+          <picture>
+            <source media="(max-width: 700px)" srcset="img/mapa-3d-mob-1x.webp" />
+            <img src="img/mapa-3d-desk-1x.webp" alt="" width="1114" height="663" />
+          </picture>
         </div>
-        <div class="hero__road" aria-hidden="true">
-          <div class="road__plane">
-            <span class="road__lane road__lane--l"></span
-            ><span class="road__lane road__lane--r"></span><span class="road__dash"></span>
+        <div class="cont hero__cab">
+          <h1 id="hero-titulo">Da nota fiscal à rota no celular do&nbsp;motorista.</h1>
+          <div class="hero__lado">
+            <p class="hero__texto">
+              O ROTAV3 lê o XML das suas notas, mostra entregas e coletas no mapa, monta a sequência
+              de paradas pelo peso, pela capacidade e pelo horário de cada cliente e envia a rota ao
+              motorista pelo WhatsApp. Cada baixa aparece no painel na hora.
+            </p>
+            <div class="hero__acoes">
+              <a class="btn btn--ouro btn--g" href="https://wa.me/5511955914618" data-abrir="acesso">
+                <svg class="ico"><use href="#i-olho" /></svg>Ver o sistema por dentro
+              </a>
+              <a class="btn btn--linha btn--g" href="https://wa.me/5511955914618" data-abrir="agendar">
+                Agendar demonstração
+              </a>
+            </div>
+            <p class="hero__nota">
+              Acesso de demonstração com dados fictícios, liberado pelo WhatsApp. Sem cartão.
+            </p>
           </div>
-          <span class="road__streak road__streak--1"></span
-          ><span class="road__streak road__streak--2"></span
-          ><span class="road__streak road__streak--3"></span>
         </div>
-        <div class="container hero__grid">
-          <div class="hero__copy">
-            <p class="eyebrow">Software de roteirização para transportadoras</p>
-            <h1 id="hero-title">
-              Entregas e coletas roteirizadas <span class="gold">em minutos</span>.
-            </h1>
-            <p class="hero__lead">
-              O ROTAV3 importa as notas fiscais, mostra cada pedido no mapa e distribui as paradas
-              entre os veículos respeitando peso e capacidade, em um painel com a identidade visual
-              da sua empresa.
-            </p>
-            <div class="hero__actions">
-              <button class="btn btn--gold btn--lg" type="button" data-open-demo="demo">
-                Solicitar demonstração
-              </button>
-            </div>
-            <p class="hero__micro">
-              Demonstração gratuita com os dados da sua operação · Sem fidelidade
-            </p>
-            <ul class="hero__features" aria-label="Recursos">
-              <li>
-                <svg class="ico"><use href="#i-invoice" /></svg>Importa NF-e, PDF, Excel e CSV
-              </li>
-              <li>
-                <svg class="ico"><use href="#i-locate" /></svg>Sincroniza com o rastreador da frota
-              </li>
-              <li>
-                <svg class="ico"><use href="#i-devices" /></svg>Funciona no navegador
-              </li>
-            </ul>
-          </div>
-          <figure class="hero__visual">
-            <div class="hero__glow" aria-hidden="true"></div>
-            <div class="hero__frame" data-tilt>
-              <picture>
-                <!-- no celular: a interface do sistema em versão de celular -->
-                <source
-                  media="(max-width: 640px)"
-                  srcset="img/dashboard-celular.webp 840w, img/dashboard-celular-3x.webp 1260w"
-                  sizes="calc(100vw - 32px)"
-                  width="840"
-                  height="1814"
-                />
-                <img
-                  class="hero__shot"
-                  src="img/dashboard-rotav3.webp"
-                  srcset="img/dashboard-rotav3.webp 1600w, img/dashboard-rotav3-2x.webp 3200w"
-                  sizes="(max-width: 980px) 100vw, 56vw"
-                  alt="Dashboard do ROTAV3: 48 pedidos, 3 rotas, tempo estimado de 6h15, pedidos por região (Barueri, Osasco, Carapicuíba, Santana de Parnaíba, Cotia e outras), mapa de distribuição com um ponto para cada pedido, pedidos agendados, IA Assistente e alertas. Números de exemplo."
-                  width="1600"
-                  height="1464"
-                  fetchpriority="high"
-                  decoding="async"
-                  data-zoom="img/dashboard-rotav3-2x.webp"
-                />
-              </picture>
-            </div>
-            <div class="toasts" aria-hidden="true">
-              <div class="toast toast--1">
-                <span class="toast__ico toast__ico--gold"
-                  ><svg class="ico"><use href="#i-route" /></svg
-                ></span>
-                <span
-                  ><strong>3 rotas geradas às 06:50</strong><small>tempo total de 6h15</small></span
-                >
+
+        <div class="cont cont--largo hero__filme">
+          <figure class="filme" id="filme" data-cena="2">
+            <div class="filme__quadro" aria-hidden="true">
+              <div class="filme__barra"><i></i><i></i><i></i><span>ROTAV3 · roteirização de entregas e coletas</span></div>
+              <div class="app">
+                <aside class="app__lado">
+                  <img class="app__logo" src="img/logo-rotav3-escuro.webp" alt="" width="124" height="30" />
+                  <div class="app__nav">
+                    <span data-pg="dash"><svg><use href="#i-grade" /></svg>Dashboard</span>
+                    <span data-pg="pedidos"><svg><use href="#i-caixa" /></svg>Pedidos</span>
+                    <span data-pg="rot"><svg><use href="#i-rota" /></svg>Roteirização</span>
+                    <span data-pg="rotas"><svg><use href="#i-pulso" /></svg>Rotas</span>
+                    <span data-pg="mot"><svg><use href="#i-pessoa" /></svg>Motoristas</span>
+                    <span data-pg="mapa"><svg><use href="#i-mapa" /></svg>Mapa</span>
+                    <span data-pg="ia"><svg><use href="#i-robo" /></svg>IA Assistente</span>
+                  </div>
+                </aside>
+                <div class="app__main">
+                  <div class="app__topo">
+                    <span class="app__busca"><svg><use href="#i-busca" /></svg>Pesquisar pedidos, rotas, regiões…</span>
+                    <span class="app__sino"><svg><use href="#i-sino" /></svg></span>
+                    <span class="app__user"><i></i>equipe@suaempresa.com.br</span>
+                  </div>
+                  <div class="app__pagina">
+                    <div class="app__cab">
+                      <b class="app__titulo" data-titulo>Roteirização</b>
+                      <span class="app__sub" data-sub>Escolha o veículo e a capacidade e gere a melhor sequência de entregas e coletas</span>
+                    </div>
+                    <div class="palco">
+                      <!-- cena 0: pedidos -->
+                      <div class="pn pn--pedidos">
+                        <div class="imp">
+                          <div class="imp__zona">
+                            <span class="imp__ic"><svg><use href="#i-caixa" /></svg></span>
+                            <b>Importar notas</b>
+                            <small>XML da NF-e, Excel, CSV ou PDF. Pode escolher vários arquivos de uma vez.</small>
+                            <div class="imp__arqs">
+                              <span>NF-e 31024.xml</span><span>NF-e 31031.xml</span><span>NF-e 31047.xml</span><span>coletas-dia.xlsx</span>
+                            </div>
+                          </div>
+                          <div class="imp__msg" data-imp-msg>✅ 21 notas importadas: 17 entregas e 4 coletas.</div>
+                        </div>
+                        <div class="tab">
+                          <div class="tab__cab"><span>NF</span><span>Destinatário</span><span>Cidade</span><span>Peso</span><span>Tipo</span></div>
+                          <div class="tab__corpo" data-tab-pedidos></div>
+                        </div>
+                      </div>
+                      <!-- cena 2: formulário e resultado da roteirização -->
+                      <div class="pn pn--rot">
+                        <div class="frm">
+                          <div class="frm__veic"><span class="frm__emoji">🚚</span><div><b>VUC</b><small>até 3t · Veículo Urbano de Carga</small></div></div>
+                          <span class="frm__lbl">O que entra nesta viagem</span>
+                          <div class="frm__seg"><span>Entregas</span><span>Coletas</span><span class="on">Entregas e coletas</span></div>
+                          <div class="frm__dup">
+                            <div><span class="frm__lbl">Saída do CD</span><span class="frm__inp">07:30</span></div>
+                            <div><span class="frm__lbl">Capacidade (kg)</span><span class="frm__inp">3.000</span></div>
+                          </div>
+                          <span class="frm__lbl">Máximo de paradas nesta viagem</span>
+                          <span class="frm__inp">6</span>
+                          <span class="frm__botao">✔ Gerar Rota Agora</span>
+                          <span class="frm__carga"><i></i>Calculando rotas…</span>
+                        </div>
+                        <div class="res">
+                          <div class="res__cab"><b>VUC · 6 paradas</b><small>5 entregas, 1 coleta</small></div>
+                          <div class="res__kpis">
+                            <span><b>769 kg</b>sai do CD</span><span><b>38,4 km</b>distância</span><span><b>11:35</b>volta ao CD</span>
+                          </div>
+                          <ol class="res__lista" data-res-lista></ol>
+                          <p class="res__nota">Esta viagem levou 6 de 21 pedidos. Os outros continuam pendentes.</p>
+                        </div>
+                      </div>
+                      <!-- cenas 3 e 4: rota confirmada e acompanhamento -->
+                      <div class="pn pn--rotas">
+                        <div class="rc">
+                          <div class="rc__cab">
+                            <div><b>Carlos (exemplo) — VUC · 6 paradas</b><small>5 entregas, 1 coleta · saída 07:30</small></div>
+                            <span class="rc__status">🚚 Em rota</span>
+                          </div>
+                          <div class="rc__mot">
+                            <div><b>Motorista</b><small>Link da rota pelo WhatsApp, válido por 7 dias</small></div>
+                            <span class="rc__wa">Enviar pelo WhatsApp</span>
+                          </div>
+                          <div class="rc__prog">
+                            <span data-prog-txt>0 de 6 paradas com baixa</span>
+                            <div class="rc__barra"><i data-prog></i></div>
+                          </div>
+                          <div class="rc__vivo"><i></i>Localização ao vivo: <b>agora</b></div>
+                          <ol class="rc__chips" data-chips></ol>
+                        </div>
+                      </div>
+                      <!-- mapa (cenas 1 a 4) -->
+                      <div class="mf">
+                        <div class="mf__filtro"><span class="on">Todos <b data-n-todos>21</b></span><span>Entregas <b data-n-ent>17</b></span><span>Coletas <b data-n-col>4</b></span></div>
+                        <svg class="mf__svg" viewBox="0 0 1520 1002" preserveAspectRatio="xMidYMid slice">
+                          <image href="img/mapa-guarulhos.svg" width="1520" height="1002" />
+                          <g data-mf-pinos></g>
+                          <path class="mf__rota" data-mf-rota d="" pathLength="1" />
+                          <g data-mf-nums></g>
+                          <g class="mf__cd" data-mf-cd></g>
+                          <g class="mf__caminhao" data-mf-caminhao>
+                            <circle r="30" class="mf__halo" />
+                            <circle r="21" class="mf__vei" />
+                            <text y="8" text-anchor="middle">🚚</text>
+                          </g>
+                        </svg>
+                        <div class="mf__legenda"><span><i class="e"></i>Entrega</span><span><i class="c"></i>Coleta</span><span><i class="cd"></i>CD Guarulhos</span></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div class="toast toast--2">
-                <span class="toast__ico toast__ico--amber"
-                  ><svg class="ico"><use href="#i-invoice" /></svg
-                ></span>
-                <span
-                  ><strong>48 pedidos importados</strong
-                  ><small>a partir das notas fiscais</small></span
-                >
-              </div>
-              <div class="toast toast--3">
-                <span class="toast__ico toast__ico--blue"
-                  ><svg class="ico"><use href="#i-gauge" /></svg
-                ></span>
-                <span
-                  ><strong>6 pedidos em regiões isoladas</strong
-                  ><small>sugestão: agendar separadamente</small></span
-                >
+            </div>
+            <div class="cel filme__cel" aria-hidden="true">
+              <div class="cel__tela">
+                <div class="cel__msg">
+                  <div class="cel__chatcab"><span class="cel__av">R</span><div><b>Escritório</b><small>online</small></div></div>
+                  <div class="cel__balao">
+                    Carlos, sua rota de hoje: 6 paradas, saída 07:30 do CD Guarulhos.
+                    <span class="cel__link"><b>ROTAV3 · Rota de hoje</b><small>Toque para abrir</small></span>
+                    <small class="cel__hora">07:12 ✓✓</small>
+                  </div>
+                </div>
+                <div class="cel__rota">
+                  <div class="cel__topo"><img src="img/marca-rotav3.png" alt="" width="20" height="17" /><b>Rota de hoje</b></div>
+                  <div class="cel__res"><b>VUC — Carlos (exemplo)</b><small>saída 07:30 · CD Guarulhos</small><div class="cel__barra"><i data-cel-prog></i></div><small data-cel-prog-txt>2 de 6</small></div>
+                  <ol class="cel__lista" data-cel-lista></ol>
+                </div>
               </div>
             </div>
-            <figcaption class="hero__caption">
-              Dashboard do ROTAV3.
-              <span class="hero__caption-tip">Toque na imagem para ampliar.</span>
+            <figcaption class="sr">
+              Demonstração animada com dados fictícios: importação das notas, pedidos no mapa,
+              geração da rota de um VUC com 6 paradas, envio do link ao motorista pelo WhatsApp e
+              acompanhamento das baixas no painel.
             </figcaption>
           </figure>
-        </div>
-      </section>
-
-      <div class="ticker" aria-label="O que o ROTAV3 faz">
-        <ul class="ticker__track">
-          <li>
-            <svg class="ico"><use href="#i-check" /></svg>Notas em XML (NF-e)
-          </li>
-          <li>
-            <svg class="ico"><use href="#i-check" /></svg>PDF (DANFE)
-          </li>
-          <li>
-            <svg class="ico"><use href="#i-check" /></svg>Excel e CSV
-          </li>
-          <li>
-            <svg class="ico"><use href="#i-check" /></svg>Entregas e coletas no mesmo mapa
-          </li>
-          <li>
-            <svg class="ico"><use href="#i-check" /></svg>Peso × capacidade do veículo
-          </li>
-          <li>
-            <svg class="ico"><use href="#i-check" /></svg>Ordem das paradas
-          </li>
-          <li>
-            <svg class="ico"><use href="#i-check" /></svg>Painel com a sua marca
-          </li>
-          <li>
-            <svg class="ico"><use href="#i-check" /></svg>Acesso pelo navegador
-          </li>
-        </ul>
-        <ul class="ticker__track" aria-hidden="true">
-          <li>
-            <svg class="ico"><use href="#i-check" /></svg>Notas em XML (NF-e)
-          </li>
-          <li>
-            <svg class="ico"><use href="#i-check" /></svg>PDF (DANFE)
-          </li>
-          <li>
-            <svg class="ico"><use href="#i-check" /></svg>Excel e CSV
-          </li>
-          <li>
-            <svg class="ico"><use href="#i-check" /></svg>Entregas e coletas no mesmo mapa
-          </li>
-          <li>
-            <svg class="ico"><use href="#i-check" /></svg>Peso × capacidade do veículo
-          </li>
-          <li>
-            <svg class="ico"><use href="#i-check" /></svg>Ordem das paradas
-          </li>
-          <li>
-            <svg class="ico"><use href="#i-check" /></svg>Painel com a sua marca
-          </li>
-          <li>
-            <svg class="ico"><use href="#i-check" /></svg>Acesso pelo navegador
-          </li>
-        </ul>
-      </div>
-
-      <!-- 2. COMO FUNCIONA -->
-      <section class="section section--light how" id="como-funciona" aria-labelledby="how-title">
-        <div class="container">
-          <div class="section-head reveal">
-            <p class="eyebrow">Como funciona</p>
-            <h2 id="how-title">Da nota fiscal à rota pronta, em três passos.</h2>
-          </div>
-          <ol class="steps">
-            <li class="step reveal">
-              <span class="step__num" aria-hidden="true">1</span>
-              <svg class="ico step__ico"><use href="#i-upload" /></svg>
-              <h3>Importe os pedidos</h3>
-              <p>
-                Envie as notas fiscais em XML, PDF, Excel ou CSV. Cada pedido entra com cidade, peso
-                e volumes.
-              </p>
-            </li>
-            <li class="step reveal">
-              <span class="step__num" aria-hidden="true">2</span>
-              <svg class="ico step__ico"><use href="#i-map" /></svg>
-              <h3>Veja tudo no mapa</h3>
-              <p>
-                Os pedidos aparecem no mapa, separados em entregas e coletas, com o peso de cada um.
-              </p>
-            </li>
-            <li class="step reveal">
-              <span class="step__num" aria-hidden="true">3</span>
-              <svg class="ico step__ico"><use href="#i-route" /></svg>
-              <h3>Gere as rotas</h3>
-              <p>
-                O sistema distribui os pedidos entre os veículos e define a ordem das paradas,
-                respeitando peso, capacidade e limite de pedidos por veículo.
-              </p>
-            </li>
-          </ol>
-          <p class="how__more reveal">
-            <a class="link-arrow" href="#planejamento"
-              >Veja como fica na prática <svg class="ico"><use href="#i-down" /></svg
-            ></a>
-          </p>
-        </div>
-      </section>
-
-      <!-- 3. PLANEJADOR INTERATIVO -->
-      <section class="section section--soft plan" id="planejamento" aria-labelledby="plan-title">
-        <div class="container plan__grid">
-          <div class="plan__copy reveal">
-            <p class="eyebrow">Experimente agora</p>
-            <h2 id="plan-title">Teste o planejador agora mesmo.</h2>
-            <p class="lead">
-              Troque entre entregas e coletas, toque nas paradas na ordem da rota e veja o resumo e
-              quanto da capacidade do veículo foi usada. O veículo em movimento simula a
-              sincronização com rastreamento. Os pedidos são fictícios.
-            </p>
-            <button class="btn btn--outline" type="button" data-open-demo>
-              Ver com os meus pedidos <svg class="ico"><use href="#i-arrow" /></svg>
+          <div class="capitulos" role="group" aria-label="Partes da demonstração">
+            <button type="button" data-ir="0"><b>1</b><span class="cap-l">Importar as notas</span><span class="cap-c">Notas</span><i></i></button>
+            <button type="button" data-ir="1"><b>2</b><span class="cap-l">Ver no mapa</span><span class="cap-c">Mapa</span><i></i></button>
+            <button type="button" data-ir="2" aria-pressed="true"><b>3</b><span class="cap-l">Gerar a rota</span><span class="cap-c">Rota</span><i></i></button>
+            <button type="button" data-ir="3"><b>4</b><span class="cap-l">Enviar ao motorista</span><span class="cap-c">Motorista</span><i></i></button>
+            <button type="button" data-ir="4"><b>5</b><span class="cap-l">Acompanhar ao vivo</span><span class="cap-c">Ao vivo</span><i></i></button>
+            <button type="button" class="capitulos__pausa" data-pausa aria-label="Pausar a demonstração">
+              <svg class="ico" data-ic-pausa><use href="#i-pausa" /></svg><svg class="ico" data-ic-play hidden><use href="#i-play" /></svg>
             </button>
           </div>
-
-          <div class="app reveal" aria-label="Demonstração interativa do painel de planejamento">
-            <div class="app__bar" aria-hidden="true">
-              <span class="app__dots"><i></i><i></i><i></i></span>
-              <span class="app__url">rotav3 · Planejamento de rotas</span>
-              <span class="app__tag">Dados demonstrativos</span>
-            </div>
-            <div class="app__body">
-              <div class="app__list">
-                <div class="tabs" role="tablist" aria-label="Tipo de pedido">
-                  <button
-                    class="tab"
-                    role="tab"
-                    type="button"
-                    id="tab-entregas"
-                    aria-selected="true"
-                    aria-controls="lista-pedidos"
-                    data-kind="entrega"
-                  >
-                    Entregas
-                  </button>
-                  <button
-                    class="tab"
-                    role="tab"
-                    type="button"
-                    id="tab-coletas"
-                    aria-selected="false"
-                    aria-controls="lista-pedidos"
-                    data-kind="coleta"
-                    tabindex="-1"
-                  >
-                    Coletas
-                  </button>
-                </div>
-                <ul
-                  class="orders"
-                  id="lista-pedidos"
-                  role="tabpanel"
-                  aria-labelledby="tab-entregas"
-                ></ul>
-              </div>
-              <div class="app__map">
-                <div
-                  class="map"
-                  id="plan-map"
-                  role="region"
-                  aria-label="Mapa de ruas com as paradas da rota na ordem de atendimento (dados demonstrativos)"
-                >
-                  <p class="map__loading">Carregando mapa…</p>
-                </div>
-                <div class="map__zoom">
-                  <button type="button" data-zoom="in" aria-label="Aproximar">
-                    <svg class="ico"><use href="#i-plus" /></svg>
-                  </button>
-                  <button type="button" data-zoom="out" aria-label="Afastar">
-                    <svg class="ico"><use href="#i-minus" /></svg>
-                  </button>
-                  <button type="button" data-zoom="reset" aria-label="Mostrar a rota inteira">
-                    <svg class="ico"><use href="#i-locate" /></svg>
-                  </button>
-                </div>
-                <span class="map__credit"
-                  ><i class="map__dots" aria-hidden="true"></i>Ordem das paradas</span
-                >
-                <button
-                  class="track-toggle"
-                  type="button"
-                  aria-pressed="false"
-                  data-track-toggle
-                  hidden
-                >
-                  <span class="track-toggle__switch" aria-hidden="true"></span>Rastreamento
-                  <small>opcional</small>
-                </button>
-                <div class="track" data-track hidden>
-                  <span class="track__ico"
-                    ><svg class="ico"><use href="#i-truck" /></svg
-                  ></span>
-                  <span class="track__text"
-                    ><strong>Fiorino · em rota</strong
-                    ><small data-track-next>Saindo do centro de distribuição</small></span
-                  >
-                  <em class="track__tag">Simulação do rastreamento</em>
-                </div>
-              </div>
-              <div class="app__side">
-                <div class="panel">
-                  <h3 class="panel__title">Resumo da rota</h3>
-                  <dl class="stats">
-                    <div>
-                      <dt>
-                        <svg class="ico"><use href="#i-ruler" /></svg>Distância
-                      </dt>
-                      <dd id="st-dist">—</dd>
-                    </div>
-                    <div>
-                      <dt>
-                        <svg class="ico"><use href="#i-clock" /></svg>Tempo estimado
-                      </dt>
-                      <dd id="st-time">—</dd>
-                    </div>
-                    <div>
-                      <dt>
-                        <svg class="ico"><use href="#i-weight" /></svg>Peso total
-                      </dt>
-                      <dd id="st-weight">—</dd>
-                    </div>
-                    <div>
-                      <dt>
-                        <svg class="ico"><use href="#i-pin" /></svg
-                        ><span id="st-stops-label">Entregas</span>
-                      </dt>
-                      <dd id="st-stops">—</dd>
-                    </div>
-                  </dl>
-                </div>
-                <div class="panel">
-                  <h3 class="panel__title">Veículo</h3>
-                  <div class="vehicle">
-                    <span class="vehicle__ico"
-                      ><svg class="ico"><use href="#i-truck" /></svg
-                    ></span>
-                    <span><strong>Fiorino</strong><small>Capacidade 650 kg</small></span>
-                  </div>
-                  <div class="cap">
-                    <div class="cap__row">
-                      <span>Capacidade usada</span><strong id="cap-pct">—</strong>
-                    </div>
-                    <div class="cap__bar"><span id="cap-bar"></span></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <p class="hero__aviso">Telas do sistema com dados fictícios.</p>
         </div>
-      </section>
 
-      <!-- 4. DORES → SOLUÇÃO (escuro, mapa 3D e calculadora) -->
-      <section class="section section--dark benefits" id="beneficios" aria-labelledby="ben-title">
-        <div class="container benefits__grid">
-          <figure class="city3d">
-            <picture>
-              <source
-                media="(max-width: 640px)"
-                srcset="
-                  img/cidade-maquete-celular.webp     720w,
-                  img/cidade-maquete-celular-2x.webp 1080w
-                "
-                sizes="100vw"
-                width="1080"
-                height="1166"
-              />
-              <img
-                class="city3d__img"
-                src="img/cidade-maquete.webp"
-                srcset="img/cidade-maquete.webp 1200w, img/cidade-maquete-2x.webp 2400w"
-                sizes="(max-width: 1240px) 100vw, 1200px"
-                alt="Ilustração 3D de um bairro em maquete: a rota do veículo sai do depósito e passa por duas entregas, uma coleta e um pedido urgente"
-                width="2400"
-                height="1021"
-                loading="lazy"
-                decoding="async"
-              />
-            </picture>
-            <div class="city3d__card city3d__card--depot" aria-hidden="true">
-              <svg class="ico"><use href="#i-warehouse" /></svg>
-              <span><b>Depósito</b><small>Guarulhos · SP</small></span>
-            </div>
-            <ul class="city3d__legend" aria-hidden="true">
-              <li><i style="--c: #2ee66b"></i>Entrega</li>
-              <li><i style="--c: #3b8bff"></i>Coleta</li>
-              <li><i style="--c: #ff3b4e"></i>Atraso / Urgente</li>
-              <li><i class="line" style="--c: #ffb21e"></i>Rota do veículo</li>
-            </ul>
-            <span class="city3d__tag" aria-hidden="true">Ilustração</span>
-          </figure>
-          <div class="benefits__copy reveal">
-            <p class="badge">
-              <svg class="ico"><use href="#i-alert" /></svg>Antes do ROTAV3
-            </p>
-            <h2 id="ben-title">Chega de montar rotas de cabeça ou em planilha.</h2>
-            <ul class="pains">
-              <li>
-                <svg class="ico"><use href="#i-close" /></svg>Rotas montadas todo dia de cabeça ou
-                em planilha, sempre dependendo da mesma pessoa.
-              </li>
-              <li>
-                <svg class="ico"><use href="#i-close" /></svg>Veículo saindo com espaço sobrando —
-                ou pedido que não cabe e fica para o dia seguinte.
-              </li>
-              <li>
-                <svg class="ico"><use href="#i-close" /></svg>Entregas e coletas controladas em
-                listas separadas.
-              </li>
-            </ul>
-            <div class="solution">
-              <p class="solution__title">
-                <svg class="ico"><use href="#i-check" /></svg>Com o ROTAV3
-              </p>
-              <p>
-                Você vê todos os pedidos no mapa, o sistema monta as rotas respeitando o peso e a
-                capacidade de cada veículo, e entregas e coletas ficam no mesmo painel.
-              </p>
-            </div>
-          </div>
-          <aside class="calc reveal" aria-labelledby="calc-title">
-            <svg class="ico ico--spot"><use href="#i-calc" /></svg>
-            <h3 id="calc-title">Quanto custa montar rotas à mão?</h3>
-            <div class="calc__fields">
-              <label class="calc__field"
-                ><span>Horas por dia montando rotas</span
-                ><input
-                  id="calc-h"
-                  type="text"
-                  inputmode="decimal"
-                  autocomplete="off"
-                  maxlength="6"
-                  value="2"
-              /></label>
-              <label class="calc__field"
-                ><span>Dias de operação por mês</span
-                ><input
-                  id="calc-d"
-                  type="text"
-                  inputmode="numeric"
-                  autocomplete="off"
-                  maxlength="6"
-                  value="22"
-              /></label>
-              <label class="calc__field"
-                ><span>Custo da hora de quem planeja (R$)</span
-                ><input
-                  id="calc-r"
-                  type="text"
-                  inputmode="decimal"
-                  autocomplete="off"
-                  maxlength="6"
-                  value="30"
-              /></label>
-            </div>
-            <output class="calc__out" for="calc-h calc-d calc-r" aria-live="polite">
-              <span><strong id="calc-hours">44 h</strong> por mês</span>
-              <span><strong id="calc-cost">R$ 1.320</strong> por mês</span>
-            </output>
-            <p class="calc__note">
-              A conta usa só os números que você informou. Não é uma promessa de economia.
-            </p>
-            <button class="link-arrow link-arrow--gold" type="button" data-open-demo>
-              Ver o planejamento no ROTAV3 <svg class="ico"><use href="#i-arrow" /></svg>
-            </button>
-          </aside>
-        </div>
-      </section>
-
-      <!-- 5. PEDIDOS NO MAPA (mapas de ruas, dados demonstrativos) -->
-      <section class="section section--light omap" id="mapa" aria-labelledby="omap-title">
-        <div class="container">
-          <div class="omap__head reveal">
-            <p class="eyebrow">Pedidos no mapa</p>
-            <h2 id="omap-title">Veja onde está cada pedido e separe coletas de entregas.</h2>
-            <p class="lead">
-              Cada pedido vira um ponto no mapa de ruas. Em um mapa você enxerga a operação inteira;
-              no outro, o que é para entregar e o que é para coletar.
-            </p>
-          </div>
-
-          <div class="omap__grid">
-            <article class="mapcard reveal" aria-labelledby="mapcard-all-title">
-              <header class="mapcard__head">
-                <div>
-                  <h3 id="mapcard-all-title">Todos os pedidos</h3>
-                  <p><strong data-count="todas">14</strong> pedidos na Grande São Paulo</p>
-                </div>
-                <span class="demo-tag">Dados demonstrativos</span>
-              </header>
-              <div
-                class="mapcard__map"
-                id="map-pedidos"
-                role="region"
-                aria-label="Mapa de ruas com a localização de todos os pedidos (dados demonstrativos)"
-              >
-                <p class="mapcard__loading">Carregando mapa…</p>
-              </div>
-              <footer class="mapcard__legend">
-                <span><i class="mk mk--pedido" aria-hidden="true"></i>Pedido</span>
-                <span
-                  ><i class="mk mk--cd mk--sm" aria-hidden="true"></i>Centro de distribuição</span
-                >
-                <span class="mapcard__hint">Toque em um ponto para ver o pedido</span>
-              </footer>
-            </article>
-
-            <article class="mapcard reveal" aria-labelledby="mapcard-kinds-title">
-              <header class="mapcard__head">
-                <div>
-                  <h3 id="mapcard-kinds-title">Coletas e entregas</h3>
-                  <p>
-                    <strong data-count="entrega">8</strong> entregas ·
-                    <strong data-count="coleta">6</strong> coletas
-                  </p>
-                </div>
-                <span class="demo-tag">Dados demonstrativos</span>
-              </header>
-              <div class="chips" role="group" aria-label="Mostrar no mapa">
-                <button type="button" class="chip" data-filter="todas" aria-pressed="true">
-                  Todas <b data-count="todas">14</b>
-                </button>
-                <button
-                  type="button"
-                  class="chip chip--entrega"
-                  data-filter="entrega"
-                  aria-pressed="false"
-                >
-                  <i class="chip__dot" aria-hidden="true"></i>Entregas <b data-count="entrega">8</b>
-                </button>
-                <button
-                  type="button"
-                  class="chip chip--coleta"
-                  data-filter="coleta"
-                  aria-pressed="false"
-                >
-                  <i class="chip__dot" aria-hidden="true"></i>Coletas <b data-count="coleta">6</b>
-                </button>
-              </div>
-              <div
-                class="mapcard__map"
-                id="map-tipos"
-                role="region"
-                aria-label="Mapa de ruas com coletas e entregas separadas (dados demonstrativos)"
-              >
-                <p class="mapcard__loading">Carregando mapa…</p>
-              </div>
-              <footer class="mapcard__legend">
-                <span
-                  ><i class="mk mk--entrega mk--sm" aria-hidden="true"
-                    ><svg viewBox="0 0 24 24"><path d="M12 5v13M6 12l6 6 6-6" /></svg></i
-                  >Entrega: levar a mercadoria</span
-                >
-                <span
-                  ><i class="mk mk--coleta mk--sm" aria-hidden="true"
-                    ><svg viewBox="0 0 24 24"><path d="M12 19V6M6 12l6-6 6 6" /></svg></i
-                  >Coleta: buscar a mercadoria</span
-                >
-              </footer>
-            </article>
-          </div>
-          <p class="omap__note">
-            Pedidos fictícios, posicionados no centro de cada bairro, só para mostrar a tela.
-          </p>
-        </div>
-      </section>
-
-      <!-- 6. FUNCIONALIDADES (bento com telas reais do sistema) -->
-      <section
-        class="section section--soft features"
-        id="funcionalidades"
-        aria-labelledby="feat-title"
-      >
-        <div class="container">
-          <div class="section-head reveal">
-            <p class="eyebrow">Funcionalidades</p>
-            <h2 id="feat-title">Tudo o que o planejamento precisa, em um só painel.</h2>
-            <p class="lead">
-              Do pedido à rota pronta. As telas abaixo mostram como o sistema organiza o
-              planejamento, com pedidos demonstrativos.
-            </p>
-          </div>
-          <div class="bento">
-            <article class="tile tile--map reveal">
-              <div class="tile__text">
-                <svg class="ico tile__ico"><use href="#i-route" /></svg>
-                <h3>Roteirização de entregas e coletas</h3>
-                <p>
-                  Sequência de paradas que respeita o peso, a capacidade e o limite de pedidos de
-                  cada veículo.
-                </p>
-              </div>
-              <img
-                class="tile__shot"
-                src="img/mapa-rotas.svg"
-                alt="Mapa demonstrativo com a rota de entregas (azul) e a rota de coletas (laranja) saindo do centro de distribuição em Guarulhos"
-                width="1200"
-                height="793"
-                data-zoom
-                loading="lazy"
-                decoding="async"
-              />
-            </article>
-            <article class="tile reveal">
-              <div class="tile__text">
-                <svg class="ico tile__ico"><use href="#i-gauge" /></svg>
-                <h3>Capacidade dos veículos</h3>
-                <p>Cadastre veículos e motoristas e veja quanto da capacidade cada rota usa.</p>
-              </div>
-              <div
-                class="tile__shot ui"
-                role="img"
-                aria-label="Dois veículos demonstrativos: Fiorino 1 na rota de entregas com 455 de 650 kg (70%) e Fiorino 2 na rota de coletas com 312 de 650 kg (48%)."
-              >
-                <div class="ui-card__head">
-                  <svg class="ico"><use href="#i-truck" /></svg><strong>Veículos</strong
-                  ><span class="ui-chip">capacidade</span>
-                </div>
-                <ul class="ui-vehs">
-                  <li class="ui-veh">
-                    <span class="ui-veh__ico" style="--c: #2f6fe4"
-                      ><svg class="ico"><use href="#i-truck" /></svg></span
-                    ><span class="ui-veh__txt"
-                      ><strong>Fiorino 1</strong><small>Rota de entregas · 8 paradas</small></span
-                    ><span class="ui-veh__cap"
-                      ><span class="ui-bar"><i style="width: 70%; --c: #2f6fe4"></i></span
-                      ><small>455 kg de 650 kg · <b>70%</b></small></span
-                    >
-                  </li>
-                  <li class="ui-veh">
-                    <span class="ui-veh__ico" style="--c: #e08a00"
-                      ><svg class="ico"><use href="#i-truck" /></svg></span
-                    ><span class="ui-veh__txt"
-                      ><strong>Fiorino 2</strong><small>Rota de coletas · 6 paradas</small></span
-                    ><span class="ui-veh__cap"
-                      ><span class="ui-bar"><i style="width: 48%; --c: #e08a00"></i></span
-                      ><small>312 kg de 650 kg · <b>48%</b></small></span
-                    >
-                  </li>
-                </ul>
-              </div>
-            </article>
-            <article class="tile tile--nf reveal">
-              <div class="tile__text">
-                <svg class="ico tile__ico"><use href="#i-invoice" /></svg>
-                <h3>Pedidos a partir de notas fiscais</h3>
-                <p>Importe as notas sem digitar tudo de novo: cidade, peso e volumes já entram.</p>
-              </div>
-              <ul class="formats" aria-label="Formatos aceitos">
-                <li>XML NF-e</li>
-                <li>PDF (DANFE)</li>
-                <li>Excel</li>
-                <li>CSV</li>
-              </ul>
-            </article>
-            <article class="tile tile--wide tile--stops reveal">
-              <div class="tile__text">
-                <svg class="ico tile__ico"><use href="#i-pin" /></svg>
-                <h3>Próximas paradas</h3>
-                <p>Cada parada com tipo (entrega ou coleta), endereço e horário previsto.</p>
-              </div>
-              <div
-                class="tile__shot ui"
-                role="img"
-                aria-label="Próximas paradas demonstrativas, com tipo, pedido, bairro, peso, horário previsto e veículo."
-              >
-                <div class="ui-card__head">
-                  <svg class="ico"><use href="#i-pin" /></svg><strong>Próximas paradas</strong
-                  ><span class="ui-chip">hoje</span>
-                </div>
-                <ol class="ui-stops">
-                  <li class="ui-stop ui-stop--coleta">
-                    <span class="ui-stop__n">1</span
-                    ><span class="ui-stop__txt"
-                      ><strong>#2032 · Macedo</strong><small><em>Coleta</em> · 18,5 kg</small></span
-                    ><span class="ui-stop__eta"><b>08:16</b><small>Fiorino 2</small></span>
-                  </li>
-                  <li class="ui-stop ui-stop--entrega">
-                    <span class="ui-stop__n">1</span
-                    ><span class="ui-stop__txt"
-                      ><strong>#1024 · Pimentas</strong
-                      ><small><em>Entrega</em> · 87,2 kg</small></span
-                    ><span class="ui-stop__eta"><b>08:23</b><small>Fiorino 1</small></span>
-                  </li>
-                  <li class="ui-stop ui-stop--coleta">
-                    <span class="ui-stop__n">2</span
-                    ><span class="ui-stop__txt"
-                      ><strong>#2031 · Itapegica</strong
-                      ><small><em>Coleta</em> · 72,0 kg</small></span
-                    ><span class="ui-stop__eta"><b>08:29</b><small>Fiorino 2</small></span>
-                  </li>
-                  <li class="ui-stop ui-stop--coleta">
-                    <span class="ui-stop__n">3</span
-                    ><span class="ui-stop__txt"
-                      ><strong>#2036 · Penha</strong><small><em>Coleta</em> · 49,0 kg</small></span
-                    ><span class="ui-stop__eta"><b>08:48</b><small>Fiorino 2</small></span>
-                  </li>
-                  <li class="ui-stop ui-stop--entrega">
-                    <span class="ui-stop__n">2</span
-                    ><span class="ui-stop__txt"
-                      ><strong>#1028 · Arujá</strong
-                      ><small><em>Entrega</em> · 120,2 kg</small></span
-                    ><span class="ui-stop__eta"><b>08:56</b><small>Fiorino 1</small></span>
-                  </li>
-                </ol>
-              </div>
-            </article>
-            <article class="tile tile--wide reveal">
-              <div class="tile__text">
-                <svg class="ico tile__ico"><use href="#i-monitor" /></svg>
-                <h3>Visão operacional</h3>
-                <p>
-                  Pedidos por região, rotas geradas e alertas de pedidos atrasados, urgentes ou em
-                  regiões isoladas.
-                </p>
-              </div>
-              <div
-                class="tile__shot ui"
-                role="img"
-                aria-label="Pedidos demonstrativos por cidade: Guarulhos 10, São Paulo 2, Arujá 1 e Itaquaquecetuba 1."
-              >
-                <div class="ui-card__head">
-                  <svg class="ico"><use href="#i-layers" /></svg><strong>Pedidos por região</strong
-                  ><span class="ui-chip">14 pedidos</span>
-                </div>
-                <ul class="ui-regs">
-                  <li>
-                    <span>Guarulhos</span
-                    ><span class="ui-bar"><i style="width: 71%; --c: #f3c24f"></i></span><b>10</b
-                    ><small>71%</small>
-                  </li>
-                  <li>
-                    <span>São Paulo</span
-                    ><span class="ui-bar"><i style="width: 14%; --c: #2f6fe4"></i></span><b>2</b
-                    ><small>14%</small>
-                  </li>
-                  <li>
-                    <span>Arujá</span
-                    ><span class="ui-bar"><i style="width: 7%; --c: #e08a00"></i></span><b>1</b
-                    ><small>7%</small>
-                  </li>
-                  <li>
-                    <span>Itaquaquecetuba</span
-                    ><span class="ui-bar"><i style="width: 7%; --c: #22b07d"></i></span><b>1</b
-                    ><small>7%</small>
-                  </li>
-                </ul>
-              </div>
-            </article>
-            <article class="tile tile--wide tile--brand reveal">
-              <div class="tile__text">
-                <svg class="ico tile__ico"><use href="#i-sliders" /></svg>
-                <h3>Com a marca da sua empresa</h3>
-                <p>
-                  Cores, logo e partes do fluxo adaptadas à identidade e aos processos da sua
-                  operação.
-                </p>
-                <a class="link-arrow" href="#modelos"
-                  >Ver exemplos <svg class="ico"><use href="#i-down" /></svg
-                ></a>
-              </div>
-              <div class="swatches" aria-hidden="true">
-                <span style="--c: #0b1b33"></span><span style="--c: #d4a93c"></span
-                ><span style="--c: #1e8f4e"></span><span style="--c: #2563eb"></span>
-              </div>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <!-- 7. PERSONALIZAÇÃO (modelos) -->
-      <section class="section section--light models" id="modelos" aria-labelledby="models-title">
-        <div class="container">
-          <div class="models__head reveal">
-            <p class="eyebrow">Personalização</p>
-            <h2 id="models-title">Modelos com a identidade de cada empresa</h2>
-            <p class="lead">Criamos o sistema com a cara da sua empresa.</p>
-          </div>
-          <ul class="models__grid">
-            <li class="model reveal">
-              <img
-                class="model__shot"
-                src="img/modelo-viaverde.webp"
-                data-zoom
-                alt="Painel de roteirização com a identidade visual da Via Verde Transportes, em verde e branco: pedidos, rotas, tempo estimado, pedidos por região, mapa de distribuição e assistente"
-                width="1536"
-                height="1441"
-                loading="lazy"
-                decoding="async"
-              />
-              <p class="model__name">Via Verde Transportes</p>
-            </li>
-            <li class="model reveal">
-              <img
-                class="model__shot"
-                src="img/modelo-2sl-log.webp"
-                srcset="img/modelo-2sl-log.webp 1077w, img/modelo-2sl-log-2x.webp 2154w"
-                sizes="(max-width: 980px) 100vw, 580px"
-                data-zoom="img/modelo-2sl-log-2x.webp"
-                alt="Painel de roteirização com a identidade visual da 2SL Log, em azul-escuro: pedidos, rotas, tempo estimado, pedidos por região, mapa de distribuição e assistente"
-                width="1077"
-                height="1346"
-                loading="lazy"
-                decoding="async"
-              />
-              <p class="model__name">2SL Log</p>
-            </li>
-          </ul>
-          <p class="models__note">Telas ilustrativas, com dados demonstrativos.</p>
-        </div>
-      </section>
-
-      <!-- 8. PARA QUEM É -->
-      <section class="section section--soft audience" id="para-quem" aria-labelledby="aud-title">
-        <div class="container">
-          <div class="audience__top">
-            <div class="audience__copy reveal">
-              <p class="eyebrow">Para quem é o ROTAV3</p>
-              <h2 id="aud-title">Feito para quem entrega e coleta todos os dias.</h2>
-              <p class="lead">
-                Coleta na indústria ou na distribuidora, entrega na loja ou no cliente final: o
-                ROTAV3 planeja tudo no mesmo mapa, saindo do seu centro de distribuição.
-              </p>
-              <ul class="netmap__key" aria-label="Legenda da ilustração">
-                <li><span class="netmap__dot netmap__dot--entrega"></span>Rota de entregas</li>
-                <li><span class="netmap__dot netmap__dot--coleta"></span>Rota de coletas</li>
-              </ul>
-              <button class="btn btn--outline btn--sm" type="button" data-open-demo>
-                Agendar demonstração
-              </button>
-            </div>
-            <figure class="netmap reveal">
-              <picture>
-                <source
-                  media="(max-width: 640px)"
-                  srcset="
-                    img/rede-operacao-celular.webp     720w,
-                    img/rede-operacao-celular-2x.webp 1080w
-                  "
-                  sizes="100vw"
-                  width="1080"
-                  height="940"
-                />
-                <img
-                  class="netmap__img"
-                  src="img/rede-operacao.webp"
-                  srcset="img/rede-operacao.webp 700w, img/rede-operacao-2x.webp 1400w"
-                  sizes="(max-width: 1099px) 100vw, 680px"
-                  alt="Ilustração 3D de uma operação: o centro de distribuição no meio, uma rota laranja de coletas que passa pela indústria e pela distribuidora e uma rota azul de entregas que passa pela loja e pelas casas dos clientes finais."
-                  width="1400"
-                  height="1024"
-                  loading="lazy"
-                  decoding="async"
-                />
-              </picture>
-              <span
-                class="netmap__label netmap__label--cd"
-                style="--x: 48.6%; --y: 36.3%; --mx: 48.8%; --my: 36%"
-                aria-hidden="true"
-                ><b>Centro de distribuição</b><b class="netmap__short">CD</b></span
-              >
-              <span
-                class="netmap__label netmap__label--coleta"
-                style="--x: 20.8%; --y: 29.2%; --mx: 18.8%; --my: 29.2%"
-                aria-hidden="true"
-                ><i></i><b>Indústria</b><em> · coleta</em></span
-              >
-              <span
-                class="netmap__label netmap__label--coleta"
-                style="--x: 53.3%; --y: 11.5%; --mx: 53.6%; --my: 10.3%"
-                aria-hidden="true"
-                ><i></i><b>Distribuidora</b><em> · coleta</em></span
-              >
-              <span
-                class="netmap__label netmap__label--entrega"
-                style="--x: 42.2%; --y: 63.6%; --mx: 42.1%; --my: 63.7%"
-                aria-hidden="true"
-                ><i></i><b>Loja</b><em> · entrega</em></span
-              >
-              <span
-                class="netmap__label netmap__label--entrega"
-                style="--x: 77.2%; --y: 43%; --mx: 79.3%; --my: 42.4%"
-                aria-hidden="true"
-                ><i></i><b>Cliente final</b><em> · entrega</em></span
-              >
-              <span class="netmap__tag" aria-hidden="true">Ilustração</span>
-            </figure>
-          </div>
-          <ul class="segcards" aria-label="Para quem é">
-            <li class="segcard reveal">
-              <svg class="ico segcard__ico"><use href="#i-truck" /></svg>
-              <div>
-                <h3>Transportadoras</h3>
-                <p>Coletas e entregas de vários clientes no mesmo planejamento.</p>
-              </div>
-            </li>
-            <li class="segcard reveal">
-              <svg class="ico segcard__ico"><use href="#i-warehouse" /></svg>
-              <div>
-                <h3>Distribuidoras</h3>
-                <p>Rotas para lojas e clientes saindo do seu centro de distribuição.</p>
-              </div>
-            </li>
-            <li class="segcard reveal">
-              <svg class="ico segcard__ico"><use href="#i-cart" /></svg>
-              <div>
-                <h3>E-commerces</h3>
-                <p>Os pedidos do dia viram rotas a partir das notas fiscais.</p>
-              </div>
-            </li>
-            <li class="segcard reveal">
-              <svg class="ico segcard__ico"><use href="#i-factory" /></svg>
-              <div>
-                <h3>Indústrias</h3>
-                <p>Entrega de produtos e coleta de insumos no mesmo mapa.</p>
-              </div>
-            </li>
-            <li class="segcard reveal">
-              <svg class="ico segcard__ico"><use href="#i-store" /></svg>
-              <div>
-                <h3>Pequenas e médias empresas</h3>
-                <p>Rota pronta sem planilha, mesmo com poucos veículos.</p>
-              </div>
-            </li>
-            <li class="segcard reveal">
-              <svg class="ico segcard__ico"><use href="#i-cycle" /></svg>
-              <div>
-                <h3>Operações próprias</h3>
-                <p>Frota própria planejada no painel com a marca da empresa.</p>
-              </div>
-            </li>
+        <div class="cont fatos">
+          <ul class="fatos__lista">
+            <li><img src="img/ic/inbox-tray.webp" alt="" width="40" height="40" loading="lazy" /><span><b>XML, Excel e CSV</b>notas entram de uma vez</span></li>
+            <li><img src="img/ic/package.webp" alt="" width="40" height="40" loading="lazy" /><span><b>Entregas e coletas</b>na mesma viagem</span></li>
+            <li><img src="img/ic/alarm-clock.webp" alt="" width="40" height="40" loading="lazy" /><span><b>Janela de horário</b>de cada cliente</span></li>
+            <li><img src="img/ic/mobile-phone.webp" alt="" width="40" height="40" loading="lazy" /><span><b>Sem aplicativo</b>o motorista abre pelo link</span></li>
+            <li><img src="img/ic/camera-with-flash.webp" alt="" width="40" height="40" loading="lazy" /><span><b>Baixa com foto</b>do canhoto, na hora</span></li>
+            <li><img src="img/ic/robot.webp" alt="" width="40" height="40" loading="lazy" /><span><b>Assistente de IA</b>que lê a operação do dia</span></li>
           </ul>
         </div>
       </section>
 
-      <!-- 9. TRANSPARÊNCIA -->
-      <section class="section section--dark trust" id="transparencia" aria-labelledby="trust-title">
-        <div class="container">
-          <div class="section-head reveal">
-            <p class="eyebrow">Transparência</p>
-            <h2 id="trust-title">Sem promessa vazia: o que o ROTAV3 faz hoje.</h2>
-            <p class="lead">
-              Preferimos mostrar o sistema como ele é. Assim você decide com tudo na mesa.
+      <!-- ================= UM DIA DE OPERAÇÃO ================= -->
+      <section class="secao secao--clara dia" id="como-funciona" aria-labelledby="dia-titulo">
+        <div class="cont">
+          <header class="cab">
+            <h2 id="dia-titulo">Um dia de operação com o ROTAV3.</h2>
+            <p class="cab__texto">
+              Do primeiro XML da manhã à última baixa da tarde, tudo acontece no mesmo painel. Estas
+              são as telas do sistema, com pedidos de exemplo.
             </p>
-          </div>
-          <div class="trust__grid">
-            <article class="trust__card reveal">
-              <h3>
-                <svg class="ico"><use href="#i-check" /></svg>O que faz hoje
-              </h3>
-              <ul class="trust__list trust__list--yes">
-                <li>Pedidos no mapa, separados em entregas e coletas</li>
-                <li>Rotas por peso, capacidade e limite de pedidos por veículo</li>
-                <li>Importação de pedidos pelas notas fiscais</li>
-                <li>Painel com a identidade visual da sua empresa</li>
-                <li>Acesso pelo navegador, no computador ou no celular</li>
-              </ul>
-            </article>
-            <article class="trust__card reveal">
-              <h3>
-                <svg class="ico"><use href="#i-clock" /></svg>Depende da sua operação
-              </h3>
-              <ul class="trust__list trust__list--no">
-                <li>
-                  Sincronização com rastreamento: depende de o fornecedor do seu rastreador liberar
-                  o acesso aos dados. <a href="#rastreamento">Confirmamos na demonstração.</a>
-                </li>
-                <li>Relatórios gerenciais prontos (em construção)</li>
-              </ul>
-              <p class="trust__hint">
-                Se algum desses for essencial para você, conte na demonstração.
-              </p>
-            </article>
-            <article class="trust__card reveal">
-              <h3>
-                <svg class="ico"><use href="#i-shield" /></svg>Quem está por trás
-              </h3>
-              <ul class="trust__list">
-                <li>Empresa brasileira, <span class="nowrap">CNPJ 68.080.201/0001-80</span></li>
-                <li>
-                  Atendimento com quem desenvolve o sistema, pelo WhatsApp
-                  <span data-whatsapp-label>(11) 95591-4618</span>
-                </li>
-                <li>
-                  Seus dados de contato seguem a
-                  <a href="privacidade.html">política de privacidade</a>
-                </li>
-              </ul>
-            </article>
-          </div>
-        </div>
-      </section>
-
-      <!-- COMO COMEÇAR: demonstração gratuita com as notas do cliente + implantação inclusa -->
-      <section class="section section--dark trial" id="como-comecar" aria-labelledby="trial-title">
-        <div class="container trial__grid">
-          <div class="trial__copy reveal">
-            <p class="eyebrow">Como começar</p>
-            <h2 id="trial-title">
-              Veja o ROTAV3 com os dados da sua operação
-              <span class="grad">antes de contratar</span>.
-            </h2>
-            <p class="lead">
-              Você envia as notas fiscais de um dia de operação. Montamos as rotas desse dia no
-              ROTAV3 e apresentamos em uma chamada de 20 minutos, sem custo. Se fizer sentido, a
-              implantação começa na mesma semana.
-            </p>
-            <ul class="trial__checks">
-              <li>
-                <svg class="ico"><use href="#i-check" /></svg>Demonstração sem custo
-              </li>
-              <li>
-                <svg class="ico"><use href="#i-check" /></svg>Com os seus pedidos, não com exemplo
-              </li>
-              <li>
-                <svg class="ico"><use href="#i-check" /></svg>Implantação e treinamento inclusos
-              </li>
-              <li>
-                <svg class="ico"><use href="#i-check" /></svg>Atendimento com quem desenvolve
-              </li>
-            </ul>
-            <div class="trial__actions">
-              <button class="btn btn--gold btn--lg" type="button" data-open-demo="demo">
-                <svg class="ico"><use href="#i-calendar" /></svg>Solicitar demonstração
-              </button>
-              <p class="trial__note">O agendamento é feito pelo WhatsApp.</p>
-            </div>
-          </div>
-          <ol class="trial__steps">
-            <li class="reveal">
-              <span class="trial__day">Passo 1 · Sem custo</span>
-              <h3>Envie as notas de um dia</h3>
-              <p>XML, PDF, Excel ou CSV, do jeito que vocês já emitem. Não precisa mudar nada.</p>
+          </header>
+          <ol class="dia__linha" data-dia>
+            <li class="parada-dia">
+              <div class="parada-dia__hora"><span class="pino-dia">1</span><time>07:00</time></div>
+              <div class="parada-dia__texto">
+                <h3>Importe as notas do dia.</h3>
+                <p>
+                  Arraste os XML das NF-e, uma planilha Excel ou um CSV. O ROTAV3 lê destinatário,
+                  endereço, peso e volumes, separa entregas de coletas e localiza os endereços pelo
+                  CEP. Nota que já está em rota não é alterada.
+                </p>
+              </div>
+              <div class="parada-dia__tela">
+                <div class="mini">
+                  <div class="mini__zona">
+                    <span class="mini__ic"><svg><use href="#i-caixa" /></svg></span>
+                    <b>Importar notas</b><small>XML da NF-e, Excel, CSV ou PDF</small>
+                    <div class="mini__arqs"><span>NF-e 31024.xml</span><span>NF-e 31031.xml</span><span>NF-e 31047.xml</span><span>+18</span></div>
+                  </div>
+                  <p class="mini__ok">✅ 21 notas importadas: 17 entregas e 4 coletas. 2 notas já estavam em rota e não foram alteradas.</p>
+                </div>
+              </div>
             </li>
-            <li class="reveal">
-              <span class="trial__day">Passo 2 · Chamada de 20 minutos</span>
-              <h3>Veja as rotas montadas</h3>
-              <p>
-                Mostramos as rotas desse dia no mapa, respeitando o peso e a capacidade de cada
-                veículo.
-              </p>
+            <li class="parada-dia">
+              <div class="parada-dia__hora"><span class="pino-dia">2</span><time>07:05</time></div>
+              <div class="parada-dia__texto">
+                <h3>Confira tudo no mapa.</h3>
+                <p>
+                  Entregas e coletas aparecem com cores diferentes e dá para filtrar por tipo. Você vê
+                  quem está longe do CD e quais pedidos ainda estão só com a cidade, sem o endereço
+                  exato.
+                </p>
+              </div>
+              <div class="parada-dia__tela">
+                <div class="mini mini--mapa">
+                  <div class="mini__seg"><span class="on">Todos 21</span><span>Entregas 17</span><span>Coletas 4</span></div>
+                  <svg class="mini__svg" viewBox="0 0 1520 1002" preserveAspectRatio="xMidYMid slice" data-mini-mapa>
+                    <image href="img/mapa-guarulhos.svg" width="1520" height="1002" />
+                  </svg>
+                  <div class="mini__leg"><span><i class="e"></i>Entrega</span><span><i class="c"></i>Coleta</span><span><i class="cd"></i>CD</span></div>
+                </div>
+              </div>
             </li>
-            <li class="reveal">
-              <span class="trial__day">Passo 3 · Implantação inclusa</span>
-              <h3>Comece a usar na operação</h3>
-              <p>
-                Configuramos o sistema com os seus dados e treinamos a equipe, sem taxa de
-                implantação. Plano mensal, sem fidelidade.
-              </p>
+            <li class="parada-dia">
+              <div class="parada-dia__hora"><span class="pino-dia">3</span><time>07:10</time></div>
+              <div class="parada-dia__texto">
+                <h3>Gere a rota do veículo.</h3>
+                <p>
+                  Escolha o veículo, a capacidade, a hora de saída e o que entra na viagem. O sistema
+                  escolhe os pedidos que cabem e a ordem das paradas, com as entregas antes das
+                  coletas e o horário de cada cliente respeitado.
+                </p>
+              </div>
+              <div class="parada-dia__tela">
+                <div class="mini mini--rota">
+                  <div class="mini__rcab"><b>VUC · 6 paradas</b><span>5 entregas, 1 coleta</span></div>
+                  <div class="mini__kpis"><span>📦 <b>769 kg</b> na saída</span><span>🛣️ <b>38,4</b> km</span><span>⏱️ volta <b>11:35</b></span></div>
+                  <ol class="mini__paradas">
+                    <li><i class="e">1</i><span>Mercado Bela Vista</span><time>07:52</time></li>
+                    <li><i class="e">2</i><span>Farmácia Central</span><time>08:21</time></li>
+                    <li><i class="e">3</i><span>Padaria Primavera <em>horário 09:00–10:00</em></span><time>09:04</time></li>
+                    <li><i class="e">4</i><span>Loja do Construtor</span><time>09:48</time></li>
+                    <li><i class="e">5</i><span>Auto Peças Avenida</span><time>10:31</time></li>
+                    <li><i class="c">6</i><span>Fábrica de Embalagens Sul <em>coleta</em></span><time>11:05</time></li>
+                  </ol>
+                </div>
+              </div>
+            </li>
+            <li class="parada-dia">
+              <div class="parada-dia__hora"><span class="pino-dia">4</span><time>07:15</time></div>
+              <div class="parada-dia__texto">
+                <h3>Mande a rota para o motorista.</h3>
+                <p>
+                  Um toque e o link da rota vai pelo WhatsApp. O motorista abre no navegador do
+                  celular, sem instalar aplicativo, e segue parada por parada pelo Google Maps ou
+                  pelo Waze. O link vale por 7 dias e pode ser encerrado pelo escritório.
+                </p>
+              </div>
+              <div class="parada-dia__tela">
+                <div class="mini mini--envio">
+                  <div class="mini__mot"><div><b>Motorista</b><small>Carlos (exemplo) · VUC</small></div><span class="mini__wa">Enviar pelo WhatsApp</span><span class="mini__sec">Copiar link</span></div>
+                  <div class="mini__balao">Carlos, sua rota de hoje: 6 paradas, saída 07:30 do CD Guarulhos.<span>ROTAV3 · Rota de hoje — toque para abrir</span></div>
+                </div>
+              </div>
+            </li>
+            <li class="parada-dia">
+              <div class="parada-dia__hora"><span class="pino-dia">5</span><time>durante o dia</time></div>
+              <div class="parada-dia__texto">
+                <h3>Acompanhe cada baixa.</h3>
+                <p>
+                  Cada parada marcada no celular aparece no painel na hora, com o nome de quem recebeu
+                  e a foto do canhoto. Quando algo não é entregue, o motivo chega junto e o pedido
+                  volta para os pendentes.
+                </p>
+              </div>
+              <div class="parada-dia__tela">
+                <div class="mini mini--baixas">
+                  <div class="mini__prog"><span>3 de 6 paradas com baixa</span><div><i style="width: 50%"></i></div></div>
+                  <ul class="mini__feed">
+                    <li class="ok"><b>✓ Entregue 07:58</b><span>Mercado Bela Vista · recebido por Ana · 📷 foto</span></li>
+                    <li class="ok"><b>✓ Entregue 08:26</b><span>Farmácia Central · recebido por Jorge</span></li>
+                    <li class="nok"><b>✗ Não realizado 09:10</b><span>Padaria Primavera · Estabelecimento fechado · voltou para os pendentes</span></li>
+                  </ul>
+                  <p class="mini__vivo"><i></i>Localização ao vivo: há 1 min</p>
+                </div>
+              </div>
+            </li>
+            <li class="parada-dia">
+              <div class="parada-dia__hora"><span class="pino-dia">6</span><time>17:30</time></div>
+              <div class="parada-dia__texto">
+                <h3>Feche o dia e prepare o próximo.</h3>
+                <p>
+                  As rotas ficam salvas com as baixas e as fotos. Pergunte à IA quais pedidos podem
+                  atrasar e importe as notas do dia seguinte.
+                </p>
+              </div>
+              <div class="parada-dia__tela">
+                <div class="mini mini--fim">
+                  <ul class="mini__rotas">
+                    <li><b>VUC · Carlos (exemplo)</b><span>6 paradas · 5 entregues · 1 não realizada</span></li>
+                    <li><b>Fiorino · Ana (exemplo)</b><span>8 paradas · todas entregues</span></li>
+                  </ul>
+                  <div class="mini__ia"><span class="mini__iaic">✨</span><span>Quais pedidos podem atrasar?</span></div>
+                </div>
+              </div>
             </li>
           </ol>
         </div>
       </section>
 
-      <!-- 10. PREÇO -->
-      <section class="section section--light price" id="preco" aria-labelledby="price-title">
-        <div class="container">
-          <div class="price__head reveal">
-            <p class="eyebrow">Preço</p>
-            <h2 id="price-title">Preço fixo pelo tamanho da frota.</h2>
-            <p class="lead">
+      <!-- ================= CRIAR ROTA ================= -->
+      <section class="secao secao--escura criar" id="criar-rota" aria-labelledby="criar-titulo">
+        <div class="cont">
+          <header class="cab cab--larga">
+            <h2 id="criar-titulo">Monte uma rota agora, com pedidos de exemplo.</h2>
+            <p class="cab__texto">
+              São as mesmas escolhas da tela de roteirização do sistema. Mude o veículo, o que entra
+              na viagem e o limite de paradas e veja a rota mudar no mapa.
+            </p>
+          </header>
+          <div class="plan" id="planejador">
+            <form class="plan__ctrl" data-plan-form onsubmit="event.preventDefault()">
+              <fieldset class="plan__grupo">
+                <legend>Veículo</legend>
+                <div class="seg seg--3" data-plan-veiculos></div>
+              </fieldset>
+              <fieldset class="plan__grupo">
+                <legend>O que entra nesta viagem</legend>
+                <div class="seg seg--3">
+                  <label><input type="radio" name="tipo" value="entrega" checked /><span>Entregas</span></label>
+                  <label><input type="radio" name="tipo" value="coleta" /><span>Coletas</span></label>
+                  <label><input type="radio" name="tipo" value="ambos" /><span>As duas</span></label>
+                </div>
+              </fieldset>
+              <div class="plan__dup">
+                <label class="plan__campo"><span>Saída do CD</span><input type="time" name="saida" value="07:00" step="300" required /></label>
+                <label class="plan__campo"><span>Capacidade (kg)</span><input type="number" name="cap" value="3000" min="100" max="40000" step="50" inputmode="numeric" required /></label>
+              </div>
+              <label class="plan__campo plan__campo--faixa">
+                <span>Máximo de paradas nesta viagem <output name="maxSaida" data-plan-max-txt>8</output></span>
+                <input type="range" name="max" min="1" max="20" value="8" />
+              </label>
+              <button class="btn btn--ouro btn--g plan__gerar" type="submit"><svg class="ico"><use href="#i-rota" /></svg>Gerar rota</button>
+              <p class="plan__regra">Entregas antes das coletas · 15 min por parada · jornada de até 8 h</p>
+            </form>
+            <div class="plan__mapa">
+              <div class="plan__leaflet" id="plan-mapa" role="region" aria-label="Mapa com os pedidos de exemplo e a rota gerada"></div>
+              <div class="plan__legenda"><span><i class="e"></i>Entrega</span><span><i class="c"></i>Coleta</span><span><i class="cd"></i>CD (exemplo)</span><span><i class="r"></i>Rota</span></div>
+            </div>
+            <div class="plan__res" aria-live="polite" data-plan-res>
+              <p class="plan__vazio">Escolha as opções e toque em <b>Gerar rota</b>.</p>
+            </div>
+          </div>
+          <p class="nota-demo">
+            Simulação feita no seu navegador, com pedidos fictícios na região de Guarulhos e
+            distâncias estimadas em linha reta × 1,3. No sistema, a rota é calculada pelo motor de
+            otimização Google OR-Tools com as distâncias pelas ruas.
+          </p>
+        </div>
+      </section>
+
+      <!-- ================= MAPA 3D ================= -->
+      <section class="secao secao--clara m3d" id="mapa" aria-labelledby="m3d-titulo">
+        <div class="cont">
+          <header class="cab cab--larga">
+            <h2 id="m3d-titulo">Todos os pedidos do dia, num mapa só.</h2>
+            <p class="cab__texto">
+              Antes de montar as rotas, veja onde está cada pedido: quantos há em cada cidade, o que é
+              entrega e o que é coleta, quem tem horário marcado e o que está longe do centro de
+              distribuição.
+            </p>
+          </header>
+          <div class="m3d__grade">
+            <div class="m3d__palco" data-m3d>
+              <div class="m3d__img">
+                <picture>
+                  <source media="(max-width: 700px)" srcset="img/mapa-3d-mob-1x.webp 720w, img/mapa-3d-mob.webp 1080w" sizes="100vw" />
+                  <img src="img/mapa-3d-desk-1x.webp" srcset="img/mapa-3d-desk-1x.webp 1114w, img/mapa-3d-desk.webp 2229w" sizes="(max-width: 1240px) 100vw, 900px" alt="Maquete 3D da Grande São Paulo com os municípios em relevo pela quantidade de pedidos e o centro de distribuição em Guarulhos" width="1114" height="663" loading="lazy" />
+                </picture>
+                <div class="m3d__camada" data-m3d-camada></div>
+              </div>
+              <div class="m3d__dica" data-m3d-dica role="status" aria-live="polite"></div>
+            </div>
+            <aside class="m3d__lado">
+              <div class="seg seg--chips" role="group" aria-label="Mostrar no mapa" data-m3d-filtros>
+                <button type="button" aria-pressed="true" data-f="todos">Todos <b data-c="todos"></b></button>
+                <button type="button" aria-pressed="false" data-f="e">Entregas <b data-c="e"></b></button>
+                <button type="button" aria-pressed="false" data-f="c">Coletas <b data-c="c"></b></button>
+                <button type="button" aria-pressed="false" data-f="j">Com horário <b data-c="j"></b></button>
+              </div>
+              <h3 class="m3d__subt">Pedidos por cidade</h3>
+              <ol class="m3d__cidades" data-m3d-cidades></ol>
+              <p class="m3d__nota">
+                86 pedidos fictícios. Ilustração em 3D com os limites reais dos municípios (IBGE): o
+                relevo de cada cidade mostra quantos pedidos ela tem. No sistema, o mapa é interativo,
+                com as ruas, e se atualiza sozinho quando entram notas novas.
+              </p>
+            </aside>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= MOTORISTA E AO VIVO ================= -->
+      <section class="secao secao--escura vivo" id="ao-vivo" aria-labelledby="vivo-titulo">
+        <div class="cont">
+          <header class="cab cab--larga">
+            <h2 id="vivo-titulo">O motorista marca no celular. Você vê no painel, na hora.</h2>
+            <p class="cab__texto">
+              Este é o celular do motorista de verdade, com uma rota de exemplo. Toque em
+              <b>Entregue</b> ou <b>Não realizado</b> numa parada e acompanhe o painel do escritório
+              mudar na hora.
+            </p>
+          </header>
+          <div class="vivo__grade">
+            <div class="vivo__cel">
+              <div class="cel cel--real">
+                <div class="cel__tela">
+                  <iframe
+                    title="Tela do motorista do ROTAV3 com uma rota de exemplo"
+                    data-src="https://hesantss-pixel.github.io/2slrotav3/motorista.html#demo"
+                    loading="lazy"
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    data-vivo-iframe
+                  ></iframe>
+                  <div class="cel__carregando" data-vivo-carregando>Abrindo a tela do motorista…</div>
+                </div>
+              </div>
+              <button class="btn btn--linha btn--p vivo__recomecar" type="button" data-vivo-recomecar>
+                <svg class="ico"><use href="#i-recomecar" /></svg>Recomeçar a rota de exemplo
+              </button>
+            </div>
+            <div class="vivo__fio" aria-hidden="true"><span></span></div>
+            <div class="vivo__painel" aria-live="polite">
+              <div class="pv">
+                <div class="pv__cab">
+                  <div><b>Carlos (exemplo) — VUC · 6 paradas</b><small>5 entregas, 1 coleta · saída 07:30 · CD Guarulhos</small></div>
+                  <span class="pv__status" data-pv-status>🚚 Em rota</span>
+                </div>
+                <div class="pv__prog"><span data-pv-prog-txt>0 de 6 paradas com baixa</span><div class="pv__barra"><i data-pv-prog></i></div></div>
+                <div class="pv__mapa">
+                  <svg viewBox="0 0 1520 1002" preserveAspectRatio="xMidYMid slice" data-pv-mapa>
+                    <image href="img/mapa-guarulhos.svg" width="1520" height="1002" />
+                  </svg>
+                  <p class="pv__vivo"><i></i><span data-pv-vivo>Localização ao vivo: aguardando a primeira baixa</span></p>
+                </div>
+                <ol class="pv__lista" data-pv-lista></ol>
+                <p class="pv__ultimo" data-pv-ultimo hidden></p>
+              </div>
+              <p class="nota-demo nota-demo--escura">
+                Painel simulado nesta página com as baixas que você marcar no celular. Nada é
+                enviado para servidor nenhum. No sistema, a localização vem do celular do motorista,
+                com a permissão dele, enquanto a página da rota está aberta.
+              </p>
+            </div>
+          </div>
+          <ul class="vivo__fatos">
+            <li><img src="img/ic/link.webp" alt="" width="44" height="44" loading="lazy" /><div><b>Sem aplicativo para instalar</b><span>O link abre no navegador de qualquer celular. Vale por 7 dias e o escritório pode encerrar antes.</span></div></li>
+            <li><img src="img/ic/camera-with-flash.webp" alt="" width="44" height="44" loading="lazy" /><div><b>Baixa com comprovante</b><span>Nome de quem recebeu, foto do canhoto e, quando não deu certo, o motivo.</span></div></li>
+            <li><img src="img/ic/satellite-antenna.webp" alt="" width="44" height="44" loading="lazy" /><div><b>Rastreador da frota</b><span>Já usa rastreador? Conectamos o ROTAV3 a ele quando o fornecedor libera os dados. Incluso nos planos Operação e Frota.</span></div></li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ================= IA ================= -->
+      <section class="secao secao--clara ia" id="ia" aria-labelledby="ia-titulo">
+        <div class="cont ia__grade">
+          <div class="ia__texto">
+            <h2 id="ia-titulo">Pergunte sobre a operação de hoje.</h2>
+            <p class="cab__texto">
+              O assistente de IA do ROTAV3 lê os pedidos pendentes e as rotas geradas e responde em
+              português, com os números do dia. Ele sugere; quem decide é a sua equipe.
+            </p>
+            <h3 class="ia__subt">O que ele usa para responder</h3>
+            <ul class="ia__usa">
+              <li>Pedidos pendentes por cidade, com peso, tipo, urgência e horário marcado</li>
+              <li>As rotas geradas: paradas, quilômetros, tempo e veículo</li>
+              <li>A capacidade dos veículos que você usa</li>
+            </ul>
+            <p class="ia__regra">
+              <svg class="ico"><use href="#i-escudo" /></svg>É instruído a usar só os dados do sistema e a
+              dizer o que falta quando a informação não está lá.
+            </p>
+          </div>
+          <div class="chat" data-chat>
+            <div class="chat__cab"><span class="chat__av">✨</span><div><b>IA Assistente</b><small>Converse com a IA sobre a operação de hoje</small></div></div>
+            <div class="chat__msgs" data-chat-msgs aria-live="polite"></div>
+            <div class="chat__sugs" role="group" aria-label="Perguntas de exemplo">
+              <button type="button" data-pergunta="divisao">Qual a melhor divisão das rotas hoje?</button>
+              <button type="button" data-pergunta="isolado">Tem algum cliente isolado?</button>
+              <button type="button" data-pergunta="atraso">Quais pedidos podem atrasar?</button>
+            </div>
+            <p class="chat__nota">Respostas de exemplo, montadas com os 86 pedidos fictícios do mapa acima.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= SUA MARCA ================= -->
+      <section class="secao secao--escura marca" id="sua-marca" aria-labelledby="marca-titulo">
+        <div class="cont marca__grade">
+          <div class="marca__texto">
+            <h2 id="marca-titulo">O painel com a cara da sua transportadora.</h2>
+            <p class="cab__texto">
+              Na implantação, ajustamos cores e logo para a sua equipe trabalhar num sistema com a
+              identidade da empresa. Partes do fluxo também podem ser adaptadas à sua operação: o
+              escopo é combinado depois de conhecermos a rotina.
+            </p>
+            <div class="marca__opcoes" role="group" aria-label="Ver o painel com outra marca" data-marcas>
+              <button type="button" aria-pressed="true" data-marca="rotav3"><i style="--c: #f3b62b"></i>ROTAV3</button>
+              <button type="button" aria-pressed="false" data-marca="aurora"><i style="--c: #0f9f8f"></i>Transportes Aurora</button>
+              <button type="button" aria-pressed="false" data-marca="rubi"><i style="--c: #d23a5c"></i>Expresso Rubi</button>
+              <button type="button" aria-pressed="false" data-marca="atlas"><i style="--c: #3d6fe0"></i>Atlas Cargas</button>
+            </div>
+            <p class="marca__nota">Marcas fictícias, só para mostrar a troca de cores e logo.</p>
+          </div>
+          <div class="pm" data-marca-painel data-tema="rotav3">
+            <aside class="pm__lado">
+              <div class="pm__logo"><span class="pm__simb" aria-hidden="true"></span><b data-marca-nome>ROTAV3</b></div>
+              <span class="pm__item on"><svg><use href="#i-grade" /></svg>Dashboard</span>
+              <span class="pm__item"><svg><use href="#i-caixa" /></svg>Pedidos</span>
+              <span class="pm__item"><svg><use href="#i-rota" /></svg>Roteirização</span>
+              <span class="pm__item"><svg><use href="#i-pulso" /></svg>Rotas</span>
+              <span class="pm__item"><svg><use href="#i-mapa" /></svg>Mapa</span>
+            </aside>
+            <div class="pm__main">
+              <div class="pm__cab"><div><b>Dashboard</b><small>Visão geral das operações</small></div><span class="pm__bot">✨ IA Assistente</span></div>
+              <div class="pm__kpis">
+                <div><small>Pedidos</small><b>86</b><span>66 entregas · 20 coletas</span></div>
+                <div><small>Rotas</small><b>5</b><span>3 em andamento</span></div>
+                <div><small>Baixas</small><b>41</b><span>2 não realizadas</span></div>
+              </div>
+              <div class="pm__baixo">
+                <div class="pm__regioes">
+                  <b>Pedidos por região</b>
+                  <div><span>Guarulhos</span><i style="--p: 100%"></i><em>24</em></div>
+                  <div><span>São Paulo</span><i style="--p: 79%"></i><em>19</em></div>
+                  <div><span>Itaquaquecetuba</span><i style="--p: 21%"></i><em>5</em></div>
+                  <div><span>Mogi das Cruzes</span><i style="--p: 21%"></i><em>5</em></div>
+                </div>
+                <div class="pm__acao"><span class="pm__btn">Gerar rota</span><span class="pm__btn pm__btn--sec">Importar notas</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= FUNÇÕES ================= -->
+      <section class="secao secao--clara funcoes" id="funcoes" aria-labelledby="func-titulo">
+        <div class="cont">
+          <header class="cab cab--larga">
+            <h2 id="func-titulo">Tudo o que já vem no sistema.</h2>
+            <p class="cab__texto">Sem módulos extras: cada plano tem as funções abaixo.</p>
+          </header>
+          <div class="funcoes__grade">
+            <div class="funcoes__grupo">
+              <h3>Antes de sair</h3>
+              <ul>
+                <li><img src="img/ic/inbox-tray.webp" alt="" width="48" height="48" loading="lazy" /><div><b>Importação de notas</b><span>XML da NF-e, Excel e CSV, vários arquivos de uma vez. PDF em teste.</span></div></li>
+                <li><img src="img/ic/factory.webp" alt="" width="48" height="48" loading="lazy" /><div><b>Entregas e coletas</b><span>Cada nota entra como entrega ou coleta; na viagem mista, as entregas vêm primeiro.</span></div></li>
+                <li><img src="img/ic/world-map.webp" alt="" width="48" height="48" loading="lazy" /><div><b>Mapa com filtros</b><span>Todos os pedidos pendentes, com o CD, filtro por tipo e aviso de local aproximado.</span></div></li>
+                <li><img src="img/ic/balance-scale.webp" alt="" width="48" height="48" loading="lazy" /><div><b>Rota por peso e capacidade</b><span>Do Fiorino à carreta, com limite de paradas e jornada de 8 horas.</span></div></li>
+                <li><img src="img/ic/alarm-clock.webp" alt="" width="48" height="48" loading="lazy" /><div><b>Agendamentos e janela de horário</b><span>Pedidos agendados entram no dia certo, com o horário do cliente respeitado.</span></div></li>
+              </ul>
+            </div>
+            <div class="funcoes__grupo">
+              <h3>Na rua</h3>
+              <ul>
+                <li><img src="img/ic/link.webp" alt="" width="48" height="48" loading="lazy" /><div><b>Link do motorista</b><span>Enviado pelo WhatsApp, abre no navegador, com Google Maps e Waze.</span></div></li>
+                <li><img src="img/ic/camera-with-flash.webp" alt="" width="48" height="48" loading="lazy" /><div><b>Baixa com foto</b><span>Entregue ou coletado com nome de quem recebeu e foto do canhoto.</span></div></li>
+                <li><img src="img/ic/warning.webp" alt="" width="48" height="48" loading="lazy" /><div><b>Não realizado com motivo</b><span>O pedido volta para os pendentes com a ocorrência registrada.</span></div></li>
+                <li><img src="img/ic/round-pushpin.webp" alt="" width="48" height="48" loading="lazy" /><div><b>Localização ao vivo</b><span>Pelo celular do motorista, com a permissão dele.</span></div></li>
+              </ul>
+            </div>
+            <div class="funcoes__grupo">
+              <h3>No escritório</h3>
+              <ul>
+                <li><img src="img/ic/bar-chart.webp" alt="" width="48" height="48" loading="lazy" /><div><b>Painel e alertas</b><span>Pedidos por região, agendados do dia e o que precisa de atenção.</span></div></li>
+                <li><img src="img/ic/clipboard.webp" alt="" width="48" height="48" loading="lazy" /><div><b>Rotas salvas</b><span>Histórico com as baixas, as fotos e o andamento de cada viagem.</span></div></li>
+                <li><img src="img/ic/robot.webp" alt="" width="48" height="48" loading="lazy" /><div><b>IA Assistente</b><span>Perguntas sobre divisão de rotas, atrasos e clientes isolados.</span></div></li>
+                <li><img src="img/ic/locked-with-key.webp" alt="" width="48" height="48" loading="lazy" /><div><b>Acesso por usuário</b><span>Cada pessoa entra com e-mail e senha e só depois de liberada.</span></div></li>
+                <li><img src="img/ic/globe-with-meridians.webp" alt="" width="48" height="48" loading="lazy" /><div><b>No navegador</b><span>Computador, tablet ou celular, sem instalar nada.</span></div></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================= COMO COMEÇAR ================= -->
+      <section class="secao secao--escura comecar" id="como-comecar" aria-labelledby="comecar-titulo">
+        <div class="cont">
+          <header class="cab cab--larga">
+            <h2 id="comecar-titulo">Dois jeitos de ver o ROTAV3 funcionando.</h2>
+            <p class="cab__texto">
+              Feito para transportadoras, distribuidoras, atacados e indústrias com frota própria que
+              entregam e coletam todos os dias. Os dois caminhos são gratuitos.
+            </p>
+          </header>
+          <div class="comecar__grade">
+            <article class="caminho caminho--destaque">
+              <img src="img/ic/key.webp" alt="" width="64" height="64" loading="lazy" onerror="this.remove()" />
+              <h3>Entre no sistema hoje</h3>
+              <p>
+                Peça o acesso de demonstração pelo WhatsApp. Você recebe e-mail e senha para usar o
+                ROTAV3 com pedidos fictícios por 7 dias: importe notas de teste, gere rotas, abra a
+                tela do motorista e converse com a IA.
+              </p>
+              <ul class="caminho__lista">
+                <li><svg class="ico"><use href="#i-ok" /></svg>Nada do que você fizer altera dados reais</li>
+                <li><svg class="ico"><use href="#i-ok" /></svg>Sem cartão e sem compromisso</li>
+              </ul>
+              <a class="btn btn--ouro btn--g" href="https://wa.me/5511955914618" data-abrir="acesso"><svg class="ico"><use href="#i-olho" /></svg>Pedir acesso de demonstração</a>
+            </article>
+            <article class="caminho">
+              <img src="img/ic/spiral-calendar.webp" alt="" width="64" height="64" loading="lazy" />
+              <h3>Veja com os seus pedidos</h3>
+              <p>
+                Envie as notas de um dia da sua operação. Montamos as rotas desse dia no ROTAV3 e
+                mostramos tudo numa chamada de 20 minutos, direto com quem desenvolve o sistema.
+              </p>
+              <ul class="caminho__lista">
+                <li><svg class="ico"><use href="#i-ok" /></svg>Rotas do seu dia real, no seu mapa</li>
+                <li><svg class="ico"><use href="#i-ok" /></svg>Conferimos o seu rastreador, se houver</li>
+              </ul>
+              <a class="btn btn--linha btn--g" href="https://wa.me/5511955914618" data-abrir="agendar"><svg class="ico"><use href="#i-agenda" /></svg>Agendar demonstração</a>
+            </article>
+          </div>
+          <ol class="implanta">
+            <li><b>Cadastro</b><span>CD, veículos, motoristas e usuários da equipe.</span></li>
+            <li><b>Sua marca</b><span>Cores e logo da empresa no painel.</span></li>
+            <li><b>Treinamento</b><span>Online, com as notas da sua operação.</span></li>
+            <li><b>Suporte</b><span>Pelo WhatsApp, com quem desenvolve o sistema.</span></li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- ================= PREÇOS ================= -->
+      <section class="secao secao--clara precos" id="precos" aria-labelledby="precos-titulo">
+        <div class="cont">
+          <header class="cab cab--larga">
+            <h2 id="precos-titulo">Preço fixo pelo tamanho da frota.</h2>
+            <p class="cab__texto">
               Sem cobrança por entrega e sem equipamento para instalar. Implantação e treinamento
               inclusos em todos os planos. Mensal, sem fidelidade.
             </p>
-          </div>
-          <div class="tiers">
-            <article class="tier reveal">
-              <h3 class="tier__name">Essencial</h3>
-              <p class="tier__for">
-                <svg class="ico"><use href="#i-truck" /></svg>Até 5 veículos
-              </p>
-              <p class="tier__price">
-                <span class="tier__cur">R$</span><strong>197</strong
-                ><span class="tier__per">/mês</span>
-              </p>
-              <ul class="tier__list">
+          </header>
+          <div class="planos">
+            <article class="plano">
+              <h3>Essencial</h3>
+              <p class="plano__para"><svg class="ico"><use href="#i-caminhao" /></svg>Até 5 veículos</p>
+              <p class="plano__preco"><span>R$</span><b>197</b><span>/mês</span></p>
+              <ul>
+                <li>Todas as funções do sistema</li>
                 <li>Implantação inclusa</li>
-                <li>Rastreamento: +R$ 97/mês</li>
+                <li>Sincronização com rastreador: +R$ 97/mês</li>
               </ul>
-              <button class="btn btn--outline tier__btn" type="button" data-open-demo="demo">
-                Solicitar demonstração
-              </button>
+              <a class="btn btn--linha-clara" href="https://wa.me/5511955914618" data-abrir="agendar">Agendar demonstração</a>
             </article>
-            <article class="tier tier--mid reveal">
-              <h3 class="tier__name">Operação</h3>
-              <p class="tier__for">
-                <svg class="ico"><use href="#i-truck" /></svg>6 a 15 veículos
-              </p>
-              <p class="tier__price">
-                <span class="tier__cur">R$</span><strong>397</strong
-                ><span class="tier__per">/mês</span>
-              </p>
-              <ul class="tier__list">
+            <article class="plano plano--meio">
+              <h3>Operação</h3>
+              <p class="plano__para"><svg class="ico"><use href="#i-caminhao" /></svg>6 a 15 veículos</p>
+              <p class="plano__preco"><span>R$</span><b>397</b><span>/mês</span></p>
+              <ul>
+                <li>Todas as funções do sistema</li>
                 <li>Implantação inclusa</li>
-                <li>Sincronização com rastreamento inclusa</li>
+                <li>Sincronização com rastreador inclusa</li>
               </ul>
-              <button class="btn btn--gold tier__btn" type="button" data-open-demo="demo">
-                Solicitar demonstração
-              </button>
+              <a class="btn btn--ouro" href="https://wa.me/5511955914618" data-abrir="agendar">Agendar demonstração</a>
             </article>
-            <article class="tier reveal">
-              <h3 class="tier__name">Frota</h3>
-              <p class="tier__for">
-                <svg class="ico"><use href="#i-truck" /></svg>Acima de 15 veículos
-              </p>
-              <p class="tier__price">
-                <span class="tier__cur">R$</span><strong>697</strong
-                ><span class="tier__per">/mês</span>
-              </p>
-              <ul class="tier__list">
+            <article class="plano">
+              <h3>Frota</h3>
+              <p class="plano__para"><svg class="ico"><use href="#i-caminhao" /></svg>Acima de 15 veículos</p>
+              <p class="plano__preco"><span>R$</span><b>697</b><span>/mês</span></p>
+              <ul>
+                <li>Todas as funções do sistema</li>
                 <li>Implantação inclusa</li>
-                <li>Sincronização com rastreamento inclusa</li>
+                <li>Sincronização com rastreador inclusa</li>
               </ul>
-              <button class="btn btn--outline tier__btn" type="button" data-open-demo="demo">
-                Solicitar demonstração
-              </button>
+              <a class="btn btn--linha-clara" href="https://wa.me/5511955914618" data-abrir="agendar">Agendar demonstração</a>
             </article>
           </div>
-          <div class="price__foot">
-            <div class="price__box reveal">
-              <h3>Todos os planos incluem</h3>
-              <ul class="price__incl">
-                <li>
-                  <svg class="ico"><use href="#i-check" /></svg>Pedidos importados das notas fiscais
-                  (XML, PDF, Excel e CSV)
-                </li>
-                <li>
-                  <svg class="ico"><use href="#i-check" /></svg>Entregas e coletas no mesmo mapa
-                </li>
-                <li>
-                  <svg class="ico"><use href="#i-check" /></svg>Rotas pelo peso e pela capacidade de
-                  cada veículo
-                </li>
-                <li>
-                  <svg class="ico"><use href="#i-check" /></svg>Treinamento da equipe e suporte pelo
-                  WhatsApp
-                </li>
-              </ul>
-            </div>
-            <div class="price__box price__box--founder reveal">
-              <p class="addon__tag">
-                <svg class="ico"><use href="#i-check" /></svg>Sem fidelidade
-              </p>
-              <h3>Mensal, sem multa e sem taxa de entrada</h3>
-              <p>
-                Antes de contratar, a demonstração com os dados da sua operação é gratuita. Depois,
-                o pagamento é mensal e o cancelamento pode ser feito a qualquer momento.
-              </p>
-            </div>
-            <div class="addon reveal" id="rastreamento">
-              <p class="addon__tag">
-                <svg class="ico"><use href="#i-locate" /></svg>Inclusa nos planos Operação e Frota
-              </p>
-              <h3>Sincronização com rastreamento</h3>
-              <p>
-                Veja os veículos no mapa junto com as rotas planejadas. Conectamos o ROTAV3 ao
-                rastreador que a sua frota já usa, quando o fornecedor libera o acesso aos dados.
-                Confirmamos a compatibilidade na demonstração.
-              </p>
-              <button class="link-arrow" type="button" data-open-demo="rastreamento">
-                Verificar meu rastreador <svg class="ico"><use href="#i-arrow" /></svg>
-              </button>
-            </div>
+          <div class="precos__rodape">
+            <p>
+              <b>Sincronização com rastreador:</b> conectamos o ROTAV3 ao rastreador que a sua frota já
+              usa, quando o fornecedor libera o acesso aos dados, e os veículos aparecem no mapa junto
+              com as rotas. Confirmamos a compatibilidade na demonstração.
+              <a href="https://wa.me/5511955914618" data-abrir="rastreamento">Verificar o meu rastreador</a>
+            </p>
+            <p><b>Sem fidelidade:</b> pagamento mensal, sem multa e sem taxa de entrada. Cancele quando quiser.</p>
           </div>
         </div>
       </section>
 
-      <!-- 11. PERGUNTAS -->
-      <section class="section section--soft faq" id="perguntas" aria-labelledby="faq-title">
-        <div class="container faq__grid">
-          <div class="faq__copy reveal">
-            <p class="eyebrow">Perguntas frequentes</p>
-            <h2 id="faq-title">Tire suas dúvidas.</h2>
-            <p class="lead">Não encontrou o que procurava? Fale com a gente pelo WhatsApp.</p>
-          </div>
-          <div class="faq__list">
-            <details class="reveal">
-              <summary>
-                Como o ROTAV3 monta as rotas?<svg class="ico"><use href="#i-plus" /></svg>
-              </summary>
+      <!-- ================= PERGUNTAS ================= -->
+      <section class="secao secao--suave perguntas" id="perguntas" aria-labelledby="perg-titulo">
+        <div class="cont perguntas__grade">
+          <header class="perguntas__cab">
+            <h2 id="perg-titulo">Perguntas frequentes.</h2>
+            <p class="cab__texto">Não achou a sua? Fale com a gente pelo <a href="https://wa.me/5511955914618" data-whatsapp>WhatsApp</a>.</p>
+          </header>
+          <div class="perguntas__lista">
+            <details>
+              <summary>Como o ROTAV3 monta a rota?<svg class="ico"><use href="#i-mais" /></svg></summary>
               <p>
-                Você informa os pedidos e os veículos disponíveis. O sistema distribui os pedidos
-                entre os veículos e define a sequência de paradas respeitando o peso de cada pedido,
-                a capacidade de cada veículo e o limite de pedidos por rota.
+                Você escolhe o veículo, a capacidade, a hora de saída, o limite de paradas e o que entra
+                na viagem: entregas, coletas ou as duas. O sistema escolhe os pedidos que cabem e calcula
+                a melhor ordem das paradas com o Google OR-Tools, usando as distâncias pelas ruas e
+                respeitando o peso, a capacidade, a jornada e a janela de horário de cada cliente. Os
+                pedidos que não couberem continuam pendentes para a próxima viagem.
               </p>
             </details>
-            <details class="reveal">
-              <summary>
-                Preciso cadastrar os pedidos um por um?<svg class="ico"><use href="#i-plus" /></svg>
-              </summary>
+            <details>
+              <summary>Preciso cadastrar os pedidos um por um?<svg class="ico"><use href="#i-mais" /></svg></summary>
               <p>
-                Não. Você importa os pedidos a partir das notas fiscais em XML (NF-e), PDF (DANFE),
-                Excel ou CSV. Outras formas de entrada são avaliadas de acordo com a sua operação.
+                Não. Importe o XML das NF-e (vários arquivos de uma vez), uma planilha Excel ou um CSV.
+                A leitura de PDF (DANFE) existe, mas ainda é experimental: para um resultado confiável,
+                use o XML ou a planilha. Notas que já estão em rota não são alteradas.
               </p>
             </details>
-            <details class="reveal">
-              <summary>
-                Preciso trocar o sistema que já uso?<svg class="ico"><use href="#i-plus" /></svg>
-              </summary>
+            <details>
+              <summary>Funciona para coletas também?<svg class="ico"><use href="#i-mais" /></svg></summary>
+              <p>
+                Sim. Cada nota entra como entrega ou coleta, com cores diferentes no mapa e filtro por
+                tipo. Numa viagem com as duas, o sistema faz as entregas primeiro e as coletas depois e
+                confere a carga a bordo em cada trecho.
+              </p>
+            </details>
+            <details>
+              <summary>Como o motorista recebe a rota?<svg class="ico"><use href="#i-mais" /></svg></summary>
+              <p>
+                Pelo WhatsApp: o sistema gera um link da rota e o motorista abre no navegador do celular,
+                sem instalar aplicativo. Ele navega pelo Google Maps ou Waze e marca cada parada como
+                entregue ou coletada (com o nome de quem recebeu e a foto do canhoto) ou como não
+                realizada (com o motivo). O link vale por 7 dias e pode ser encerrado pelo escritório.
+              </p>
+            </details>
+            <details>
+              <summary>Dá para acompanhar os veículos em tempo real?<svg class="ico"><use href="#i-mais" /></svg></summary>
+              <p>
+                Sim, de dois jeitos. Pelo celular do motorista: com a permissão dele, a página da rota
+                envia a localização enquanto está aberta, e o painel mostra o veículo no mapa. Pelo
+                rastreador da frota: conectamos o ROTAV3 ao rastreador que a sua frota já usa, quando o
+                fornecedor libera o acesso aos dados. A sincronização com rastreador está inclusa nos
+                planos Operação e Frota; no Essencial custa R$ 97 por mês.
+              </p>
+            </details>
+            <details>
+              <summary>O que o assistente de IA faz?<svg class="ico"><use href="#i-mais" /></svg></summary>
+              <p>
+                Responde perguntas sobre a operação do dia com base nos pedidos e nas rotas do sistema:
+                como dividir as rotas, quais clientes estão isolados, quais pedidos podem atrasar e qual
+                veículo usar. Ele não altera nada sozinho; a decisão continua com a sua equipe.
+              </p>
+            </details>
+            <details>
+              <summary>Preciso trocar o sistema que já uso?<svg class="ico"><use href="#i-mais" /></svg></summary>
               <p>
                 Não. O ROTAV3 trabalha com as notas fiscais que a sua empresa já emite. Integração
                 direta com outros sistemas é avaliada caso a caso.
               </p>
             </details>
-            <details class="reveal">
-              <summary>
-                Dá para rastrear os veículos no mapa?<svg class="ico">
-                  <use href="#i-plus" />
-                </svg>
-              </summary>
+            <details>
+              <summary>O sistema pode ter a identidade visual da minha empresa?<svg class="ico"><use href="#i-mais" /></svg></summary>
               <p>
-                Sim, com a sincronização com rastreamento: conectamos o ROTAV3 ao rastreador que a
-                sua frota já usa, quando o fornecedor libera o acesso aos dados, e os veículos
-                aparecem no mapa junto com as rotas planejadas. Confirmamos a compatibilidade do seu
-                rastreador na demonstração. Inclusa nos planos Operação e Frota; no Essencial custa
-                R$ 97 por mês.
+                Sim. Cores e logo são ajustados na implantação, e partes do fluxo podem ser adaptadas aos
+                processos da sua empresa. O escopo é combinado depois de conhecermos a operação.
               </p>
             </details>
-            <details class="reveal">
-              <summary>
-                Funciona para coletas também?<svg class="ico"><use href="#i-plus" /></svg>
-              </summary>
-              <p>Sim. Entregas e coletas aparecem separadas no mapa e no planejamento.</p>
-            </details>
-            <details class="reveal">
-              <summary>
-                O sistema pode ter a identidade visual da minha empresa?<svg class="ico">
-                  <use href="#i-plus" />
-                </svg>
-              </summary>
+            <details>
+              <summary>Quanto custa?<svg class="ico"><use href="#i-mais" /></svg></summary>
               <p>
-                Sim. Cores, logo e partes do fluxo podem ser adaptadas aos processos da sua empresa.
-                O escopo é combinado depois de conhecermos a operação.
+                Essencial (até 5 veículos): R$ 197 por mês. Operação (6 a 15 veículos): R$ 397 por mês.
+                Frota (acima de 15 veículos): R$ 697 por mês. Implantação e treinamento inclusos em
+                todos os planos, sem taxa de entrada. <a href="#precos">Ver os planos</a>.
               </p>
             </details>
-            <details class="reveal">
-              <summary>
-                Funciona no celular?<svg class="ico"><use href="#i-plus" /></svg>
-              </summary>
+            <details>
+              <summary>Dá para testar antes de pagar?<svg class="ico"><use href="#i-mais" /></svg></summary>
               <p>
-                Sim. O ROTAV3 é acessado pelo navegador e se adapta a computadores, tablets e
-                celulares, sem instalar aplicativo.
+                Sim, de dois jeitos e sem custo: o acesso de demonstração (e-mail e senha pelo WhatsApp,
+                com pedidos fictícios, por 7 dias) ou a demonstração com as notas de um dia da sua
+                operação, numa chamada de 20 minutos. <a href="#como-comecar">Ver como funciona</a>.
               </p>
             </details>
-            <details class="reveal">
-              <summary>
-                Quanto custa?<svg class="ico"><use href="#i-plus" /></svg>
-              </summary>
-              <p>
-                Essencial (até 5 veículos): R$ 197 por mês. Operação (6 a 15 veículos): R$ 397 por
-                mês. Frota (acima de 15 veículos): R$ 697 por mês. Implantação e treinamento estão
-                inclusos em todos os planos, sem taxa de entrada.
-                <a href="#preco">Ver os planos.</a>
-              </p>
+            <details>
+              <summary>Tem fidelidade?<svg class="ico"><use href="#i-mais" /></svg></summary>
+              <p>Não. O plano é mensal, sem multa, e o cancelamento pode ser feito a qualquer momento.</p>
             </details>
-            <details class="reveal">
-              <summary>
-                Dá para ver funcionando antes de pagar?<svg class="ico">
-                  <use href="#i-plus" />
-                </svg>
-              </summary>
+            <details>
+              <summary>Como ficam os dados da minha operação?<svg class="ico"><use href="#i-mais" /></svg></summary>
               <p>
-                Sim. Você envia as notas fiscais de um dia de operação, montamos as rotas desse dia
-                no ROTAV3 e apresentamos em uma chamada de 20 minutos, sem custo.
-                <a href="#como-comecar">Veja como funciona.</a>
-              </p>
-            </details>
-            <details class="reveal">
-              <summary>
-                Tem fidelidade?<svg class="ico"><use href="#i-plus" /></svg>
-              </summary>
-              <p>
-                Não. O plano é mensal, sem multa, e o cancelamento pode ser feito a qualquer
-                momento.
-              </p>
-            </details>
-            <details class="reveal">
-              <summary>
-                Como ficam os dados da minha operação?<svg class="ico">
-                  <use href="#i-plus" />
-                </svg>
-              </summary>
-              <p>
-                Eles são usados só para planejar as suas rotas. Na demonstração explicamos onde
-                ficam armazenados e quem tem acesso. Os dados enviados por esta página seguem a
+                São usados só para planejar e acompanhar as suas rotas. Cada usuário entra com e-mail e
+                senha e só vê o sistema depois de liberado pelo administrador. Na demonstração explicamos
+                onde os dados ficam armazenados. Os dados enviados por esta página seguem a
                 <a href="privacidade.html">política de privacidade</a>.
               </p>
             </details>
@@ -1569,139 +1034,127 @@
         </div>
       </section>
 
-      <!-- 12. CHAMADA FINAL -->
-      <section class="cta" id="contato" aria-labelledby="cta-title">
-        <div class="container cta__grid">
-          <img
-            class="cta__logo"
-            src="img/logo-rotav3.png"
-            alt="ROTAV3 Systems"
-            width="177"
-            height="43"
-            loading="lazy"
-          />
-          <div class="cta__copy">
-            <h2 id="cta-title">Veja o ROTAV3 funcionando com os dados da sua operação.</h2>
-            <p>
-              Demonstração gratuita de 20 minutos, com as notas fiscais de um dia da sua operação. O
-              agendamento é feito pelo WhatsApp, direto com a equipe que desenvolve o sistema.
+      <!-- ================= CONTATO ================= -->
+      <section class="secao secao--escura contato" id="contato" aria-labelledby="contato-titulo">
+        <div class="cont contato__grade">
+          <div class="contato__texto">
+            <h2 id="contato-titulo">Veja as suas rotas no ROTAV3.</h2>
+            <p class="cab__texto">
+              Preencha e a conversa abre no WhatsApp com a mensagem pronta, direto com a equipe que
+              desenvolve o sistema. Se preferir entrar sozinho, peça o acesso de demonstração.
             </p>
+            <a class="btn btn--linha btn--g" href="https://wa.me/5511955914618" data-abrir="acesso"><svg class="ico"><use href="#i-olho" /></svg>Pedir acesso de demonstração</a>
           </div>
-          <div class="cta__actions">
-            <button class="btn btn--gold" type="button" data-open-demo="demo">
-              <svg class="ico"><use href="#i-calendar" /></svg>Solicitar demonstração
-            </button>
-            <a class="btn btn--ghost" href="#" data-whatsapp hidden
-              ><svg class="ico"><use href="#i-chat" /></svg>Falar no WhatsApp</a
-            >
-          </div>
+          <form class="form form--cartao" data-form="agendar" novalidate>
+            <h3>Agendar demonstração</h3>
+            <div class="form__campos">
+              <label class="campo"><span>Nome</span><input name="nome" autocomplete="name" required minlength="2" maxlength="80" /><small class="campo__erro"></small></label>
+              <label class="campo"><span>Empresa</span><input name="empresa" autocomplete="organization" required minlength="2" maxlength="100" /><small class="campo__erro"></small></label>
+              <fieldset class="campo campo--todo">
+                <legend>Quantos veículos na operação?</legend>
+                <div class="escolha">
+                  <label><input type="radio" name="frota" value="1 a 5" /><span>1 a 5</span></label>
+                  <label><input type="radio" name="frota" value="6 a 15" /><span>6 a 15</span></label>
+                  <label><input type="radio" name="frota" value="16 a 50" /><span>16 a 50</span></label>
+                  <label><input type="radio" name="frota" value="mais de 50" /><span>Mais de 50</span></label>
+                </div>
+                <small class="campo__erro"></small>
+              </fieldset>
+              <label class="campo" data-so-endpoint hidden><span>E-mail</span><input name="email" type="email" autocomplete="email" maxlength="120" inputmode="email" /><small class="campo__erro"></small></label>
+              <label class="campo" data-so-endpoint hidden><span>WhatsApp</span><input name="telefone" type="tel" autocomplete="tel" inputmode="tel" placeholder="(11) 90000-0000" maxlength="20" /><small class="campo__erro"></small></label>
+              <input type="hidden" name="interesse" value="demo" />
+              <label class="hp" aria-hidden="true">Não preencha<input name="website" tabindex="-1" autocomplete="off" /></label>
+            </div>
+            <button class="btn btn--ouro btn--g form__enviar" type="submit"><svg class="ico"><use href="#i-chat" /></svg><span data-rotulo>Abrir no WhatsApp</span></button>
+            <p class="form__legal">Usamos seus dados só para responder a este contato. <a href="privacidade.html">Política de privacidade</a>.</p>
+            <p class="form__status" role="status" aria-live="polite"></p>
+          </form>
         </div>
       </section>
     </main>
 
-    <footer class="site-footer">
-      <div class="container footer__inner">
-        <div class="footer__legal">
-          <p>ROTAV3 Systems © <span data-year>2026</span>. Todos os direitos reservados.</p>
-          <p>CNPJ 68.080.201/0001-80</p>
+    <footer class="rodape">
+      <div class="cont rodape__grade">
+        <div>
+          <img src="img/logo-rotav3.png" alt="ROTAV3 Systems" width="148" height="36" loading="lazy" />
+          <p>Roteirização de entregas e coletas para transportadoras.</p>
         </div>
-        <nav aria-label="Rodapé">
-          <a class="footer__link" href="#" data-whatsapp hidden
-            >WhatsApp <span data-whatsapp-label></span
-          ></a>
-          <a class="footer__link" href="privacidade.html">Política de privacidade</a>
-          <a class="footer__link" href="#topo">Voltar ao topo</a>
+        <nav aria-label="Rodapé" class="rodape__links">
+          <a href="#como-funciona">Como funciona</a>
+          <a href="#criar-rota">Criar rota</a>
+          <a href="#precos">Preços</a>
+          <a href="#perguntas">Perguntas</a>
+          <a href="privacidade.html">Política de privacidade</a>
         </nav>
+        <div class="rodape__contato">
+          <a href="https://wa.me/5511955914618" data-whatsapp>WhatsApp <span data-whatsapp-rotulo>(11) 95591-4618</span></a>
+          <p>ROTAV3 Systems © <span data-ano>2026</span> · CNPJ 68.080.201/0001-80</p>
+        </div>
       </div>
+      <p class="cont rodape__creditos">
+        Mapas: © colaboradores do OpenStreetMap, OpenFreeMap e OpenMapTiles. Limites dos municípios:
+        IBGE. Rodovias e rios da maquete: Natural Earth. Ícones 3D: Fluent Emoji (Microsoft, licença
+        MIT). Pedidos, empresas e pessoas das demonstrações são fictícios.
+      </p>
     </footer>
 
-    <dialog class="modal" id="demo-modal" aria-labelledby="demo-title">
-      <form class="modal__card" id="demo-form" novalidate>
-        <button class="modal__close" type="button" data-close-demo aria-label="Fechar">
-          <svg class="ico ico--lg"><use href="#i-close" /></svg>
-        </button>
-        <p class="eyebrow">Demonstração</p>
-        <h2 id="demo-title">Agende uma demonstração</h2>
-        <p class="modal__intro" id="form-intro">
-          Três informações e pronto: a conversa abre no WhatsApp com a mensagem já escrita.
+    <!-- Ver o sistema: pede acesso de demonstração pelo WhatsApp -->
+    <dialog class="modal" id="modal-acesso" aria-labelledby="acesso-titulo">
+      <form class="form" data-form="acesso" novalidate>
+        <button class="modal__fechar" type="button" data-fechar aria-label="Fechar"><svg class="ico ico--g"><use href="#i-fechar" /></svg></button>
+        <h2 id="acesso-titulo">Veja o sistema por dentro</h2>
+        <p class="modal__texto">
+          Liberamos um acesso de demonstração pelo WhatsApp: você recebe o link, um e-mail e uma senha
+          para entrar no ROTAV3 com pedidos fictícios por 7 dias. Nada do que fizer lá altera dados
+          reais.
         </p>
-        <p class="modal__notice" id="form-notice" hidden>
-          Formulário em modo de demonstração: os dados são validados, mas ainda não são enviados.
-        </p>
-        <div class="field-grid">
-          <label class="field"
-            ><span>Nome *</span
-            ><input name="nome" autocomplete="name" required minlength="2" maxlength="80" /><small
-              class="field__error"
-              aria-live="polite"
-            ></small
-          ></label>
-          <label class="field"
-            ><span>Empresa *</span
-            ><input
-              name="empresa"
-              autocomplete="organization"
-              required
-              minlength="2"
-              maxlength="100" /><small class="field__error" aria-live="polite"></small
-          ></label>
-          <fieldset class="field field--full field--choice">
-            <legend>Quantos veículos na operação? *</legend>
-            <div class="choice">
-              <label><input type="radio" name="frota" value="1 a 5" /><span>1 a 5</span></label>
-              <label><input type="radio" name="frota" value="6 a 20" /><span>6 a 20</span></label>
-              <label><input type="radio" name="frota" value="21 a 50" /><span>21 a 50</span></label>
-              <label
-                ><input type="radio" name="frota" value="Mais de 50" /><span
-                  >Mais de 50</span
-                ></label
-              >
-            </div>
-            <small class="field__error" aria-live="polite"></small>
-          </fieldset>
-          <label class="field" data-endpoint-only hidden
-            ><span>E-mail *</span
-            ><input
-              name="email"
-              type="email"
-              autocomplete="email"
-              maxlength="120"
-              inputmode="email" /><small class="field__error" aria-live="polite"></small
-          ></label>
-          <label class="field" data-endpoint-only hidden
-            ><span>WhatsApp *</span
-            ><input
-              name="telefone"
-              type="tel"
-              autocomplete="tel"
-              inputmode="tel"
-              placeholder="(11) 90000-0000"
-              maxlength="20" /><small class="field__error" aria-live="polite"></small
-          ></label>
-          <input type="hidden" name="interesse" value="" />
-          <label class="hp" aria-hidden="true"
-            >Não preencha<input name="website" tabindex="-1" autocomplete="off"
-          /></label>
+        <div class="form__campos">
+          <label class="campo"><span>Nome</span><input name="nome" autocomplete="name" required minlength="2" maxlength="80" /><small class="campo__erro"></small></label>
+          <label class="campo"><span>Empresa</span><input name="empresa" autocomplete="organization" required minlength="2" maxlength="100" /><small class="campo__erro"></small></label>
+          <label class="campo campo--todo"><span>E-mail para entrar no sistema</span><input name="email" type="email" autocomplete="email" required maxlength="120" inputmode="email" /><small class="campo__erro"></small></label>
+          <label class="hp" aria-hidden="true">Não preencha<input name="website" tabindex="-1" autocomplete="off" /></label>
         </div>
-        <p class="modal__legal">
-          Usamos seus dados só para responder a este contato.
-          <a href="privacidade.html" target="_blank" rel="noopener">Política de privacidade</a>.
+        <button class="btn btn--ouro btn--g form__enviar" type="submit"><svg class="ico"><use href="#i-chat" /></svg><span data-rotulo>Pedir acesso pelo WhatsApp</span></button>
+        <p class="form__legal">Sem cartão. Usamos seus dados só para criar o acesso e responder. <a href="privacidade.html" target="_blank" rel="noopener">Política de privacidade</a>.</p>
+        <p class="form__status" role="status" aria-live="polite"></p>
+        <p class="modal__extra">
+          Quer ver algo agora?
+          <a href="https://hesantss-pixel.github.io/2slrotav3/motorista.html#demo" target="_blank" rel="noopener">Abra a tela do motorista de exemplo</a>.
         </p>
-        <div class="modal__actions">
-          <button class="btn btn--gold" type="submit" id="demo-submit">
-            Enviar pelo WhatsApp <svg class="ico"><use href="#i-arrow" /></svg>
-          </button>
-        </div>
-        <p class="form-status" id="form-status" role="status" aria-live="polite"></p>
       </form>
     </dialog>
 
-    <dialog class="zoom" id="zoom-dialog" aria-label="Imagem ampliada">
-      <button class="zoom__close" type="button" aria-label="Fechar imagem ampliada" data-zoom-close>
-        <svg class="ico ico--lg"><use href="#i-close" /></svg>
-      </button>
-      <div class="zoom__scroll"><img alt="" id="zoom-img" /></div>
-      <p class="zoom__hint">Arraste para ver as outras partes da imagem.</p>
+    <!-- Agendar demonstração com os dados da operação -->
+    <dialog class="modal" id="modal-agendar" aria-labelledby="agendar-titulo">
+      <form class="form" data-form="agendar" novalidate>
+        <button class="modal__fechar" type="button" data-fechar aria-label="Fechar"><svg class="ico ico--g"><use href="#i-fechar" /></svg></button>
+        <h2 id="agendar-titulo">Agendar demonstração</h2>
+        <p class="modal__texto" data-modal-texto>
+          Três respostas e a conversa abre no WhatsApp com a mensagem pronta para combinarmos a
+          demonstração com as notas de um dia da sua operação.
+        </p>
+        <div class="form__campos">
+          <label class="campo"><span>Nome</span><input name="nome" autocomplete="name" required minlength="2" maxlength="80" /><small class="campo__erro"></small></label>
+          <label class="campo"><span>Empresa</span><input name="empresa" autocomplete="organization" required minlength="2" maxlength="100" /><small class="campo__erro"></small></label>
+          <fieldset class="campo campo--todo">
+            <legend>Quantos veículos na operação?</legend>
+            <div class="escolha">
+              <label><input type="radio" name="frota" value="1 a 5" /><span>1 a 5</span></label>
+              <label><input type="radio" name="frota" value="6 a 15" /><span>6 a 15</span></label>
+              <label><input type="radio" name="frota" value="16 a 50" /><span>16 a 50</span></label>
+              <label><input type="radio" name="frota" value="mais de 50" /><span>Mais de 50</span></label>
+            </div>
+            <small class="campo__erro"></small>
+          </fieldset>
+          <label class="campo" data-so-endpoint hidden><span>E-mail</span><input name="email" type="email" autocomplete="email" maxlength="120" inputmode="email" /><small class="campo__erro"></small></label>
+          <label class="campo" data-so-endpoint hidden><span>WhatsApp</span><input name="telefone" type="tel" autocomplete="tel" inputmode="tel" placeholder="(11) 90000-0000" maxlength="20" /><small class="campo__erro"></small></label>
+          <input type="hidden" name="interesse" value="demo" />
+          <label class="hp" aria-hidden="true">Não preencha<input name="website" tabindex="-1" autocomplete="off" /></label>
+        </div>
+        <button class="btn btn--ouro btn--g form__enviar" type="submit"><svg class="ico"><use href="#i-chat" /></svg><span data-rotulo>Abrir no WhatsApp</span></button>
+        <p class="form__legal">Usamos seus dados só para responder a este contato. <a href="privacidade.html" target="_blank" rel="noopener">Política de privacidade</a>.</p>
+        <p class="form__status" role="status" aria-live="polite"></p>
+      </form>
     </dialog>
 
     <script type="module" src="js/main.js"></script>
