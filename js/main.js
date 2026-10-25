@@ -72,11 +72,13 @@ function abrirModal(qual, gatilho) {
   const m = modais[tipo];
   ultimoGatilho = gatilho || null;
   if (tipo === "agendar") {
-    m.querySelector("[name=interesse]").value = qual === "rastreamento" ? "rastreamento" : "demo";
+    m.querySelector("[name=interesse]").value = qual === "rastreamento" || qual === "preco" ? qual : "demo";
     textoAgendar.textContent =
       qual === "rastreamento"
         ? "Conte sobre a sua frota. A conversa abre no WhatsApp para verificarmos se o seu rastreador pode ser conectado ao ROTAV3."
-        : textoAgendarPadrao;
+        : qual === "preco"
+          ? "Conte o tamanho da frota. A conversa abre no WhatsApp para passarmos o valor do seu plano."
+          : textoAgendarPadrao;
   }
   if (typeof m.showModal === "function") m.showModal();
   else m.setAttribute("open", "");
@@ -124,7 +126,9 @@ function mensagem(tipo, d) {
   return [
     `Olá! Sou ${d.nome.trim()}, da ${d.empresa.trim()}.`,
     d.frota ? `Temos ${d.frota} veículos.` : "",
-    "Gostaria de agendar uma demonstração do ROTAV3 com os dados da nossa operação.",
+    d.interesse === "preco"
+      ? "Gostaria de saber o valor do ROTAV3 para a nossa frota."
+      : "Gostaria de agendar uma demonstração do ROTAV3 com os dados da nossa operação.",
     d.interesse === "rastreamento" ? "Também quero verificar a conexão com o nosso rastreador." : "",
   ]
     .filter(Boolean)

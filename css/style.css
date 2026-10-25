@@ -514,10 +514,21 @@ p {
   align-items: end;
 }
 .hero h1 {
-  font-size: clamp(2.45rem, 1.25rem + 4.1vw, 4.75rem);
+  font-size: clamp(2.45rem, 1.25rem + 4.1vw, 4.6rem);
   line-height: 1.01;
   letter-spacing: -0.045em;
   color: #fff;
+}
+.h1-a,
+.h1-b {
+  display: block;
+}
+.h1-b {
+  margin-top: 0.32em;
+  font-size: 0.56em;
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+  color: var(--txt-esc-2);
 }
 .hero__texto {
   font-size: clamp(1.03rem, 0.97rem + 0.32vw, 1.2rem);
@@ -3975,11 +3986,71 @@ i.r {
 .plano--meio li::before {
   border-color: var(--ouro);
 }
+.preco {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 16px;
+  align-items: stretch;
+}
+.preco__card {
+  display: grid;
+  align-content: start;
+  gap: 10px;
+  padding: clamp(24px, 3vw, 40px);
+  border-radius: var(--raio-g);
+  background: var(--marinho);
+  color: #fff;
+  box-shadow: 0 30px 60px -30px rgba(16, 34, 63, 0.8);
+}
+.preco__rotulo {
+  font-weight: 600;
+  color: #c3cee0;
+}
+.preco__card .plano__preco span {
+  color: #c3cee0;
+}
+.preco__texto {
+  color: #c3cee0;
+  max-width: 40ch;
+  margin-bottom: 10px;
+}
+.preco__card .btn {
+  justify-self: start;
+}
+.preco__inclui {
+  padding: clamp(24px, 3vw, 40px);
+  border-radius: var(--raio-g);
+  background: #fff;
+  border: 1px solid var(--linha);
+}
+.preco__inclui h3 {
+  font-size: 1.2rem;
+  margin-bottom: 14px;
+}
+.preco__inclui ul {
+  display: grid;
+  gap: 12px;
+}
+.preco__inclui li {
+  position: relative;
+  padding-left: 26px;
+  color: var(--tinta-2);
+}
+.preco__inclui li::before {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 0.42em;
+  width: 11px;
+  height: 6px;
+  border-left: 2px solid var(--entrega);
+  border-bottom: 2px solid var(--entrega);
+  transform: rotate(-45deg);
+}
 .precos__rodape {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
-  margin-top: 18px;
+  margin-top: 16px;
 }
 .precos__rodape p {
   padding: 18px 20px;
@@ -3998,8 +4069,11 @@ i.r {
 }
 @media (max-width: 900px) {
   .planos,
-  .precos__rodape {
+  .preco {
     grid-template-columns: minmax(0, 1fr);
+  }
+  .preco__card .btn {
+    justify-self: stretch;
   }
 }
 
