@@ -75,7 +75,7 @@ function abrirModal(qual, gatilho) {
     m.querySelector("[name=interesse]").value = qual === "rastreamento" || qual === "preco" ? qual : "demo";
     textoAgendar.textContent =
       qual === "rastreamento"
-        ? "Conte sobre a sua frota. A conversa abre no WhatsApp para verificarmos se o seu rastreador pode ser conectado ao ROTAV3."
+        ? "Conte sobre a sua frota. A conversa abre no WhatsApp para falarmos do rastreamento: o rastreador que fornecemos e instalamos ou o que a sua frota já usa."
         : qual === "preco"
           ? "Conte o tamanho da frota. A conversa abre no WhatsApp para passarmos o valor do seu plano."
           : textoAgendarPadrao;
@@ -129,7 +129,7 @@ function mensagem(tipo, d) {
     d.interesse === "preco"
       ? "Gostaria de saber o valor do ROTAV3 para a nossa frota."
       : "Gostaria de agendar uma demonstração do ROTAV3 com os dados da nossa operação.",
-    d.interesse === "rastreamento" ? "Também quero verificar a conexão com o nosso rastreador." : "",
+    d.interesse === "rastreamento" ? "Também quero saber sobre o rastreamento dos veículos." : "",
   ]
     .filter(Boolean)
     .join(" ");
@@ -266,6 +266,10 @@ document.querySelectorAll("[data-ampliar]").forEach((b) =>
     const img = b.querySelector("img");
     zoomImg.src = b.dataset.ampliar;
     zoomImg.alt = img ? img.alt : "";
+    const lw = img ? img.naturalWidth || +img.getAttribute("width") : 0;
+    const lh = img ? img.naturalHeight || +img.getAttribute("height") : 0;
+    zoomImg.classList.toggle("zoom__img--larga", lw > lh * 1.2);
+    zoom.querySelector(".zoom__rolagem").scrollTo(0, 0);
     if (typeof zoom.showModal === "function") zoom.showModal();
     else zoom.setAttribute("open", "");
     doc.classList.add("modal-aberto");
@@ -280,6 +284,40 @@ zoom.addEventListener("close", () => {
   zoomImg.removeAttribute("src");
   if (zoomGatilho) zoomGatilho.focus();
 });
+
+/* ---------- telas reais: abas (sem JS, todas as telas aparecem uma embaixo da outra) ---------- */
+const faixaAbas = document.querySelector("[data-telas-abas]");
+if (faixaAbas) {
+  const abas = [...faixaAbas.querySelectorAll('[role="tab"]')];
+  const mostrarTela = (aba, foco) => {
+    abas.forEach((a) => {
+      const ativa = a === aba;
+      a.setAttribute("aria-selected", String(ativa));
+      a.tabIndex = ativa ? 0 : -1;
+      const painel = document.getElementById(a.getAttribute("aria-controls"));
+      if (painel) painel.hidden = !ativa;
+    });
+    if (foco) aba.focus({ preventScroll: true });
+    // no celular as abas rolam de lado: deixa a escolhida à vista sem mexer na rolagem da página
+    const fora = aba.offsetLeft < faixaAbas.scrollLeft || aba.offsetLeft + aba.offsetWidth > faixaAbas.scrollLeft + faixaAbas.clientWidth;
+    if (fora) faixaAbas.scrollTo({ left: aba.offsetLeft - 16, behavior: reduzir ? "auto" : "smooth" });
+  };
+  abas.forEach((a, i) => {
+    a.addEventListener("click", () => mostrarTela(a));
+    a.addEventListener("keydown", (e) => {
+      const passo = { ArrowRight: 1, ArrowLeft: -1 }[e.key];
+      if (passo) {
+        e.preventDefault();
+        mostrarTela(abas[(i + passo + abas.length) % abas.length], true);
+      } else if (e.key === "Home" || e.key === "End") {
+        e.preventDefault();
+        mostrarTela(abas[e.key === "Home" ? 0 : abas.length - 1], true);
+      }
+    });
+  });
+  faixaAbas.closest(".telas").classList.add("telas--abas");
+  mostrarTela(abas.find((a) => a.getAttribute("aria-selected") === "true") || abas[0]);
+}
 
 /* ---------- filme do topo ---------- */
 iniciarFilme({ reduzir });

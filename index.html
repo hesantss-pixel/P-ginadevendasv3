@@ -27,7 +27,7 @@
     <title>ROTAV3 — Rotas prontas no automático para transportadoras</title>
     <meta
       name="description"
-      content="Rotas prontas no automático para transportadoras: importe as notas e o ROTAV3 monta a sequência de paradas pelo peso, pela capacidade e pelo horário de cada cliente, envia a rota ao motorista pelo WhatsApp e mostra cada entrega e coleta no mapa. Planos a partir de R$ 197 por mês."
+      content="Rotas prontas no automático para transportadoras: importe as notas e o ROTAV3 monta a sequência de paradas pelo peso, pela capacidade e pelo horário de cada cliente, envia a rota ao motorista pelo WhatsApp e mostra cada entrega e coleta no mapa. Rastreamento pelo celular do motorista ou com rastreador no veículo."
     />
     <meta name="theme-color" content="#0a1220" />
     <link rel="canonical" href="https://www.rotav3.com.br/" />
@@ -62,6 +62,7 @@
             "contactPoint": {
               "@type": "ContactPoint",
               "telephone": "+55-11-95591-4618",
+              "email": "rotav3systemy@gmail.com",
               "contactType": "sales",
               "areaServed": "BR",
               "availableLanguage": "pt-BR"
@@ -73,12 +74,7 @@
             "applicationCategory": "BusinessApplication",
             "operatingSystem": "Web",
             "inLanguage": "pt-BR",
-            "description": "Sistema de roteirização de entregas e coletas: importa pedidos das notas fiscais, mostra os pedidos no mapa, monta a rota respeitando peso, capacidade do veículo e janela de horário, envia a rota ao motorista pelo WhatsApp e recebe as baixas com foto.",
-            "offers": {
-              "@type": "AggregateOffer",
-              "priceCurrency": "BRL",
-              "lowPrice": "197"
-            },
+            "description": "Sistema de roteirização de entregas e coletas: importa pedidos das notas fiscais, mostra os pedidos no mapa, monta a rota respeitando peso, capacidade do veículo e janela de horário, envia a rota ao motorista pelo WhatsApp, recebe as baixas com foto e mostra a localização do veículo pelo celular do motorista.",
             "publisher": { "@id": "https://www.rotav3.com.br/#org" }
           }
         ]
@@ -185,12 +181,12 @@
           <img src="img/logo-rotav3.png" alt="ROTAV3 Systems" width="148" height="36" />
         </a>
         <nav class="menu" id="menu" aria-label="Menu principal">
+          <a href="#telas" data-nav>Telas</a>
           <a href="#como-funciona" data-nav>Como funciona</a>
           <a href="#criar-rota" data-nav>Criar rota</a>
-          <a href="#mapa" data-nav>Mapa</a>
           <a href="#ao-vivo" data-nav>Ao vivo</a>
-          <a href="#ia" data-nav>IA</a>
-          <a href="#precos" data-nav>Preços</a>
+          <a href="#rastreamento" data-nav>Rastreamento</a>
+          <a href="#precos" data-nav>Preço</a>
           <a href="#perguntas" data-nav>Perguntas</a>
           <div class="menu__acoes">
             <a class="btn btn--linha" href="https://wa.me/5511955914618" data-abrir="agendar">Agendar demonstração</a>
@@ -236,7 +232,8 @@
               </a>
             </div>
             <p class="hero__nota">
-              Acesso de demonstração com dados fictícios, liberado pelo WhatsApp. Sem cartão.
+              Acesso de demonstração por 7 dias, liberado pelo WhatsApp: teste com pedidos de
+              exemplo ou com as suas notas. Sem cartão.
             </p>
           </div>
         </div>
@@ -398,6 +395,104 @@
             <li><img src="img/ic/camera-with-flash.webp" alt="" width="40" height="40" loading="lazy" /><span><b>Baixa com foto</b>do canhoto, na hora</span></li>
             <li><img src="img/ic/robot.webp" alt="" width="40" height="40" loading="lazy" /><span><b>Assistente de IA</b>que lê a operação do dia</span></li>
           </ul>
+        </div>
+      </section>
+
+      <!-- ================= TELAS REAIS ================= -->
+      <section class="secao secao--suave telas" id="telas" aria-labelledby="telas-titulo">
+        <div class="cont">
+          <header class="cab cab--larga">
+            <h2 id="telas-titulo">O sistema de verdade, tela por tela.</h2>
+            <p class="cab__texto">
+              Estas telas foram capturadas do ROTAV3 funcionando, com dados de exemplo. Escolha uma
+              etapa e toque na imagem para ver de perto.
+            </p>
+          </header>
+          <div class="telas__abas" role="tablist" aria-label="Telas do sistema" data-telas-abas>
+            <button type="button" role="tab" id="aba-painel" aria-controls="tela-painel" aria-selected="true">Painel</button>
+            <button type="button" role="tab" id="aba-pedidos" aria-controls="tela-pedidos" aria-selected="false">Pedidos</button>
+            <button type="button" role="tab" id="aba-roteirizacao" aria-controls="tela-roteirizacao" aria-selected="false">Roteirização</button>
+            <button type="button" role="tab" id="aba-rota" aria-controls="tela-rota" aria-selected="false">Rota enviada</button>
+            <button type="button" role="tab" id="aba-motorista" aria-controls="tela-motorista" aria-selected="false">Motorista</button>
+            <button type="button" role="tab" id="aba-celular" aria-controls="tela-celular" aria-selected="false">No celular</button>
+          </div>
+          <div class="telas__palco">
+            <figure class="tela" id="tela-painel" role="tabpanel" aria-labelledby="aba-painel">
+              <button class="tela__nav" type="button" data-ampliar="img/telas/painel.webp" aria-label="Ampliar a tela do painel">
+                <span class="tela__barra" aria-hidden="true"><i></i><i></i><i></i><span>ROTAV3 · Painel</span></span>
+                <img src="img/telas/painel.webp" width="1600" height="1000" loading="lazy" decoding="async" alt="Painel do ROTAV3: total de pedidos, rotas, tempo estimado, pedidos por região, mapa de distribuição e pedidos agendados" />
+                <span class="modelo__lupa" aria-hidden="true"><svg class="ico"><use href="#i-busca" /></svg>Ampliar</span>
+              </button>
+              <figcaption>
+                <b>O dia inteiro numa tela.</b>
+                Pedidos pendentes, entregas e coletas, tempo estimado, pedidos por região, agendados
+                do dia e alertas do que precisa de atenção.
+              </figcaption>
+            </figure>
+            <figure class="tela" id="tela-pedidos" role="tabpanel" aria-labelledby="aba-pedidos">
+              <button class="tela__nav" type="button" data-ampliar="img/telas/pedidos.webp" aria-label="Ampliar a tela de pedidos">
+                <span class="tela__barra" aria-hidden="true"><i></i><i></i><i></i><span>ROTAV3 · Pedidos</span></span>
+                <img src="img/telas/pedidos.webp" width="1600" height="1000" loading="lazy" decoding="async" alt="Tela de pedidos do ROTAV3: botão para importar notas e pedidos agrupados por cidade, com entregas e coletas" />
+                <span class="modelo__lupa" aria-hidden="true"><svg class="ico"><use href="#i-busca" /></svg>Ampliar</span>
+              </button>
+              <figcaption>
+                <b>As notas entram de uma vez.</b>
+                Importe o XML das NF-e, uma planilha Excel ou um CSV, vários arquivos juntos. Os
+                pedidos aparecem por cidade, separados em entregas e coletas.
+              </figcaption>
+            </figure>
+            <figure class="tela" id="tela-roteirizacao" role="tabpanel" aria-labelledby="aba-roteirizacao">
+              <button class="tela__nav" type="button" data-ampliar="img/telas/roteirizacao.webp" aria-label="Ampliar a tela de roteirização">
+                <span class="tela__barra" aria-hidden="true"><i></i><i></i><i></i><span>ROTAV3 · Roteirização</span></span>
+                <img src="img/telas/roteirizacao.webp" width="1600" height="1000" loading="lazy" decoding="async" alt="Tela de roteirização do ROTAV3: motoristas cadastrados, escolha do veículo do Fiorino à carreta e CD de saída definido pelo CEP" />
+                <span class="modelo__lupa" aria-hidden="true"><svg class="ico"><use href="#i-busca" /></svg>Ampliar</span>
+              </button>
+              <figcaption>
+                <b>Escolha o veículo e gere a rota.</b>
+                Motoristas cadastrados ou veículo escolhido na hora, do Fiorino à carreta. O CD de
+                onde as rotas saem é definido pelo CEP.
+              </figcaption>
+            </figure>
+            <figure class="tela" id="tela-rota" role="tabpanel" aria-labelledby="aba-rota">
+              <button class="tela__nav" type="button" data-ampliar="img/telas/rota.webp" aria-label="Ampliar a tela da rota enviada">
+                <span class="tela__barra" aria-hidden="true"><i></i><i></i><i></i><span>ROTAV3 · Rotas</span></span>
+                <img src="img/telas/rota.webp" width="1600" height="1000" loading="lazy" decoding="async" alt="Rota confirmada no ROTAV3: peso, quilômetros e tempo, botão para enviar pelo WhatsApp, paradas com baixa e localização do veículo" />
+                <span class="modelo__lupa" aria-hidden="true"><svg class="ico"><use href="#i-busca" /></svg>Ampliar</span>
+              </button>
+              <figcaption>
+                <b>A rota vai para o motorista.</b>
+                Peso, quilômetros e tempo da viagem, o link para mandar pelo WhatsApp e, depois, cada
+                baixa, a foto do canhoto e a última localização do veículo.
+              </figcaption>
+            </figure>
+            <figure class="tela tela--cel" id="tela-motorista" role="tabpanel" aria-labelledby="aba-motorista">
+              <div class="tela__cels">
+                <button class="tela__cel" type="button" data-ampliar="img/telas/motorista-lista.webp" aria-label="Ampliar a lista de paradas no celular do motorista">
+                  <span class="cel"><span class="cel__tela"><img src="img/telas/motorista-lista.webp" width="660" height="1428" loading="lazy" decoding="async" alt="Celular do motorista com a lista de paradas da rota, botões do Google Maps e do Waze e os botões Entregue e Não realizado" /></span></span>
+                </button>
+                <button class="tela__cel" type="button" data-ampliar="img/telas/motorista-baixa.webp" aria-label="Ampliar a baixa com foto do canhoto">
+                  <span class="cel"><span class="cel__tela"><img src="img/telas/motorista-baixa.webp" width="660" height="1428" loading="lazy" decoding="async" alt="Celular do motorista dando baixa numa entrega com o nome de quem recebeu e a foto do canhoto" /></span></span>
+                </button>
+              </div>
+              <figcaption>
+                <b>O motorista só abre o link.</b>
+                Sem instalar aplicativo: ele segue as paradas pelo Google Maps ou pelo Waze e dá
+                baixa com o nome de quem recebeu e a foto do canhoto.
+              </figcaption>
+            </figure>
+            <figure class="tela tela--cel" id="tela-celular" role="tabpanel" aria-labelledby="aba-celular">
+              <div class="tela__cels">
+                <button class="tela__cel" type="button" data-ampliar="img/telas/painel-celular.webp" aria-label="Ampliar o painel aberto no celular">
+                  <span class="cel"><span class="cel__tela"><img src="img/telas/painel-celular.webp" width="660" height="1428" loading="lazy" decoding="async" alt="Painel do ROTAV3 aberto no navegador do celular" /></span></span>
+                </button>
+              </div>
+              <figcaption>
+                <b>O escritório também cabe no bolso.</b>
+                O painel abre no navegador do computador, do tablet ou do celular, sem instalar nada.
+              </figcaption>
+            </figure>
+          </div>
+          <p class="nota-demo">Telas reais do sistema. Pedidos, clientes e motoristas são de exemplo.</p>
         </div>
       </section>
 
@@ -688,8 +783,64 @@
           <ul class="vivo__fatos">
             <li><img src="img/ic/link.webp" alt="" width="44" height="44" loading="lazy" /><div><b>Sem aplicativo para instalar</b><span>O link abre no navegador de qualquer celular. Vale por 7 dias e o escritório pode encerrar antes.</span></div></li>
             <li><img src="img/ic/camera-with-flash.webp" alt="" width="44" height="44" loading="lazy" /><div><b>Baixa com comprovante</b><span>Nome de quem recebeu, foto do canhoto e, quando não deu certo, o motivo.</span></div></li>
-            <li><img src="img/ic/satellite-antenna.webp" alt="" width="44" height="44" loading="lazy" /><div><b>Rastreador da frota</b><span>Já usa rastreador? Conectamos o ROTAV3 a ele quando o fornecedor libera os dados. Confirmamos na demonstração.</span></div></li>
+            <li><img src="img/ic/satellite-antenna.webp" alt="" width="44" height="44" loading="lazy" /><div><b>Rastreamento</b><span>Pelo celular do motorista, já incluso, ou com rastreador que fornecemos e instalamos. <a href="#rastreamento">Ver como funciona</a></span></div></li>
           </ul>
+        </div>
+      </section>
+
+      <!-- ================= RASTREAMENTO ================= -->
+      <section class="secao secao--suave rastreio" id="rastreamento" aria-labelledby="rastreio-titulo">
+        <div class="cont">
+          <header class="cab cab--larga">
+            <h2 id="rastreio-titulo">Também oferecemos rastreamento.</h2>
+            <p class="cab__texto">
+              Saiba onde cada veículo está durante a rota: pelo celular do motorista, que já vem no
+              sistema, ou com um rastreador instalado no veículo.
+            </p>
+          </header>
+          <div class="rastreio__grade">
+            <article class="rastreio__card rastreio__card--cel">
+              <div class="rastreio__txt">
+                <span class="selo selo--ok">Incluso no sistema</span>
+                <h3>Pelo celular do motorista</h3>
+                <ul class="rastreio__lista">
+                  <li>O motorista liga a localização no link da rota com um toque, com a permissão dele.</li>
+                  <li>A posição vai para o painel a cada 45 segundos, ou antes se o veículo andar 150 metros.</li>
+                  <li>No painel, o veículo aparece no mapa da rota, com o tempo desde a última posição.</li>
+                  <li>Funciona com a página da rota aberta e desliga sozinha quando a rota termina.</li>
+                </ul>
+              </div>
+              <button class="rastreio__cel" type="button" data-ampliar="img/telas/motorista-localizacao.webp" aria-label="Ampliar o celular do motorista com a localização ligada">
+                <span class="cel"><span class="cel__tela"><img src="img/telas/motorista-localizacao.webp" width="660" height="1428" loading="lazy" decoding="async" alt="Celular do motorista com a localização ao vivo ligada e a hora do último envio" /></span></span>
+              </button>
+            </article>
+            <article class="rastreio__card rastreio__card--rastreador">
+              <img class="rastreio__ic" src="img/ic/satellite-antenna.webp" alt="" width="64" height="64" loading="lazy" />
+              <span class="selo">À parte, sob consulta</span>
+              <h3>Com rastreador no veículo</h3>
+              <p>
+                Para acompanhar o veículo mesmo com o celular do motorista desligado. Nós fornecemos o
+                rastreador e fazemos a instalação.
+              </p>
+              <ul class="rastreio__lista">
+                <li>Equipamento fornecido pela ROTAV3</li>
+                <li>Instalação no veículo</li>
+                <li>Modelo, valor e prazo combinados na demonstração</li>
+              </ul>
+              <p class="rastreio__ja">Já tem rastreador? Verificamos se dá para aproveitar o que a sua frota já usa.</p>
+              <a class="btn btn--ouro btn--g" href="https://wa.me/5511955914618" data-abrir="rastreamento"><svg class="ico"><use href="#i-sinal" /></svg>Quero rastreamento</a>
+            </article>
+          </div>
+          <figure class="rastreio__faixa">
+            <figcaption>No painel do escritório, a rota mostra as baixas e a última localização do veículo:</figcaption>
+            <button class="rastreio__painel" type="button" data-ampliar="img/telas/rota.webp" aria-label="Ampliar a rota no painel com a localização do veículo">
+              <picture>
+                <source media="(max-width: 700px)" srcset="img/telas/rota-localizacao-cel.webp" width="900" height="431" />
+                <img src="img/telas/rota-localizacao.webp" width="1800" height="357" loading="lazy" decoding="async" alt="Rota no painel do escritório: uma de quatro paradas com baixa, botão para enviar pelo WhatsApp e localização ao vivo de dois minutos atrás" />
+              </picture>
+            </button>
+          </figure>
+          <p class="nota-demo">Telas reais do sistema, com uma rota de exemplo.</p>
         </div>
       </section>
 
@@ -829,8 +980,8 @@
               <h3>Entre no sistema hoje</h3>
               <p>
                 Peça o acesso de demonstração pelo WhatsApp. Você recebe e-mail e senha para usar o
-                ROTAV3 com pedidos fictícios por 7 dias: importe notas de teste, gere rotas, abra a
-                tela do motorista e converse com a IA.
+                ROTAV3 por 7 dias. Ele abre com pedidos de exemplo; importe as suas notas e elas
+                tomam o lugar dos exemplos. Gere rotas, abra a tela do motorista e converse com a IA.
               </p>
               <ul class="caminho__lista">
                 <li><svg class="ico"><use href="#i-ok" /></svg>Nada do que você fizer altera dados reais</li>
@@ -865,36 +1016,36 @@
       <section class="secao secao--clara precos" id="precos" aria-labelledby="precos-titulo">
         <div class="cont">
           <header class="cab cab--larga">
-            <h2 id="precos-titulo">Preço pelo tamanho da frota.</h2>
+            <h2 id="precos-titulo">Valor pelo tamanho da sua frota.</h2>
             <p class="cab__texto">
-              Sem cobrança por entrega e sem equipamento para instalar. O valor do seu plano depende de
-              quantos veículos rodam na operação e é fechado na demonstração.
+              Sem cobrança por entrega. O valor do seu plano depende de quantos veículos rodam na
+              operação e é passado na demonstração ou pelo WhatsApp.
             </p>
           </header>
           <div class="preco">
             <article class="preco__card">
-              <p class="preco__rotulo">Planos a partir de</p>
-              <p class="plano__preco"><span>R$</span><b>197</b><span>/mês</span></p>
-              <p class="preco__texto">Para operações com poucos veículos. Frotas maiores têm o valor calculado pelo número de veículos.</p>
+              <p class="preco__rotulo">Valor sob consulta</p>
+              <p class="preco__chamada">Conte quantos veículos rodam na sua operação e passamos o valor do seu plano.</p>
+              <p class="preco__texto">Sem compromisso: você recebe o valor e decide depois de ver o sistema.</p>
               <a class="btn btn--ouro btn--g" href="https://wa.me/5511955914618" data-abrir="preco"><svg class="ico"><use href="#i-chat" /></svg>Consultar o valor da minha frota</a>
             </article>
             <div class="preco__inclui">
               <h3>Em todos os planos</h3>
               <ul>
                 <li>Todas as funções do sistema, sem módulos extras</li>
-                <li>Implantação e treinamento da equipe inclusos</li>
+                <li>Rastreamento pelo celular do motorista</li>
+                <li>Implantação e treinamento da equipe</li>
                 <li>Painel com as cores e o logo da sua empresa</li>
                 <li>Suporte pelo WhatsApp, com quem desenvolve o sistema</li>
-                <li>Mensal, sem fidelidade, sem multa e sem taxa de entrada</li>
+                <li>Mensal, sem fidelidade e sem multa</li>
               </ul>
             </div>
           </div>
           <div class="precos__rodape">
             <p>
-              <b>Sincronização com rastreador:</b> conectamos o ROTAV3 ao rastreador que a sua frota já
-              usa, quando o fornecedor libera o acesso aos dados, e os veículos aparecem no mapa junto
-              com as rotas. Confirmamos a compatibilidade e o valor na demonstração.
-              <a href="https://wa.me/5511955914618" data-abrir="rastreamento">Verificar o meu rastreador</a>
+              <b>Rastreador no veículo:</b> fornecido e instalado por nós, com valor à parte. Modelo,
+              valor e prazo são combinados na demonstração.
+              <a href="#rastreamento">Ver o rastreamento</a>
             </p>
           </div>
         </div>
@@ -905,7 +1056,7 @@
         <div class="cont perguntas__grade">
           <header class="perguntas__cab">
             <h2 id="perg-titulo">Perguntas frequentes.</h2>
-            <p class="cab__texto">Não achou a sua? Fale com a gente pelo <a href="https://wa.me/5511955914618" data-whatsapp>WhatsApp</a>.</p>
+            <p class="cab__texto">Não achou a sua? Fale com a gente pelo <a href="https://wa.me/5511955914618" data-whatsapp>WhatsApp</a> ou pelo e-mail <a href="mailto:rotav3systemy@gmail.com">rotav3systemy@gmail.com</a>.</p>
           </header>
           <div class="perguntas__lista">
             <details>
@@ -946,11 +1097,11 @@
             <details>
               <summary>Dá para acompanhar os veículos em tempo real?<svg class="ico"><use href="#i-mais" /></svg></summary>
               <p>
-                Sim, de dois jeitos. Pelo celular do motorista: com a permissão dele, a página da rota
-                envia a localização enquanto está aberta, e o painel mostra o veículo no mapa. Pelo
-                rastreador da frota: conectamos o ROTAV3 ao rastreador que a sua frota já usa, quando o
-                fornecedor libera o acesso aos dados; confirmamos a compatibilidade e o valor na
-                demonstração.
+                Sim. Pelo celular do motorista, já incluso: com a permissão dele, a página da rota envia
+                a localização enquanto está aberta, e o painel mostra o veículo no mapa com o horário da
+                última posição. Também oferecemos rastreador no veículo, fornecido e instalado por nós,
+                para acompanhar mesmo com o celular desligado; modelo, valor e prazo são combinados na
+                demonstração. <a href="#rastreamento">Ver o rastreamento</a>.
               </p>
             </details>
             <details>
@@ -978,8 +1129,8 @@
             <details>
               <summary>Quanto custa?<svg class="ico"><use href="#i-mais" /></svg></summary>
               <p>
-                Os planos começam em R$ 197 por mês. O valor exato depende do tamanho da frota e é
-                fechado na demonstração, com implantação e treinamento inclusos e sem taxa de entrada.
+                O valor depende do tamanho da frota e é passado na demonstração ou pelo WhatsApp. Não há
+                cobrança por entrega. O rastreador no veículo, se você quiser, é cobrado à parte.
                 <a href="#precos">Ver o que vem nos planos</a>.
               </p>
             </details>
@@ -987,8 +1138,8 @@
               <summary>Dá para testar antes de pagar?<svg class="ico"><use href="#i-mais" /></svg></summary>
               <p>
                 Sim, de dois jeitos e sem custo: o acesso de demonstração (e-mail e senha pelo WhatsApp,
-                com pedidos fictícios, por 7 dias) ou a demonstração com as notas de um dia da sua
-                operação, numa chamada de 20 minutos. <a href="#como-comecar">Ver como funciona</a>.
+                por 7 dias, com pedidos de exemplo ou com as suas notas) ou a demonstração com as notas
+                de um dia da sua operação, numa chamada de 20 minutos. <a href="#como-comecar">Ver como funciona</a>.
               </p>
             </details>
             <details>
@@ -1018,6 +1169,7 @@
               desenvolve o sistema. Se preferir entrar sozinho, peça o acesso de demonstração.
             </p>
             <a class="btn btn--linha btn--g" href="https://wa.me/5511955914618" data-abrir="acesso"><svg class="ico"><use href="#i-olho" /></svg>Pedir acesso de demonstração</a>
+            <p class="contato__email">Prefere e-mail? Escreva para <a href="mailto:rotav3systemy@gmail.com">rotav3systemy@gmail.com</a>.</p>
           </div>
           <form class="form form--cartao" data-form="agendar" novalidate>
             <h3>Agendar demonstração</h3>
@@ -1054,14 +1206,17 @@
           <p>Roteirização de entregas e coletas para transportadoras.</p>
         </div>
         <nav aria-label="Rodapé" class="rodape__links">
+          <a href="#telas">Telas</a>
           <a href="#como-funciona">Como funciona</a>
           <a href="#criar-rota">Criar rota</a>
-          <a href="#precos">Preços</a>
+          <a href="#rastreamento">Rastreamento</a>
+          <a href="#precos">Preço</a>
           <a href="#perguntas">Perguntas</a>
           <a href="privacidade.html">Política de privacidade</a>
         </nav>
         <div class="rodape__contato">
           <a href="https://wa.me/5511955914618" data-whatsapp>WhatsApp <span data-whatsapp-rotulo>(11) 95591-4618</span></a>
+          <a href="mailto:rotav3systemy@gmail.com">rotav3systemy@gmail.com</a>
           <p>ROTAV3 Systems © <span data-ano>2026</span> · CNPJ 68.080.201/0001-80</p>
         </div>
       </div>

@@ -3763,6 +3763,12 @@ i.r {
   width: 100%;
   max-width: none;
 }
+/* telas de computador no celular: abre maior, para arrastar para os lados e ler */
+@media (max-width: 760px) {
+  .zoom__rolagem img.zoom__img--larga {
+    width: 1100px;
+  }
+}
 .zoom__fechar {
   z-index: 2;
 }
@@ -4467,6 +4473,364 @@ html.modal-aberto {
 .legal__date {
   color: var(--tinta-3);
   font-size: 0.9rem;
+}
+
+/* =====================================================================
+   TELAS REAIS (capturas do sistema, em abas)
+   ===================================================================== */
+.telas__abas {
+  display: flex;
+  gap: 8px;
+  margin: 0 -2px clamp(20px, 3vw, 32px);
+  padding: 2px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+.telas__abas::-webkit-scrollbar {
+  display: none;
+}
+.telas__abas button {
+  flex: none;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1px solid var(--linha-2);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--tinta-2);
+  font: 600 0.95rem/1 var(--f-texto);
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    color 0.2s,
+    border-color 0.2s;
+}
+.telas__abas button:hover {
+  border-color: var(--tinta-3);
+  color: var(--tinta);
+}
+.telas__abas button[aria-selected="true"] {
+  background: var(--tinta);
+  border-color: var(--tinta);
+  color: #fff;
+}
+/* sem JS as abas não funcionam: some a faixa e as telas ficam empilhadas */
+.telas:not(.telas--abas) .telas__abas {
+  display: none;
+}
+.tela {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 300px);
+  gap: clamp(20px, 3.4vw, 48px);
+  align-items: center;
+  margin: 0;
+}
+.telas:not(.telas--abas) .tela + .tela {
+  margin-top: 48px;
+}
+.tela[hidden] {
+  display: none;
+}
+.tela__nav {
+  position: relative;
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 1px solid var(--linha);
+  border-radius: var(--raio);
+  overflow: hidden;
+  background: #fff;
+  box-shadow: var(--sombra-clara);
+  cursor: zoom-in;
+  transition:
+    transform 0.25s var(--ease),
+    border-color 0.25s;
+}
+.tela__nav:hover {
+  transform: translateY(-2px);
+  border-color: var(--linha-2);
+}
+.tela__barra {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 14px;
+  border-bottom: 1px solid var(--linha);
+  background: var(--papel-2);
+  color: var(--tinta-3);
+  font-size: 0.76rem;
+  font-weight: 600;
+  text-align: left;
+}
+.tela__barra i {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #c6cfdb;
+}
+.tela__barra span {
+  margin-left: 8px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+.tela__nav img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.tela figcaption {
+  color: var(--tinta-2);
+  font-size: 1.02rem;
+  line-height: 1.6;
+}
+.tela figcaption b {
+  display: block;
+  margin-bottom: 8px;
+  font-family: var(--f-titulo);
+  font-size: clamp(1.25rem, 1.1rem + 0.5vw, 1.5rem);
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  color: var(--tinta);
+}
+.tela__cels {
+  display: flex;
+  justify-content: center;
+  gap: clamp(14px, 3vw, 40px);
+}
+.tela__cel,
+.rastreio__cel {
+  display: block;
+  padding: 0;
+  border: 0;
+  border-radius: 13% / 6.2%;
+  background: none;
+  cursor: zoom-in;
+  transition: transform 0.25s var(--ease);
+}
+.tela__cel {
+  width: min(250px, 47%);
+}
+.tela__cel:hover,
+.rastreio__cel:hover {
+  transform: translateY(-3px);
+}
+.tela__cel .cel,
+.rastreio__cel .cel {
+  display: block;
+}
+/* faixa de status em cima da captura, para o recorte do celular não cobrir o topo da tela */
+.tela__cel .cel__tela,
+.rastreio__cel .cel__tela {
+  display: block;
+  aspect-ratio: 660 / 1500;
+  padding-top: 9%;
+  background: #0a1220;
+}
+.tela__cel img,
+.rastreio__cel img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+@media (max-width: 900px) {
+  .tela {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+  }
+}
+@media (max-width: 560px) {
+  .tela__barra {
+    height: 26px;
+    padding: 0 10px;
+  }
+  .tela__barra i {
+    width: 7px;
+    height: 7px;
+  }
+  .tela__nav .modelo__lupa {
+    right: 8px;
+    bottom: 8px;
+    padding: 5px 8px;
+    font-size: 0.74rem;
+  }
+}
+
+/* =====================================================================
+   RASTREAMENTO
+   ===================================================================== */
+.rastreio__grade {
+  display: grid;
+  grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+  gap: 16px;
+  align-items: stretch;
+}
+.rastreio__card {
+  padding: clamp(22px, 3vw, 40px);
+  border-radius: var(--raio-g);
+}
+.rastreio__card h3 {
+  margin: 12px 0 14px;
+  font-size: clamp(1.3rem, 1.1rem + 0.6vw, 1.65rem);
+  letter-spacing: -0.025em;
+  line-height: 1.15;
+}
+.rastreio__card--cel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 210px);
+  grid-template-areas: "txt cel";
+  gap: 22px 28px;
+  align-items: center;
+  background: var(--papel);
+  border: 1px solid var(--linha);
+}
+.rastreio__txt {
+  grid-area: txt;
+}
+.rastreio__cel {
+  grid-area: cel;
+  width: 100%;
+}
+.rastreio__faixa {
+  margin: clamp(24px, 3vw, 36px) 0 0;
+}
+.rastreio__faixa figcaption {
+  margin-bottom: 12px;
+  font-weight: 600;
+  color: var(--tinta);
+}
+.rastreio__painel {
+  display: block;
+  width: 100%;
+  padding: 0;
+  border: 1px solid var(--linha);
+  border-radius: 14px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow: var(--sombra-clara);
+  cursor: zoom-in;
+}
+.rastreio__painel img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.rastreio__card--rastreador {
+  display: grid;
+  align-content: start;
+  justify-items: start;
+  gap: 12px;
+  background: var(--marinho);
+  color: #fff;
+  box-shadow: 0 30px 60px -30px rgba(16, 34, 63, 0.8);
+}
+.rastreio__card--rastreador h3 {
+  margin: 0;
+  color: #fff;
+}
+.rastreio__card--rastreador p {
+  color: #c3cee0;
+}
+.rastreio__ic {
+  width: 56px;
+  height: 56px;
+}
+.selo {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: rgba(243, 182, 43, 0.16);
+  color: var(--ouro-esc);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+.selo--ok {
+  background: rgba(22, 163, 106, 0.12);
+  color: #0b6b44;
+}
+.rastreio__lista {
+  display: grid;
+  gap: 10px;
+}
+.rastreio__lista li {
+  position: relative;
+  padding-left: 26px;
+  color: var(--tinta-2);
+}
+.rastreio__lista li::before {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 0.42em;
+  width: 11px;
+  height: 6px;
+  border-left: 2px solid var(--entrega);
+  border-bottom: 2px solid var(--entrega);
+  transform: rotate(-45deg);
+}
+.rastreio__card--rastreador .rastreio__lista li {
+  color: #dbe3ef;
+}
+.rastreio__card--rastreador .rastreio__lista li::before {
+  border-color: var(--ouro);
+}
+.rastreio__ja {
+  font-size: 0.94rem;
+}
+.rastreio__card--rastreador .btn {
+  margin-top: 6px;
+}
+.vivo__fatos span a {
+  color: var(--ouro-esc);
+  font-weight: 600;
+}
+.preco__chamada {
+  font-family: var(--f-titulo);
+  font-size: clamp(1.35rem, 1.15rem + 0.7vw, 1.75rem);
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: -0.025em;
+  color: #fff;
+  max-width: 24ch;
+}
+.contato__email {
+  margin-top: 18px;
+  color: var(--txt-esc-2);
+  font-size: 0.95rem;
+}
+.contato__email a,
+.rodape__contato a[href^="mailto"] {
+  color: var(--ouro-esc);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+@media (max-width: 1000px) {
+  .rastreio__grade {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 600px) {
+  .rastreio__card--cel {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "txt"
+      "cel";
+  }
+  .rastreio__cel {
+    justify-self: center;
+    width: min(230px, 72%);
+  }
+  .rastreio__card--rastreador {
+    justify-items: stretch;
+  }
+  .rastreio__card--rastreador .rastreio__ic,
+  .rastreio__card--rastreador .selo {
+    justify-self: start;
+  }
 }
 
 /* =====================================================================

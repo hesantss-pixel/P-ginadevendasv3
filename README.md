@@ -11,13 +11,15 @@ pedidos, criação de rota, link do motorista, baixas em tempo real e assistente
 | Seção | O que mostra | Arquivo |
 | --- | --- | --- |
 | Topo | Título "Rotas prontas no automático. Cada entrega e coleta acompanhada no mapa.", "Ver o sistema por dentro" (pede e-mail e senha de demonstração pelo WhatsApp), "Agendar demonstração" e um filme em 5 cenas feito com as telas do sistema (importar notas → mapa → gerar rota → enviar ao motorista → acompanhar ao vivo). Fundo com a maquete 3D. | `js/filme.js` |
+| Telas reais | Capturas do sistema funcionando (dados de exemplo), em abas: painel, pedidos, roteirização, rota enviada, motorista e painel no celular. Tocar amplia; no celular a tela de computador abre maior para arrastar. Imagens em `img/telas/`. | `js/main.js` |
 | Um dia de operação | Linha do tempo das 07:00 às 17:30 com telas pequenas do sistema; a linha dourada enche com a rolagem. | `js/dia.js` |
 | Criar rota | Planejador interativo no mapa de ruas (OpenFreeMap): veículo, entregas/coletas/as duas, saída, capacidade e limite de paradas; "Montar a próxima viagem" com os pedidos que sobraram. Gera a primeira rota sozinho quando aparece. | `js/planejador.js`, `js/roteiro.js` |
 | Mapa 3D | Maquete da Grande São Paulo com os limites reais dos municípios (IBGE), relevo pela quantidade de pedidos, 86 pinos com filtro (todos, entregas, coletas, com horário) e lista por cidade. | `js/mapa3d.js`, `js/dados-regiao.js` |
 | Ao vivo | A **tela do motorista real do sistema** (modo demonstração) dentro de um celular. Cada baixa marcada nele atualiza o painel do escritório ao lado (progresso, mapa, motivo, foto). | `js/aovivo.js` |
+| Rastreamento | "Também oferecemos rastreamento": pelo celular do motorista (já incluso; capturas reais da tela do motorista com a localização ligada e da rota no painel) e rastreador no veículo, fornecido e instalado pela ROTAV3, com valor sob consulta. A página **não** diz que a posição do rastreador aparece no mapa do ROTAV3: essa ligação ainda não existe no sistema. | `index.html` |
 | IA | Conversa de exemplo com as três perguntas do sistema; respostas calculadas com os 86 pedidos fictícios do mapa. | `js/ia.js` |
 | Sua marca | Modelos do painel com a identidade da Via Verde Transportes e da 2SL Log (telas ilustrativas, com dados demonstrativos); tocar amplia. | `index.html`, `img/modelo-*.webp` |
-| Funções, Como começar, Preços, Perguntas, Contato | Texto e formulários (abrem o WhatsApp com a mensagem pronta). Preço: só "planos a partir de R$ 197/mês"; o valor da frota é consultado pelo WhatsApp ("Consultar o valor da minha frota"). | `js/main.js` |
+| Funções, Como começar, Preços, Perguntas, Contato | Texto e formulários (abrem o WhatsApp com a mensagem pronta). Preço: sem valor na página (01/11/2026); o valor da frota é consultado pelo WhatsApp ("Consultar o valor da minha frota"). E-mail de contato: rotav3systemy@gmail.com (contato, perguntas, rodapé, dados estruturados e política de privacidade). | `js/main.js` |
 
 Todos os dados das demonstrações são **fictícios** e a página avisa isso em cada lugar. Nada do que
 o visitante faz nas demonstrações sai do navegador dele.
@@ -132,3 +134,6 @@ mapa) e o Safari do iPhone.
   motorista real sincronizando com o painel; IA; modelos com a identidade de outras empresas; fontes no próprio site.
 - **v6.1 (25/10/2026):** título "Rotas prontas no automático. Cada entrega e coleta acompanhada no
   mapa."; tabela de planos trocada por "a partir de R$ 197/mês" + consulta do valor pela frota.
+- **v6.2 (01/11/2026):** seção "Telas reais" com capturas do sistema atual; seção "Rastreamento"
+  (celular do motorista incluso + rastreador no veículo sob consulta); preço tirado da página (só
+  consulta); demonstração com as notas do próprio cliente; e-mail rotav3systemy@gmail.com.
