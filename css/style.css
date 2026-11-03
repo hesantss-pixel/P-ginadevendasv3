@@ -550,6 +550,46 @@ p {
   font-size: 0.86rem;
   color: var(--txt-esc-3);
 }
+.hero__pacote {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  margin-top: 18px;
+  padding: 12px 14px;
+  border: 1px solid rgba(243, 182, 43, 0.38);
+  border-radius: 14px;
+  background: rgba(243, 182, 43, 0.08);
+  color: var(--txt-esc-2);
+  font-size: 0.92rem;
+  line-height: 1.5;
+  text-decoration: none;
+  transition: border-color 0.2s, background-color 0.2s;
+}
+.hero__pacote:hover {
+  border-color: rgba(243, 182, 43, 0.65);
+  background: rgba(243, 182, 43, 0.13);
+}
+.hero__pacote:focus-visible {
+  outline: 3px solid var(--ouro);
+  outline-offset: 3px;
+}
+.hero__pacote img {
+  flex: none;
+  width: 36px;
+  height: 36px;
+}
+.hero__pacote b {
+  display: block;
+  margin-bottom: 2px;
+  color: #fff;
+  font-size: 0.98rem;
+}
+.hero__pacote-ver {
+  display: inline-block;
+  color: var(--ouro-esc);
+  font-weight: 600;
+  white-space: nowrap;
+}
 .hero__filme {
   margin-top: clamp(40px, 5.5vw, 72px);
   position: relative;

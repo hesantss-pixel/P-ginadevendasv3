@@ -46,6 +46,40 @@ linksMenu.forEach((a) => {
   if (s) espiao.observe(s);
 });
 
+/* ---------- links para seções: as seções do meio crescem quando carregam durante a rolagem,
+   então, quando a rolagem para, conferimos se a seção ficou no lugar e acertamos ---------- */
+let pousoAtual = null;
+function acertarChegada(alvo, tentativas = 4) {
+  clearInterval(pousoAtual);
+  let ultimo = -1;
+  let parado = 0;
+  pousoAtual = setInterval(() => {
+    if (scrollY !== ultimo) {
+      ultimo = scrollY;
+      parado = 0;
+      return;
+    }
+    if (++parado < 3) return;
+    clearInterval(pousoAtual);
+    const folga = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 0;
+    const erro = alvo.getBoundingClientRect().top - folga;
+    if (Math.abs(erro) > 24 && tentativas > 0) {
+      window.scrollBy({ top: erro, behavior: reduzir ? "auto" : "smooth" });
+      acertarChegada(alvo, tentativas - 1);
+    }
+  }, 120);
+}
+// se a pessoa rolar por conta própria, a correção para
+["wheel", "touchstart", "keydown"].forEach((ev) =>
+  addEventListener(ev, () => clearInterval(pousoAtual), { passive: true }),
+);
+document.addEventListener("click", (e) => {
+  const a = e.target.closest('a[href^="#"]');
+  if (!a || a.hasAttribute("data-abrir")) return;
+  const alvo = document.getElementById(a.getAttribute("href").slice(1));
+  if (alvo) setTimeout(() => acertarChegada(alvo), 0);
+});
+
 /* ---------- WhatsApp e ano ---------- */
 const wa = String(SITE_CONFIG.whatsappNumber || "").replace(/\D/g, "");
 const temWa = wa.length >= 12;
