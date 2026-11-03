@@ -4781,6 +4781,16 @@ html.modal-aberto {
 .rastreio__ja {
   font-size: 0.94rem;
 }
+.rastreio__card--rastreador .rastreio__nota {
+  margin: 0;
+  padding: 9px 12px;
+  border-left: 3px solid var(--ouro);
+  border-radius: 0 8px 8px 0;
+  background: rgba(255, 255, 255, 0.06);
+  color: #dbe3ef;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
 .rastreio__card--rastreador .btn {
   margin-top: 6px;
 }

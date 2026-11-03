@@ -75,7 +75,7 @@ function abrirModal(qual, gatilho) {
     m.querySelector("[name=interesse]").value = qual === "rastreamento" || qual === "preco" ? qual : "demo";
     textoAgendar.textContent =
       qual === "rastreamento"
-        ? "Conte sobre a sua frota. A conversa abre no WhatsApp para falarmos do rastreamento: o rastreador que fornecemos e instalamos ou o que a sua frota já usa."
+        ? "Conte sobre a sua frota. A conversa abre no WhatsApp para falarmos do pacote sistema + rastreador 4G, ou do rastreador que a sua frota já usa."
         : qual === "preco"
           ? "Conte o tamanho da frota. A conversa abre no WhatsApp para passarmos o valor do seu plano."
           : textoAgendarPadrao;
@@ -129,7 +129,7 @@ function mensagem(tipo, d) {
     d.interesse === "preco"
       ? "Gostaria de saber o valor do ROTAV3 para a nossa frota."
       : "Gostaria de agendar uma demonstração do ROTAV3 com os dados da nossa operação.",
-    d.interesse === "rastreamento" ? "Também quero saber sobre o rastreamento dos veículos." : "",
+    d.interesse === "rastreamento" ? "Também quero saber do pacote sistema + rastreador 4G nos veículos." : "",
   ]
     .filter(Boolean)
     .join(" ");
