@@ -614,6 +614,37 @@ p {
 }
 
 /* ---------- filme do produto ---------- */
+/* telas reais do sistema, uma por quadro */
+.filme__telas {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  background: #f3f6fa;
+}
+.filme__tela {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 0.55s ease;
+}
+.filme__tela.on {
+  opacity: 1;
+}
+.filme__tela img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+@media (max-width: 700px) {
+  .filme__telas {
+    aspect-ratio: 4 / 3;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .filme__tela {
+    transition: none;
+  }
+}
 .filme {
   position: relative;
   container: filme / inline-size;
@@ -3728,8 +3759,8 @@ i.r {
    ===================================================================== */
 .modelos {
   display: grid;
-  /* larguras proporcionais ao formato de cada imagem, para as duas ficarem da mesma altura */
-  grid-template-columns: minmax(0, 1.066fr) minmax(0, 0.8fr);
+  /* as duas telas têm o mesmo formato (16:10): colunas iguais */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: clamp(16px, 2.4vw, 28px);
   align-items: start;
 }
@@ -4740,6 +4771,20 @@ html.modal-aberto {
   margin-bottom: 12px;
   font-weight: 600;
   color: var(--tinta);
+}
+/* a rota com o caminhão no mapa vem primeiro, logo abaixo do título */
+.rastreio__faixa--topo {
+  margin: 0 0 clamp(24px, 3vw, 36px);
+}
+.rastreio__faixa--topo figcaption {
+  margin: 12px 0 0;
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: var(--tinta-2, #475569);
+}
+.rastreio__faixa--topo .rastreio__painel {
+  border-radius: 18px;
+  box-shadow: 0 30px 70px -30px rgba(13, 27, 46, 0.45), 0 0 0 1px rgba(13, 27, 46, 0.06);
 }
 .rastreio__painel {
   display: block;

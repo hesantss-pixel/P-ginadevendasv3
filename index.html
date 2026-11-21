@@ -239,166 +239,63 @@
               <img src="img/ic/satellite-antenna.webp" alt="" width="36" height="36" />
               <span>
                 <b>Sistema + rastreamento conectado</b>
-                Também fazemos o rastreamento ligado ao sistema: para frotas sem rastreador,
-                instalamos o rastreador 4G no veículo e a posição dele vai para o mapa do ROTAV3,
-                junto com as rotas e as baixas (em implantação). Valor sob consulta.
-                <span class="hero__pacote-ver">Ver o pacote →</span>
+                O veículo aparece no mapa do ROTAV3, junto com a rota e as baixas: pelo celular do
+                motorista, já incluso, ou por rastreador 4G que fornecemos e instalamos (em
+                implantação, valor sob consulta).
+                <span class="hero__pacote-ver">Ver como funciona →</span>
               </span>
             </a>
           </div>
         </div>
 
         <div class="cont cont--largo hero__filme">
-          <figure class="filme" id="filme" data-cena="2">
-            <div class="filme__quadro" aria-hidden="true">
-              <div class="filme__barra"><i></i><i></i><i></i><span>ROTAV3 · roteirização de entregas e coletas</span></div>
-              <div class="app">
-                <aside class="app__lado">
-                  <img class="app__logo" src="img/logo-rotav3-escuro.webp" alt="" width="124" height="30" />
-                  <div class="app__nav">
-                    <span data-pg="dash"><svg><use href="#i-grade" /></svg>Dashboard</span>
-                    <span data-pg="pedidos"><svg><use href="#i-caixa" /></svg>Pedidos</span>
-                    <span data-pg="rot"><svg><use href="#i-rota" /></svg>Roteirização</span>
-                    <span data-pg="rotas"><svg><use href="#i-pulso" /></svg>Rotas</span>
-                    <span data-pg="mot"><svg><use href="#i-pessoa" /></svg>Motoristas</span>
-                    <span data-pg="mapa"><svg><use href="#i-mapa" /></svg>Mapa</span>
-                    <span data-pg="ia"><svg><use href="#i-robo" /></svg>IA Assistente</span>
-                  </div>
-                </aside>
-                <div class="app__main">
-                  <div class="app__topo">
-                    <span class="app__busca"><svg><use href="#i-busca" /></svg>Pesquisar pedidos, rotas, regiões…</span>
-                    <span class="app__sino"><svg><use href="#i-sino" /></svg></span>
-                    <span class="app__user"><i></i>equipe@suaempresa.com.br</span>
-                  </div>
-                  <div class="app__pagina">
-                    <div class="app__cab">
-                      <b class="app__titulo" data-titulo>Roteirização</b>
-                      <span class="app__sub" data-sub>Escolha o veículo e a capacidade e gere a melhor sequência de entregas e coletas</span>
-                    </div>
-                    <div class="palco">
-                      <!-- cena 0: pedidos -->
-                      <div class="pn pn--pedidos">
-                        <div class="imp">
-                          <div class="imp__zona">
-                            <span class="imp__ic"><svg><use href="#i-caixa" /></svg></span>
-                            <b>Importar notas</b>
-                            <small>XML da NF-e, Excel, CSV ou PDF. Pode escolher vários arquivos de uma vez.</small>
-                            <div class="imp__arqs">
-                              <span>NF-e 31024.xml</span><span>NF-e 31031.xml</span><span>NF-e 31047.xml</span><span>coletas-dia.xlsx</span>
-                            </div>
-                          </div>
-                          <div class="imp__msg" data-imp-msg>✅ 21 notas importadas: 17 entregas e 4 coletas.</div>
-                        </div>
-                        <div class="tab">
-                          <div class="tab__cab"><span>NF</span><span>Destinatário</span><span>Cidade</span><span>Peso</span><span>Tipo</span></div>
-                          <div class="tab__corpo" data-tab-pedidos></div>
-                        </div>
-                      </div>
-                      <!-- cena 2: formulário e resultado da roteirização -->
-                      <div class="pn pn--rot">
-                        <div class="frm">
-                          <div class="frm__veic"><span class="frm__emoji">🚚</span><div><b>VUC</b><small>até 3t · Veículo Urbano de Carga</small></div></div>
-                          <span class="frm__lbl">O que entra nesta viagem</span>
-                          <div class="frm__seg"><span>Entregas</span><span>Coletas</span><span class="on">Entregas e coletas</span></div>
-                          <div class="frm__dup">
-                            <div><span class="frm__lbl">Saída do CD</span><span class="frm__inp">07:30</span></div>
-                            <div><span class="frm__lbl">Capacidade (kg)</span><span class="frm__inp">3.000</span></div>
-                          </div>
-                          <span class="frm__lbl">Máximo de paradas nesta viagem</span>
-                          <span class="frm__inp">6</span>
-                          <span class="frm__botao">✔ Gerar Rota Agora</span>
-                          <span class="frm__carga"><i></i>Calculando rotas…</span>
-                        </div>
-                        <div class="res">
-                          <div class="res__cab"><b>VUC · 6 paradas</b><small>5 entregas, 1 coleta</small></div>
-                          <div class="res__kpis">
-                            <span><b>769 kg</b>sai do CD</span><span><b>38,4 km</b>distância</span><span><b>11:35</b>volta ao CD</span>
-                          </div>
-                          <ol class="res__lista" data-res-lista></ol>
-                          <p class="res__nota">Esta viagem levou 6 de 21 pedidos. Os outros continuam pendentes.</p>
-                        </div>
-                      </div>
-                      <!-- cenas 3 e 4: rota confirmada e acompanhamento -->
-                      <div class="pn pn--rotas">
-                        <div class="rc">
-                          <div class="rc__cab">
-                            <div><b>Carlos (exemplo) — VUC · 6 paradas</b><small>5 entregas, 1 coleta · saída 07:30</small></div>
-                            <span class="rc__status">🚚 Em rota</span>
-                          </div>
-                          <div class="rc__mot">
-                            <div><b>Motorista</b><small>Link da rota pelo WhatsApp, válido por 7 dias</small></div>
-                            <span class="rc__wa">Enviar pelo WhatsApp</span>
-                          </div>
-                          <div class="rc__prog">
-                            <span data-prog-txt>0 de 6 paradas com baixa</span>
-                            <div class="rc__barra"><i data-prog></i></div>
-                          </div>
-                          <div class="rc__vivo"><i></i>Localização ao vivo: <b>agora</b></div>
-                          <ol class="rc__chips" data-chips></ol>
-                        </div>
-                      </div>
-                      <!-- mapa (cenas 1 a 4) -->
-                      <div class="mf">
-                        <div class="mf__filtro"><span class="on">Todos <b data-n-todos>21</b></span><span>Entregas <b data-n-ent>17</b></span><span>Coletas <b data-n-col>4</b></span></div>
-                        <svg class="mf__svg" viewBox="0 0 1520 1002" preserveAspectRatio="xMidYMid slice">
-                          <image href="img/mapa-guarulhos.svg" width="1520" height="1002" />
-                          <g data-mf-pinos></g>
-                          <path class="mf__rota" data-mf-rota d="" pathLength="1" />
-                          <g data-mf-nums></g>
-                          <g class="mf__cd" data-mf-cd></g>
-                          <g class="mf__caminhao" data-mf-caminhao>
-                            <circle r="30" class="mf__halo" />
-                            <circle r="21" class="mf__vei" />
-                            <text y="8" text-anchor="middle">🚚</text>
-                          </g>
-                        </svg>
-                        <div class="mf__legenda"><span><i class="e"></i>Entrega</span><span><i class="c"></i>Coleta</span><span><i class="cd"></i>CD Guarulhos</span></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="cel filme__cel" aria-hidden="true">
-              <div class="cel__tela">
-                <div class="cel__msg">
-                  <div class="cel__chatcab"><span class="cel__av">R</span><div><b>Escritório</b><small>online</small></div></div>
-                  <div class="cel__balao">
-                    Carlos, sua rota de hoje: 6 paradas, saída 07:30 do CD Guarulhos.
-                    <span class="cel__link"><b>ROTAV3 · Rota de hoje</b><small>Toque para abrir</small></span>
-                    <small class="cel__hora">07:12 ✓✓</small>
-                  </div>
-                </div>
-                <div class="cel__rota">
-                  <div class="cel__topo"><img src="img/marca-rotav3.png" alt="" width="20" height="17" /><b>Rota de hoje</b></div>
-                  <div class="cel__res"><b>VUC — Carlos (exemplo)</b><small>saída 07:30 · CD Guarulhos</small><div class="cel__barra"><i data-cel-prog></i></div><small data-cel-prog-txt>2 de 6</small></div>
-                  <ol class="cel__lista" data-cel-lista></ol>
-                </div>
+          <figure class="filme" id="filme" data-cena="0">
+            <div class="filme__quadro">
+              <div class="filme__barra" aria-hidden="true"><i></i><i></i><i></i><span data-filme-titulo>ROTAV3 · Pedidos</span></div>
+              <div class="filme__telas">
+                <picture class="filme__tela on" data-tela="0">
+                  <source media="(max-width: 700px)" srcset="img/telas/filme-1-mob.webp" width="1000" height="750" />
+                  <img src="img/telas/filme-1.webp" width="1600" height="1000" fetchpriority="high" decoding="async" alt="Tela de pedidos do ROTAV3: notas importadas, busca e pedidos por cidade, com entregas e coletas" />
+                </picture>
+                <picture class="filme__tela" data-tela="1">
+                  <source media="(max-width: 700px)" srcset="img/telas/filme-2-mob.webp" width="1000" height="750" />
+                  <img src="img/telas/filme-2.webp" width="1600" height="1000" loading="lazy" decoding="async" alt="Mapa do ROTAV3 com as entregas e coletas pendentes e o veículo em rota, ao vivo" />
+                </picture>
+                <picture class="filme__tela" data-tela="2">
+                  <source media="(max-width: 700px)" srcset="img/telas/filme-3-mob.webp" width="1000" height="750" />
+                  <img src="img/telas/filme-3.webp" width="1600" height="1000" loading="lazy" decoding="async" alt="Rota gerada no ROTAV3: oito paradas no mapa, quilômetros e peso a bordo" />
+                </picture>
+                <picture class="filme__tela" data-tela="3">
+                  <source media="(max-width: 700px)" srcset="img/telas/filme-4-mob.webp" width="1000" height="750" />
+                  <img src="img/telas/filme-4.webp" width="1600" height="1000" loading="lazy" decoding="async" alt="Celular do motorista com a rota: localização ao vivo ligada e baixas com nome e foto" />
+                </picture>
+                <picture class="filme__tela" data-tela="4">
+                  <source media="(max-width: 700px)" srcset="img/telas/filme-5-mob.webp" width="1000" height="750" />
+                  <img src="img/telas/filme-5.webp" width="1600" height="1000" loading="lazy" decoding="async" alt="Rota em andamento no painel: localização do veículo há 2 minutos, baixas feitas e botão para enviar pelo WhatsApp" />
+                </picture>
               </div>
             </div>
             <figcaption class="sr">
-              Demonstração animada com dados fictícios: importação das notas, pedidos no mapa,
-              geração da rota de um VUC com 6 paradas, envio do link ao motorista pelo WhatsApp e
-              acompanhamento das baixas no painel.
+              Telas reais do ROTAV3 com dados de exemplo: pedidos importados, pedidos no mapa,
+              rota gerada, rota no celular do motorista e acompanhamento ao vivo no painel.
             </figcaption>
           </figure>
           <div class="capitulos" role="group" aria-label="Partes da demonstração">
-            <button type="button" data-ir="0"><b>1</b><span class="cap-l">Importar as notas</span><span class="cap-c">Notas</span><i></i></button>
+            <button type="button" data-ir="0" aria-pressed="true"><b>1</b><span class="cap-l">Importar as notas</span><span class="cap-c">Notas</span><i></i></button>
             <button type="button" data-ir="1"><b>2</b><span class="cap-l">Ver no mapa</span><span class="cap-c">Mapa</span><i></i></button>
-            <button type="button" data-ir="2" aria-pressed="true"><b>3</b><span class="cap-l">Gerar a rota</span><span class="cap-c">Rota</span><i></i></button>
+            <button type="button" data-ir="2"><b>3</b><span class="cap-l">Gerar a rota</span><span class="cap-c">Rota</span><i></i></button>
             <button type="button" data-ir="3"><b>4</b><span class="cap-l">Enviar ao motorista</span><span class="cap-c">Motorista</span><i></i></button>
             <button type="button" data-ir="4"><b>5</b><span class="cap-l">Acompanhar ao vivo</span><span class="cap-c">Ao vivo</span><i></i></button>
             <button type="button" class="capitulos__pausa" data-pausa aria-label="Pausar a demonstração">
               <svg class="ico" data-ic-pausa><use href="#i-pausa" /></svg><svg class="ico" data-ic-play hidden><use href="#i-play" /></svg>
             </button>
           </div>
-          <p class="hero__aviso">Telas do sistema com dados fictícios.</p>
+          <p class="hero__aviso">Telas reais do sistema, com dados de exemplo e fundo de mapa ilustrativo.</p>
         </div>
 
         <div class="cont fatos">
           <ul class="fatos__lista">
-            <li><img src="img/ic/inbox-tray.webp" alt="" width="40" height="40" loading="lazy" /><span><b>XML, Excel e CSV</b>notas entram de uma vez</span></li>
+            <li><img src="img/ic/inbox-tray.webp" alt="" width="40" height="40" loading="lazy" /><span><b>XML, Excel, CSV e PDF</b>notas entram de uma vez</span></li>
             <li><img src="img/ic/package.webp" alt="" width="40" height="40" loading="lazy" /><span><b>Entregas e coletas</b>na mesma viagem</span></li>
             <li><img src="img/ic/alarm-clock.webp" alt="" width="40" height="40" loading="lazy" /><span><b>Janela de horário</b>de cada cliente</span></li>
             <li><img src="img/ic/mobile-phone.webp" alt="" width="40" height="40" loading="lazy" /><span><b>Sem aplicativo</b>o motorista abre pelo link</span></li>
@@ -421,8 +318,10 @@
           <div class="telas__abas" role="tablist" aria-label="Telas do sistema" data-telas-abas>
             <button type="button" role="tab" id="aba-painel" aria-controls="tela-painel" aria-selected="true">Painel</button>
             <button type="button" role="tab" id="aba-pedidos" aria-controls="tela-pedidos" aria-selected="false">Pedidos</button>
+            <button type="button" role="tab" id="aba-mapa" aria-controls="tela-mapa" aria-selected="false">Mapa</button>
             <button type="button" role="tab" id="aba-roteirizacao" aria-controls="tela-roteirizacao" aria-selected="false">Roteirização</button>
-            <button type="button" role="tab" id="aba-rota" aria-controls="tela-rota" aria-selected="false">Rota enviada</button>
+            <button type="button" role="tab" id="aba-rota" aria-controls="tela-rota" aria-selected="false">Rota ao vivo</button>
+            <button type="button" role="tab" id="aba-frota" aria-controls="tela-frota" aria-selected="false">Frota</button>
             <button type="button" role="tab" id="aba-motorista" aria-controls="tela-motorista" aria-selected="false">Motorista</button>
             <button type="button" role="tab" id="aba-celular" aria-controls="tela-celular" aria-selected="false">No celular</button>
           </div>
@@ -430,49 +329,71 @@
             <figure class="tela" id="tela-painel" role="tabpanel" aria-labelledby="aba-painel">
               <button class="tela__nav" type="button" data-ampliar="img/telas/painel.webp" aria-label="Ampliar a tela do painel">
                 <span class="tela__barra" aria-hidden="true"><i></i><i></i><i></i><span>ROTAV3 · Painel</span></span>
-                <img src="img/telas/painel.webp" width="1600" height="1000" loading="lazy" decoding="async" alt="Painel do ROTAV3: total de pedidos, rotas, tempo estimado, pedidos por região, mapa de distribuição e pedidos agendados" />
+                <img src="img/telas/painel.webp" width="1600" height="1000" loading="lazy" decoding="async" alt="Painel do ROTAV3: pedidos pendentes, rotas confirmadas, quilômetros, pedidos por região, mapa de distribuição, agendados e alertas" />
                 <span class="modelo__lupa" aria-hidden="true"><svg class="ico"><use href="#i-busca" /></svg>Ampliar</span>
               </button>
               <figcaption>
                 <b>O dia inteiro numa tela.</b>
-                Pedidos pendentes, entregas e coletas, tempo estimado, pedidos por região, agendados
-                do dia e alertas do que precisa de atenção.
+                Pedidos pendentes, entregas e coletas, rotas do dia e quilômetros, pedidos por região,
+                agendados e alertas do que precisa de atenção.
               </figcaption>
             </figure>
             <figure class="tela" id="tela-pedidos" role="tabpanel" aria-labelledby="aba-pedidos">
               <button class="tela__nav" type="button" data-ampliar="img/telas/pedidos.webp" aria-label="Ampliar a tela de pedidos">
                 <span class="tela__barra" aria-hidden="true"><i></i><i></i><i></i><span>ROTAV3 · Pedidos</span></span>
-                <img src="img/telas/pedidos.webp" width="1600" height="1000" loading="lazy" decoding="async" alt="Tela de pedidos do ROTAV3: botão para importar notas e pedidos agrupados por cidade, com entregas e coletas" />
+                <img src="img/telas/pedidos.webp" width="1600" height="1000" loading="lazy" decoding="async" alt="Tela de pedidos do ROTAV3: importar notas em XML, Excel, CSV ou PDF, busca por nota e pedidos agrupados por cidade" />
                 <span class="modelo__lupa" aria-hidden="true"><svg class="ico"><use href="#i-busca" /></svg>Ampliar</span>
               </button>
               <figcaption>
                 <b>As notas entram de uma vez.</b>
-                Importe o XML das NF-e, uma planilha Excel ou um CSV, vários arquivos juntos. Os
-                pedidos aparecem por cidade, separados em entregas e coletas.
+                XML das NF-e, Excel, CSV ou o PDF do DANFE e da Ordem de Coleta, vários arquivos
+                juntos. Os pedidos aparecem por cidade, separados em entregas e coletas.
+              </figcaption>
+            </figure>
+            <figure class="tela" id="tela-mapa" role="tabpanel" aria-labelledby="aba-mapa">
+              <button class="tela__nav" type="button" data-ampliar="img/telas/mapa.webp" aria-label="Ampliar a tela do mapa">
+                <span class="tela__barra" aria-hidden="true"><i></i><i></i><i></i><span>ROTAV3 · Mapa</span></span>
+                <img src="img/telas/mapa.webp" width="1600" height="1000" loading="lazy" decoding="async" alt="Mapa do ROTAV3 com as entregas e coletas pendentes, o CD e o caminhão em rota com a localização ao vivo" />
+                <span class="modelo__lupa" aria-hidden="true"><svg class="ico"><use href="#i-busca" /></svg>Ampliar</span>
+              </button>
+              <figcaption>
+                <b>Tudo no mapa, inclusive quem já saiu.</b>
+                Entregas e coletas pendentes, o CD e os veículos em rota, atualizados ao vivo. O ponto que você corrige fica guardado para as próximas notas do mesmo endereço.
               </figcaption>
             </figure>
             <figure class="tela" id="tela-roteirizacao" role="tabpanel" aria-labelledby="aba-roteirizacao">
               <button class="tela__nav" type="button" data-ampliar="img/telas/roteirizacao.webp" aria-label="Ampliar a tela de roteirização">
                 <span class="tela__barra" aria-hidden="true"><i></i><i></i><i></i><span>ROTAV3 · Roteirização</span></span>
-                <img src="img/telas/roteirizacao.webp" width="1600" height="1000" loading="lazy" decoding="async" alt="Tela de roteirização do ROTAV3: motoristas cadastrados, escolha do veículo do Fiorino à carreta e CD de saída definido pelo CEP" />
+                <img src="img/telas/roteirizacao.webp" width="1600" height="1000" loading="lazy" decoding="async" alt="Rota gerada no ROTAV3: oito paradas no mapa, quilômetros, peso na saída e botões do Google Maps e do Waze" />
                 <span class="modelo__lupa" aria-hidden="true"><svg class="ico"><use href="#i-busca" /></svg>Ampliar</span>
               </button>
               <figcaption>
                 <b>Escolha o veículo e gere a rota.</b>
-                Motoristas cadastrados ou veículo escolhido na hora, do Fiorino à carreta. O CD de
-                onde as rotas saem é definido pelo CEP.
+                O sistema escolhe os pedidos que cabem no veículo e a ordem das paradas, e mostra
+                quilômetros, peso na saída e o caminho no mapa.
               </figcaption>
             </figure>
             <figure class="tela" id="tela-rota" role="tabpanel" aria-labelledby="aba-rota">
-              <button class="tela__nav" type="button" data-ampliar="img/telas/rota.webp" aria-label="Ampliar a tela da rota enviada">
+              <button class="tela__nav" type="button" data-ampliar="img/telas/rota.webp" aria-label="Ampliar a rota ao vivo">
                 <span class="tela__barra" aria-hidden="true"><i></i><i></i><i></i><span>ROTAV3 · Rotas</span></span>
-                <img src="img/telas/rota.webp" width="1600" height="1000" loading="lazy" decoding="async" alt="Rota confirmada no ROTAV3: peso, quilômetros e tempo, botão para enviar pelo WhatsApp, paradas com baixa e localização do veículo" />
+                <img src="img/telas/rota.webp" width="1600" height="1000" loading="lazy" decoding="async" alt="Rota em andamento no ROTAV3: botão para enviar pelo WhatsApp, duas de seis paradas com baixa, localização ao vivo e o caminhão no mapa" />
                 <span class="modelo__lupa" aria-hidden="true"><svg class="ico"><use href="#i-busca" /></svg>Ampliar</span>
               </button>
               <figcaption>
-                <b>A rota vai para o motorista.</b>
-                Peso, quilômetros e tempo da viagem, o link para mandar pelo WhatsApp e, depois, cada
-                baixa, a foto do canhoto e a última localização do veículo.
+                <b>A rota vai para o motorista e volta ao vivo.</b>
+                O link sai pelo WhatsApp. Depois, cada baixa aparece com a hora e a foto do canhoto, e
+                o caminhão aparece no mapa da rota.
+              </figcaption>
+            </figure>
+            <figure class="tela" id="tela-frota" role="tabpanel" aria-labelledby="aba-frota">
+              <button class="tela__nav" type="button" data-ampliar="img/telas/frota.webp" aria-label="Ampliar a tela da frota">
+                <span class="tela__barra" aria-hidden="true"><i></i><i></i><i></i><span>ROTAV3 · Veículos e motoristas</span></span>
+                <img src="img/telas/frota.webp" width="1600" height="1000" loading="lazy" decoding="async" alt="Cadastro da frota no ROTAV3: cada veículo com desenho do tipo, modelo, placa, capacidade e motorista" />
+                <span class="modelo__lupa" aria-hidden="true"><svg class="ico"><use href="#i-busca" /></svg>Ampliar</span>
+              </button>
+              <figcaption>
+                <b>Cada veículo com placa e motorista.</b>
+                Do Fiorino à carreta, com modelo, placa e capacidade. Na roteirização é só clicar no veículo, e a rota já sai com a placa.
               </figcaption>
             </figure>
             <figure class="tela tela--cel" id="tela-motorista" role="tabpanel" aria-labelledby="aba-motorista">
@@ -481,7 +402,7 @@
                   <span class="cel"><span class="cel__tela"><img src="img/telas/motorista-lista.webp" width="660" height="1428" loading="lazy" decoding="async" alt="Celular do motorista com a lista de paradas da rota, botões do Google Maps e do Waze e os botões Entregue e Não realizado" /></span></span>
                 </button>
                 <button class="tela__cel" type="button" data-ampliar="img/telas/motorista-baixa.webp" aria-label="Ampliar a baixa com foto do canhoto">
-                  <span class="cel"><span class="cel__tela"><img src="img/telas/motorista-baixa.webp" width="660" height="1428" loading="lazy" decoding="async" alt="Celular do motorista dando baixa numa entrega com o nome de quem recebeu e a foto do canhoto" /></span></span>
+                  <span class="cel"><span class="cel__tela"><img src="img/telas/motorista-baixa.webp" width="660" height="1428" loading="lazy" decoding="async" alt="Celular do motorista dando baixa numa coleta com o nome de quem entregou a carga e a foto do canhoto" /></span></span>
                 </button>
               </div>
               <figcaption>
@@ -495,6 +416,9 @@
                 <button class="tela__cel" type="button" data-ampliar="img/telas/painel-celular.webp" aria-label="Ampliar o painel aberto no celular">
                   <span class="cel"><span class="cel__tela"><img src="img/telas/painel-celular.webp" width="660" height="1428" loading="lazy" decoding="async" alt="Painel do ROTAV3 aberto no navegador do celular" /></span></span>
                 </button>
+                <button class="tela__cel" type="button" data-ampliar="img/telas/mapa-celular.webp" aria-label="Ampliar o mapa aberto no celular">
+                  <span class="cel"><span class="cel__tela"><img src="img/telas/mapa-celular.webp" width="660" height="1428" loading="lazy" decoding="async" alt="Mapa do ROTAV3 no celular, com os pedidos e o caminhão em rota" /></span></span>
+                </button>
               </div>
               <figcaption>
                 <b>O escritório também cabe no bolso.</b>
@@ -502,7 +426,7 @@
               </figcaption>
             </figure>
           </div>
-          <p class="nota-demo">Telas reais do sistema. Pedidos, clientes e motoristas são de exemplo.</p>
+          <p class="nota-demo">Telas reais do sistema. Pedidos, clientes, motoristas e placas são de exemplo. Nas imagens, o fundo do mapa é ilustrativo; no sistema, é o mapa de ruas.</p>
         </div>
       </section>
 
@@ -522,9 +446,10 @@
               <div class="parada-dia__texto">
                 <h3>Importe as notas do dia.</h3>
                 <p>
-                  Arraste os XML das NF-e, uma planilha Excel ou um CSV. O ROTAV3 lê destinatário,
-                  endereço, peso e volumes, separa entregas de coletas e localiza os endereços pelo
-                  CEP. Nota que já está em rota não é alterada.
+                  Arraste os XML das NF-e, uma planilha Excel, um CSV ou o PDF do DANFE e da Ordem de
+                  Coleta de Cargas. O ROTAV3 lê destinatário, endereço, peso e volumes, separa entregas
+                  de coletas e localiza os endereços pelo CEP. Nota repetida não vira duas, e a que já
+                  está em rota não é alterada.
                 </p>
               </div>
               <div class="parada-dia__tela">
@@ -802,13 +727,22 @@
       <section class="secao secao--suave rastreio" id="rastreamento" aria-labelledby="rastreio-titulo">
         <div class="cont">
           <header class="cab cab--larga">
-            <h2 id="rastreio-titulo">Sistema + rastreamento para a sua frota.</h2>
+            <h2 id="rastreio-titulo">O rastreamento ligado ao mapa da sua operação.</h2>
             <p class="cab__texto">
-              Saiba onde cada veículo está durante a rota: pelo celular do motorista, que já vem no
-              sistema, ou com um rastreador 4G que fornecemos e instalamos, para transportadoras que
-              ainda não têm rastreamento.
+              A posição do veículo aparece no mesmo mapa da rota, junto com as paradas, as baixas e
+              os horários. Vem do celular do motorista, que já faz parte do sistema, ou de um
+              rastreador 4G que fornecemos e instalamos, para frotas que ainda não têm rastreamento.
             </p>
           </header>
+          <figure class="rastreio__faixa rastreio__faixa--topo">
+            <button class="rastreio__painel" type="button" data-ampliar="img/telas/rota.webp" aria-label="Ampliar a rota no painel com a localização do veículo">
+              <picture>
+                <source media="(max-width: 700px)" srcset="img/telas/rota-localizacao-cel.webp" width="800" height="560" />
+                <img src="img/telas/rota-localizacao.webp" width="1280" height="568" loading="lazy" decoding="async" alt="Rota no painel do escritório: duas de seis paradas com baixa, localização ao vivo de dois minutos atrás e o caminhão no mapa da rota" />
+              </picture>
+            </button>
+            <figcaption>No painel do escritório: a rota, as baixas feitas e o caminhão no mapa, visto há 2 minutos.</figcaption>
+          </figure>
           <div class="rastreio__grade">
             <article class="rastreio__card rastreio__card--cel">
               <div class="rastreio__txt">
@@ -844,16 +778,7 @@
               <a class="btn btn--ouro btn--g" href="https://wa.me/5511955914618" data-abrir="rastreamento"><svg class="ico"><use href="#i-sinal" /></svg>Quero sistema + rastreador</a>
             </article>
           </div>
-          <figure class="rastreio__faixa">
-            <figcaption>No painel do escritório, a rota mostra as baixas e a última localização do veículo:</figcaption>
-            <button class="rastreio__painel" type="button" data-ampliar="img/telas/rota.webp" aria-label="Ampliar a rota no painel com a localização do veículo">
-              <picture>
-                <source media="(max-width: 700px)" srcset="img/telas/rota-localizacao-cel.webp" width="900" height="431" />
-                <img src="img/telas/rota-localizacao.webp" width="1800" height="357" loading="lazy" decoding="async" alt="Rota no painel do escritório: uma de quatro paradas com baixa, botão para enviar pelo WhatsApp e localização ao vivo de dois minutos atrás" />
-              </picture>
-            </button>
-          </figure>
-          <p class="nota-demo">Telas reais do sistema, com uma rota de exemplo.</p>
+          <p class="nota-demo">Telas reais do sistema, com uma rota de exemplo. Nas imagens, o fundo do mapa é ilustrativo; no sistema, é o mapa de ruas.</p>
         </div>
       </section>
 
@@ -901,38 +826,24 @@
             </p>
           </header>
           <ul class="modelos">
-            <li class="modelo modelo--vv">
-              <button class="modelo__abrir" type="button" data-ampliar="img/modelo-viaverde.webp" aria-label="Ampliar o painel com a identidade da Via Verde Transportes">
-                <img
-                  src="img/modelo-viaverde.webp"
-                  alt="Painel de roteirização com a identidade visual da Via Verde Transportes, em verde e branco: pedidos, rotas, tempo estimado, pedidos por região, mapa de distribuição e assistente"
-                  width="1536"
-                  height="1441"
-                  loading="lazy"
-                  decoding="async"
-                />
+            <li class="modelo">
+              <button class="modelo__abrir" type="button" data-ampliar="img/telas/marca-padrao.webp" aria-label="Ampliar o painel nas cores da ROTAV3">
+                <img src="img/telas/marca-padrao.webp" width="1600" height="1000" loading="lazy" decoding="async"
+                  alt="Painel do ROTAV3 nas cores padrão, azul-marinho e dourado: pedidos, rotas, quilômetros, pedidos por região e mapa de distribuição" />
                 <span class="modelo__lupa" aria-hidden="true"><svg class="ico"><use href="#i-busca" /></svg>Ampliar</span>
               </button>
-              <p class="modelo__nome">Via Verde Transportes</p>
+              <p class="modelo__nome">Padrão ROTAV3</p>
             </li>
-            <li class="modelo modelo--2sl">
-              <button class="modelo__abrir" type="button" data-ampliar="img/modelo-2sl-log-2x.webp" aria-label="Ampliar o painel com a identidade da 2SL Log">
-                <img
-                  src="img/modelo-2sl-log.webp"
-                  srcset="img/modelo-2sl-log.webp 1077w, img/modelo-2sl-log-2x.webp 2154w"
-                  sizes="(max-width: 760px) 100vw, 520px"
-                  alt="Painel de roteirização com a identidade visual da 2SL Log, em azul-escuro: pedidos, rotas, tempo estimado, pedidos por região, mapa de distribuição e assistente"
-                  width="1077"
-                  height="1346"
-                  loading="lazy"
-                  decoding="async"
-                />
+            <li class="modelo">
+              <button class="modelo__abrir" type="button" data-ampliar="img/telas/marca-exemplo.webp" aria-label="Ampliar o painel com outras cores e outro logo">
+                <img src="img/telas/marca-exemplo.webp" width="1600" height="1000" loading="lazy" decoding="async"
+                  alt="O mesmo painel com cores verde-azuladas e o logo de uma transportadora fictícia" />
                 <span class="modelo__lupa" aria-hidden="true"><svg class="ico"><use href="#i-busca" /></svg>Ampliar</span>
               </button>
-              <p class="modelo__nome">2SL Log</p>
+              <p class="modelo__nome">Com a marca da transportadora</p>
             </li>
           </ul>
-          <p class="nota-demo">Empresas parceiras.</p>
+          <p class="nota-demo">O mesmo sistema, com outras cores e outro logo. "Vale Norte Logística" é uma marca fictícia, só para o exemplo.</p>
         </div>
       </section>
 
@@ -947,10 +858,10 @@
             <div class="funcoes__grupo">
               <h3>Antes de sair</h3>
               <ul>
-                <li><img src="img/ic/inbox-tray.webp" alt="" width="48" height="48" loading="lazy" /><div><b>Importação de notas</b><span>XML da NF-e, Excel e CSV, vários arquivos de uma vez. PDF em teste.</span></div></li>
+                <li><img src="img/ic/inbox-tray.webp" alt="" width="48" height="48" loading="lazy" /><div><b>Importação de notas</b><span>XML da NF-e, Excel, CSV e PDF (DANFE e Ordem de Coleta de Cargas), vários arquivos de uma vez. Nota repetida não duplica.</span></div></li>
                 <li><img src="img/ic/factory.webp" alt="" width="48" height="48" loading="lazy" /><div><b>Entregas e coletas</b><span>Cada nota entra como entrega ou coleta; na viagem mista, as entregas vêm primeiro.</span></div></li>
-                <li><img src="img/ic/world-map.webp" alt="" width="48" height="48" loading="lazy" /><div><b>Mapa com filtros</b><span>Todos os pedidos pendentes, com o CD, filtro por tipo e aviso de local aproximado.</span></div></li>
-                <li><img src="img/ic/balance-scale.webp" alt="" width="48" height="48" loading="lazy" /><div><b>Rota por peso e capacidade</b><span>Do Fiorino à carreta, com limite de paradas e jornada de 8 horas.</span></div></li>
+                <li><img src="img/ic/world-map.webp" alt="" width="48" height="48" loading="lazy" /><div><b>Mapa que aprende o endereço</b><span>Pedidos pendentes e veículos em rota no mesmo mapa. O ponto que você corrige fica guardado, e as baixas do motorista ensinam o local exato de cada cliente.</span></div></li>
+                <li><img src="img/ic/balance-scale.webp" alt="" width="48" height="48" loading="lazy" /><div><b>Frota cadastrada</b><span>Cada veículo com modelo, placa, capacidade e motorista, do Fiorino à carreta. A rota respeita o peso, o limite de paradas e a jornada de 8 horas.</span></div></li>
                 <li><img src="img/ic/alarm-clock.webp" alt="" width="48" height="48" loading="lazy" /><div><b>Agendamentos e janela de horário</b><span>Pedidos agendados entram no dia certo, com o horário do cliente respeitado.</span></div></li>
               </ul>
             </div>
@@ -1086,9 +997,10 @@
             <details>
               <summary>Preciso cadastrar os pedidos um por um?<svg class="ico"><use href="#i-mais" /></svg></summary>
               <p>
-                Não. Importe o XML das NF-e (vários arquivos de uma vez), uma planilha Excel ou um CSV.
-                A leitura de PDF (DANFE) existe, mas ainda é experimental: para um resultado confiável,
-                use o XML ou a planilha. Notas que já estão em rota não são alteradas.
+                Não. Importe o XML das NF-e (vários arquivos de uma vez), uma planilha Excel, um CSV ou
+                o PDF do DANFE e da Ordem de Coleta de Cargas: o sistema lê nome, endereço, CEP,
+                cidade, volumes e peso. Se a mesma nota vier de novo, ela é atualizada, sem duplicar,
+                e as que já estão em rota não são alteradas.
               </p>
             </details>
             <details>

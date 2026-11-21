@@ -137,3 +137,20 @@ mapa) e o Safari do iPhone.
 - **v6.2 (01/11/2026):** seção "Telas reais" com capturas do sistema atual; seção "Rastreamento"
   (celular do motorista incluso + rastreador no veículo sob consulta); preço tirado da página (só
   consulta); demonstração com as notas do próprio cliente; e-mail rotav3systemy@gmail.com.
+
+## Telas reais do sistema (v7, 21/11/2026)
+
+As imagens de `img/telas/` são capturas do sistema ROTAV3 de verdade rodando, com dados de
+exemplo (transportadora, clientes, motoristas e placas fictícios). Para gerar de novo:
+
+```bash
+cd /caminho/do/2slrotav3 && python3 -m http.server 8771 &
+cd ferramentas/telas-sistema
+node capturar.js            # gera os PNG em saida/ (Firebase simulado, sem internet)
+python3 montar_imagens.py   # converte em WebP e monta os quadros do topo em img/telas/
+```
+
+- O fundo do mapa é um desenho nosso (`mapa-fundo-claro.svg`), porque o ambiente de captura não
+  acessa os blocos do mapa de ruas. A página avisa isso abaixo das telas.
+- "Vale Norte Logística", na seção Sua marca, é uma marca fictícia: o mesmo painel com outras
+  cores e outro logo.
