@@ -4530,6 +4530,9 @@ html.modal-aberto {
 .legal__body li {
   color: var(--tinta-2);
 }
+.legal__body p + p {
+  margin-top: 12px;
+}
 .legal__body ul {
   list-style: disc;
   padding-left: 22px;
