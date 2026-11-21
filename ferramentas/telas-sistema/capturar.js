@@ -148,6 +148,10 @@ const ir = async (p, pag, ms) => { await p.evaluate((x) => window.irParaPagina(x
     for (let i = 0; i < 2; i++) { await p.click('#mapa-completo .leaflet-control-zoom-in'); await p.waitForTimeout(500); }
     await foto(p, 'mapa');
     await ir(p, 'motoristas'); await foto(p, 'frota');
+    await p.click('text=+ Adicionar veículo'); await p.waitForTimeout(500);
+    await p.click('#mot-veh-grid .veh-card >> nth=2'); await p.waitForTimeout(300);
+    await foto(p, 'frota-form', '#form-motorista-box');
+    await p.click('#form-motorista-box .btn-modal-sec'); await p.waitForTimeout(300);
     await ir(p, 'rotas', 1800);
     await p.evaluate(() => { const c = document.querySelector('#page-rotas .rc-card .rc-card-head'); if (c) c.click(); });
     await p.waitForTimeout(1800);
